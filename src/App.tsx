@@ -149,9 +149,10 @@ function viewToPath(view: PublicView): string {
 
 function useNavHandlers() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   return {
     onNavigate: (view: PublicView) => navigate(viewToPath(view)),
-    onSignIn: () => navigate('/signin'),
+    onSignIn: () => navigate(user ? '/dashboard' : '/signin'),
   };
 }
 
@@ -179,7 +180,7 @@ function AppContent() {
           path="/"
           element={
             <LandingPage
-              onGetStarted={() => navigate('/signin')}
+              onGetStarted={() => navigate(user ? '/dashboard' : '/signin')}
               onBlogClick={() => navigate('/blog')}
               onNavigate={navHandlers.onNavigate}
             />
@@ -202,9 +203,9 @@ function AppContent() {
         />
         <Route path="/blog/:slug" element={<BlogPostRoute />} />
 
-        {/* ── Auth pages (redirect to home if already signed in) ── */}
-        <Route path="/signin" element={user ? <Navigate to="/" replace /> : <SignInRoute />} />
-        <Route path="/signup" element={user ? <Navigate to="/" replace /> : <SignUpRoute />} />
+        {/* ── Auth pages (redirect to dashboard if already signed in) ── */}
+        <Route path="/signin" element={user ? <Navigate to="/dashboard" replace /> : <SignInRoute />} />
+        <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <SignUpRoute />} />
         <Route path="/forgot-password" element={<ForgotPasswordRoute />} />
         <Route path="/reset-password" element={<ResetPasswordRoute />} />
 
@@ -234,7 +235,15 @@ function AppContent() {
         <Route path="/admin/blog" element={<ProtectedAdminRoute><BlogManagement /></ProtectedAdminRoute>} />
         <Route path="/admin/email" element={<ProtectedAdminRoute><EmailManagement /></ProtectedAdminRoute>} />
 
-        {/* ── Catch-all: dashboard for authenticated, landing for guests ── */}
+        {/* ── Dashboard (explicit + catch-all) ── */}
+        <Route
+          path="/dashboard"
+          element={
+            user
+              ? <Dashboard onNavigatePublic={navHandlers.onNavigate} />
+              : <Navigate to="/signin" replace />
+          }
+        />
         <Route
           path="/*"
           element={
