@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef, useImperativeHandle, forwardRef } from 'react';
+import { sanitizeEmailHtml } from '../../lib/sanitize';
 import {
   Mail,
   FileText,
@@ -327,7 +328,7 @@ const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(
           onKeyUp={updateActiveState}
           onMouseUp={updateActiveState}
           onSelect={updateActiveState}
-          dangerouslySetInnerHTML={{ __html: initialContent }}
+          dangerouslySetInnerHTML={{ __html: sanitizeEmailHtml(initialContent) }}
           className="prose prose-sm dark:prose-invert max-w-none min-h-[200px] px-4 py-3 focus:outline-none text-gray-800 dark:text-gray-200 bg-white dark:bg-transparent"
         />
       </div>
@@ -571,7 +572,7 @@ function TemplateModal({ template, onClose, onSaved }: TemplateModalProps) {
                 <div className="border border-gray-200 dark:border-white/[0.1] rounded-xl overflow-hidden bg-white dark:bg-white/[0.03] p-4 min-h-[200px]">
                   <div
                     className="prose prose-sm dark:prose-invert max-w-none text-gray-800 dark:text-gray-200"
-                    dangerouslySetInnerHTML={{ __html: previewHtml || '<p class="text-gray-400">No content yet</p>' }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeEmailHtml(previewHtml || '<p class="text-gray-400">No content yet</p>') }}
                   />
                 </div>
               )}
