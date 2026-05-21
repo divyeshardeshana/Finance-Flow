@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Save, Eye, CreditCard as Edit2, Plus, Trash2, GripVertical, CheckCircle2, Star } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { mapFeaturesToDisplayNames } from '../../lib/pricingHelpers';
 import { useAdmin } from '../../contexts/AdminContext';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -92,7 +93,7 @@ export default function PricingPage() {
           annual_price: tier.annual_price,
           description: tier.description || '',
           cta_text: tier.cta_text || 'Get Started',
-          features: Array.isArray(tier.features) ? tier.features : [],
+          features: Array.isArray(tier.features) ? mapFeaturesToDisplayNames(tier.features) : [],
           max_goals: tier.max_goals,
           is_active: tier.is_active,
           highlighted: tier.tier_name === 'paid',
