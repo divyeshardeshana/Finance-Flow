@@ -80,7 +80,7 @@ def prepare_data(df):
     df['MA_21'] = df['Close'].rolling(window=21, min_periods=1).mean()
     df['Volatility'] = df['Close'].rolling(window=7, min_periods=1).std()
     df['Price_Change'] = df['Close'].pct_change()
-    df = df.fillna(method='bfill')
+    df = df.bfill()
     return df
 
 def train_model(df, model_type):
@@ -191,7 +191,7 @@ if predict_button and stock_symbol:
         future_dates = pd.date_range(
             start=df.index[-1] + timedelta(days=1),
             periods=prediction_days,
-            freq='D'
+            freq='B'
         )
 
         prediction_df = pd.DataFrame({
