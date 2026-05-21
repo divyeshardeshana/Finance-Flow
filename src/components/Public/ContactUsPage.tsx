@@ -59,7 +59,7 @@ const contactItems = [
   {
     icon: Phone,
     title: 'Phone Support',
-    detail: '+971 4 XXX XXXX',
+    detail: 'Available via support ticket',
     sub: 'Available for Premium users',
     gradient: 'from-amber-500 to-orange-400',
     ring: 'shadow-amber-500/20',
