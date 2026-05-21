@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { AppPreferencesProvider } from './contexts/AppPreferencesContext';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
@@ -41,332 +41,210 @@ import { PaymentSuccess } from './components/payment/PaymentSuccess';
 import { PaymentCancel } from './components/payment/PaymentCancel';
 import { type PublicView } from './components/Common/PublicNavbar';
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
+function LoadingSpinner() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    </div>
+  );
+}
+
 function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const { isAdmin, loading } = useAdmin();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user || !isAdmin) {
-    return <Navigate to="/" replace />;
-  }
-
+  if (loading) return <LoadingSpinner />;
+  if (!user || !isAdmin) return <Navigate to="/" replace />;
   return <AdminLayout>{children}</AdminLayout>;
 }
 
-type AppView = 'landing' | 'signin' | 'signup' | 'forgot-password' | 'reset-password' | 'blog' | 'blogpost' | PublicView;
+// ── Route wrappers ────────────────────────────────────────────────────────────
 
-function getInitialView(): AppView {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('view') === 'reset-password') return 'reset-password';
-  const hash = window.location.hash;
-  if (hash.includes('type=recovery')) return 'reset-password';
-  return 'landing';
+function BlogPostRoute() {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const navHandlers = useNavHandlers();
+  return (
+    <BlogPostPage
+      slug={slug!}
+      onBack={() => navigate('/blog')}
+      onPostClick={(s) => navigate(`/blog/${s}`)}
+      {...navHandlers}
+    />
+  );
 }
 
+function SignInRoute() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const showPasswordResetSuccess = !!(location.state as { passwordResetSuccess?: boolean } | null)?.passwordResetSuccess;
+  const navHandlers = useNavHandlers();
+  return (
+    <SignIn
+      onToggle={() => navigate('/signup')}
+      onBackToHome={() => navigate('/')}
+      onForgotPassword={() => navigate('/forgot-password')}
+      showPasswordResetSuccess={showPasswordResetSuccess}
+      {...navHandlers}
+    />
+  );
+}
+
+function SignUpRoute() {
+  const navigate = useNavigate();
+  const navHandlers = useNavHandlers();
+  return (
+    <SignUp
+      onToggle={() => navigate('/signin')}
+      onBackToHome={() => navigate('/')}
+      {...navHandlers}
+    />
+  );
+}
+
+function ForgotPasswordRoute() {
+  const navigate = useNavigate();
+  const navHandlers = useNavHandlers();
+  return (
+    <ForgotPasswordPage
+      onBackToSignIn={() => navigate('/signin')}
+      {...navHandlers}
+    />
+  );
+}
+
+function ResetPasswordRoute() {
+  const { clearPasswordRecovery, signOut } = useAuth();
+  const navigate = useNavigate();
+  const navHandlers = useNavHandlers();
+  return (
+    <ResetPasswordPage
+      onSuccess={() => {
+        clearPasswordRecovery();
+        signOut().then(() => navigate('/signin', { state: { passwordResetSuccess: true } }));
+      }}
+      onForgotPassword={() => {
+        clearPasswordRecovery();
+        navigate('/forgot-password');
+      }}
+      {...navHandlers}
+    />
+  );
+}
+
+// ── Shared hook ───────────────────────────────────────────────────────────────
+
+function viewToPath(view: PublicView): string {
+  return view === 'home' ? '/' : `/${view}`;
+}
+
+function useNavHandlers() {
+  const navigate = useNavigate();
+  return {
+    onNavigate: (view: PublicView) => navigate(viewToPath(view)),
+    onSignIn: () => navigate('/signin'),
+  };
+}
+
+// ── Main app content ──────────────────────────────────────────────────────────
+
 function AppContent() {
-  const { user, loading: authLoading, isPasswordRecovery, clearPasswordRecovery, signOut } = useAuth();
-  const [appView, setAppView] = useState<AppView>(getInitialView);
-  const [blogPostSlug, setBlogPostSlug] = useState('');
-  const [showPasswordResetSuccess, setShowPasswordResetSuccess] = useState(false);
+  const { user, loading: authLoading, isPasswordRecovery } = useAuth();
+  const navigate = useNavigate();
+  const navHandlers = useNavHandlers();
 
   useEffect(() => {
-    if (isPasswordRecovery && appView !== 'reset-password') {
-      setAppView('reset-password');
+    if (isPasswordRecovery) {
+      navigate('/reset-password', { replace: true });
     }
   }, [isPasswordRecovery]);
 
-  const handleNavigate = (view: PublicView) => {
-    setAppView(view);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  };
-
-  const handleSignIn = () => setAppView('signin');
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (appView === 'reset-password') {
-    return (
-      <ResetPasswordPage
-        onNavigate={handleNavigate}
-        onSignIn={handleSignIn}
-        onSuccess={() => {
-          clearPasswordRecovery();
-          setShowPasswordResetSuccess(true);
-          signOut().then(() => setAppView('signin'));
-        }}
-        onForgotPassword={() => {
-          clearPasswordRecovery();
-          setAppView('forgot-password');
-        }}
-      />
-    );
-  }
-
-  if (appView === 'forgot-password') {
-    return (
-      <ForgotPasswordPage
-        onNavigate={handleNavigate}
-        onSignIn={handleSignIn}
-        onBackToSignIn={() => setAppView('signin')}
-      />
-    );
-  }
-
-  if (appView === 'blog') {
-    return (
-      <BlogPage
-        onBack={() => setAppView('landing')}
-        onPostClick={(slug) => { setBlogPostSlug(slug); setAppView('blogpost'); }}
-        onNavigate={handleNavigate}
-        onSignIn={handleSignIn}
-      />
-    );
-  }
-
-  if (appView === 'blogpost' && blogPostSlug) {
-    return (
-      <BlogPostPage
-        slug={blogPostSlug}
-        onBack={() => setAppView('blog')}
-        onPostClick={(slug) => { setBlogPostSlug(slug); setAppView('blogpost'); }}
-        onNavigate={handleNavigate}
-        onSignIn={handleSignIn}
-      />
-    );
-  }
-
-  if (appView === 'about') {
-    return <AboutUsPage onNavigate={handleNavigate} onSignIn={handleSignIn} />;
-  }
-
-  if (appView === 'features') {
-    return <FeaturesPage onNavigate={handleNavigate} onSignIn={handleSignIn} />;
-  }
-
-  if (appView === 'pricing') {
-    return <PublicPricingPage onNavigate={handleNavigate} onSignIn={handleSignIn} />;
-  }
-
-  if (appView === 'contact') {
-    return <ContactUsPage onNavigate={handleNavigate} onSignIn={handleSignIn} />;
-  }
-
-  if (appView === 'privacy') {
-    return <PrivacyPolicyPage onNavigate={handleNavigate} onSignIn={handleSignIn} />;
-  }
-
-  // Payment routes are always accessible regardless of auth state.
-  // They are handled via React Router <Routes>, so we check the current URL path.
-  const isPaymentRoute = ['/products', '/orders', '/checkout/success', '/checkout/cancel'].some(
-    p => window.location.pathname === p || window.location.pathname.startsWith(p + '?')
-  );
-
-  if (!user && !isPaymentRoute) {
-    if (appView === 'landing' || appView === 'home') {
-      return (
-        <LandingPage
-          onGetStarted={handleSignIn}
-          onBlogClick={() => setAppView('blog')}
-          onNavigate={handleNavigate}
-        />
-      );
-    }
-
-    if (appView === 'signup') {
-      return (
-        <SignUp
-          onToggle={() => setAppView('signin')}
-          onBackToHome={() => setAppView('landing')}
-          onNavigate={handleNavigate}
-        />
-      );
-    }
-
-    return (
-      <SignIn
-        onToggle={() => setAppView('signup')}
-        onBackToHome={() => setAppView('landing')}
-        onNavigate={handleNavigate}
-        onForgotPassword={() => setAppView('forgot-password')}
-        showPasswordResetSuccess={showPasswordResetSuccess}
-      />
-    );
-  }
+  if (authLoading) return <LoadingSpinner />;
 
   return (
-    <Routes>
-      {/* Payment routes — accessible to all */}
-      <Route path="/products" element={<ProductsPage />} />
-      <Route path="/orders" element={<OrdersPage />} />
-      <Route path="/checkout/success" element={<PaymentSuccess />} />
-      <Route path="/checkout/cancel" element={<PaymentCancel />} />
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* ── Public pages ── */}
+        <Route
+          path="/"
+          element={
+            <LandingPage
+              onGetStarted={() => navigate('/signin')}
+              onBlogClick={() => navigate('/blog')}
+              onNavigate={navHandlers.onNavigate}
+            />
+          }
+        />
+        <Route path="/about" element={<AboutUsPage {...navHandlers} />} />
+        <Route path="/features" element={<FeaturesPage {...navHandlers} />} />
+        <Route path="/pricing" element={<PublicPricingPage {...navHandlers} />} />
+        <Route path="/contact" element={<ContactUsPage {...navHandlers} />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage {...navHandlers} />} />
+        <Route
+          path="/blog"
+          element={
+            <BlogPage
+              onBack={() => navigate('/')}
+              onPostClick={(slug) => navigate(`/blog/${slug}`)}
+              {...navHandlers}
+            />
+          }
+        />
+        <Route path="/blog/:slug" element={<BlogPostRoute />} />
 
-      {/* Authenticated app */}
-      <Route path="/*" element={<Dashboard onNavigatePublic={handleNavigate} />} />
-      <Route
-        path="/admin"
-        element={
-          <ProtectedAdminRoute>
-            <AdminDashboard />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/users"
-        element={
-          <ProtectedAdminRoute>
-            <UserManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/users/create"
-        element={
-          <ProtectedAdminRoute>
-            <CreateUserPage />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/users/:userId"
-        element={
-          <ProtectedAdminRoute>
-            <UserDetailsPage />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/subscriptions"
-        element={
-          <ProtectedAdminRoute>
-            <SubscriptionManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/payments"
-        element={
-          <ProtectedAdminRoute>
-            <PaymentManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/tickets"
-        element={
-          <ProtectedAdminRoute>
-            <TicketManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/quizzes"
-        element={
-          <ProtectedAdminRoute>
-            <ContentManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/faqs"
-        element={
-          <ProtectedAdminRoute>
-            <ContentManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/reports"
-        element={
-          <ProtectedAdminRoute>
-            <AdminReports />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/features"
-        element={
-          <ProtectedAdminRoute>
-            <FeatureManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/retirement-management"
-        element={
-          <ProtectedAdminRoute>
-            <RetirementManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/investment-management"
-        element={
-          <ProtectedAdminRoute>
-            <InvestmentManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/settings"
-        element={
-          <ProtectedAdminRoute>
-            <SystemSettings />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/pricing"
-        element={
-          <ProtectedAdminRoute>
-            <PricingPage />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/seo"
-        element={
-          <ProtectedAdminRoute>
-            <SEOManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/blog"
-        element={
-          <ProtectedAdminRoute>
-            <BlogManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-      <Route
-        path="/admin/email"
-        element={
-          <ProtectedAdminRoute>
-            <EmailManagement />
-          </ProtectedAdminRoute>
-        }
-      />
-    </Routes>
+        {/* ── Auth pages (redirect to home if already signed in) ── */}
+        <Route path="/signin" element={user ? <Navigate to="/" replace /> : <SignInRoute />} />
+        <Route path="/signup" element={user ? <Navigate to="/" replace /> : <SignUpRoute />} />
+        <Route path="/forgot-password" element={<ForgotPasswordRoute />} />
+        <Route path="/reset-password" element={<ResetPasswordRoute />} />
+
+        {/* ── Payment routes (always accessible) ── */}
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/checkout/success" element={<PaymentSuccess />} />
+        <Route path="/checkout/cancel" element={<PaymentCancel />} />
+
+        {/* ── Admin routes ── */}
+        <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+        <Route path="/admin/users" element={<ProtectedAdminRoute><UserManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/users/create" element={<ProtectedAdminRoute><CreateUserPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/users/:userId" element={<ProtectedAdminRoute><UserDetailsPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/subscriptions" element={<ProtectedAdminRoute><SubscriptionManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/payments" element={<ProtectedAdminRoute><PaymentManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/tickets" element={<ProtectedAdminRoute><TicketManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/quizzes" element={<ProtectedAdminRoute><ContentManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/faqs" element={<ProtectedAdminRoute><ContentManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/reports" element={<ProtectedAdminRoute><AdminReports /></ProtectedAdminRoute>} />
+        <Route path="/admin/features" element={<ProtectedAdminRoute><FeatureManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/retirement-management" element={<ProtectedAdminRoute><RetirementManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/investment-management" element={<ProtectedAdminRoute><InvestmentManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/settings" element={<ProtectedAdminRoute><SystemSettings /></ProtectedAdminRoute>} />
+        <Route path="/admin/pricing" element={<ProtectedAdminRoute><PricingPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/seo" element={<ProtectedAdminRoute><SEOManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/blog" element={<ProtectedAdminRoute><BlogManagement /></ProtectedAdminRoute>} />
+        <Route path="/admin/email" element={<ProtectedAdminRoute><EmailManagement /></ProtectedAdminRoute>} />
+
+        {/* ── Catch-all: dashboard for authenticated, landing for guests ── */}
+        <Route
+          path="/*"
+          element={
+            user
+              ? <Dashboard onNavigatePublic={navHandlers.onNavigate} />
+              : <Navigate to="/" replace />
+          }
+        />
+      </Routes>
+    </>
   );
 }
 
