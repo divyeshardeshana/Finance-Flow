@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, Clock, Zap, Globe, Lock, ArrowRight } from 'lucide
 import { supabase } from '../../lib/supabase';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import SEOHead from '../SEO/SEOHead';
+import { sanitizeHtml } from '../../lib/sanitize';
 
 interface BlogCategory {
   id: string;
@@ -1038,7 +1039,7 @@ function ArticleContent({ content }: { content: string }) {
             <blockquote
               key={i}
               className="my-6 pl-5 border-l-4 border-blue-500 dark:border-blue-400 italic text-gray-600 dark:text-gray-300 text-lg leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: block.html }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
             />
           );
         }
@@ -1047,7 +1048,7 @@ function ArticleContent({ content }: { content: string }) {
             <div
               key={i}
               className="my-6 px-5 py-4 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/25 text-blue-800 dark:text-blue-200 text-sm leading-relaxed font-medium"
-              dangerouslySetInnerHTML={{ __html: block.html }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
             />
           );
         }
@@ -1077,7 +1078,7 @@ function ArticleContent({ content }: { content: string }) {
           <p
             key={i}
             className="text-gray-600 dark:text-gray-300 leading-[1.85] text-base mb-3"
-            dangerouslySetInnerHTML={{ __html: block.html }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
           />
         );
       })}
