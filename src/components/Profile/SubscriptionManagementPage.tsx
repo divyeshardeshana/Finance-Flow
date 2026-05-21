@@ -737,7 +737,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                     const actionType = getActionType(plan.tier_name);
                     // coming_soon is now a first-class DB flag — not inferred from Stripe config
                     const isComingSoon = !!plan.coming_soon;
-                    const price = billingCycle === 'annual' ? plan.annual_price / 12 : plan.monthly_price;
+                    const price = billingCycle === 'annual' ? plan.annual_price : plan.monthly_price;
 
                     return (
                       <motion.div
@@ -797,16 +797,13 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                             {isFree ? '$0' : formatCurrency(price, currency)}
                           </span>
                           {!isFree && (
-                            <span className="text-[13px] text-gray-400 dark:text-gray-500 font-medium"> /mo</span>
+                            <span className="text-[13px] text-gray-400 dark:text-gray-500 font-medium">
+                              {billingCycle === 'annual' ? '/year' : '/mo'}
+                            </span>
                           )}
                         </div>
                         {isFree && (
                           <p className="text-[12px] text-gray-400 dark:text-gray-500 mb-4">Free forever</p>
-                        )}
-                        {!isFree && billingCycle === 'annual' && (
-                          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mb-4">
-                            Billed {formatCurrency(plan.annual_price, currency)}/year
-                          </p>
                         )}
                         {!isFree && billingCycle !== 'annual' && <div className="mb-4" />}
 
