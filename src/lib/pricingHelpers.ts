@@ -201,7 +201,7 @@ export async function getSubscriptionTiers(): Promise<PricingPlan[]> {
     const plansWithFeatures = await Promise.all(
       sortedTiers.map(async (tier) => {
         const features = tier.features && tier.features.length > 0 && typeof tier.features[0] !== 'object'
-          ? tier.features as string[]
+          ? mapFeaturesToDisplayNames(tier.features as string[])
           : await getFeaturesForTier(tier.id, tier.tier_name);
         return {
           id: tier.id,
