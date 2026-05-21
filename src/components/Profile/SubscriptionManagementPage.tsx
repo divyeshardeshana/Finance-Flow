@@ -394,6 +394,15 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
     || currentTier;
   const isPaidSubscription = currentSubscription?.stripe_subscription_id && currentSubscription.status !== 'cancelled';
 
+  const maxAnnualSavingsPct = (() => {
+    const paid = plans.filter(p => p.monthly_price > 0);
+    if (paid.length === 0) return 15;
+    return Math.max(...paid.map(p => {
+      const m12 = p.monthly_price * 12;
+      return m12 > 0 ? Math.round((m12 - p.annual_price) / m12 * 100) : 0;
+    })) || 15;
+  })();
+
   return (
     <div className="space-y-6">
       {stripeEnv.loaded && stripeEnv.isTest && (
@@ -694,7 +703,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                       >
                         {cycle === 'monthly' ? 'Monthly' : 'Annual'}
                         {cycle === 'annual' && (
-                          <span className="ml-1 text-emerald-600 dark:text-emerald-400 text-[10px]">Save 15%</span>
+                          <span className="ml-1 text-emerald-600 dark:text-emerald-400 text-[10px]">Save {maxAnnualSavingsPct}%</span>
                         )}
                       </button>
                     ))}
