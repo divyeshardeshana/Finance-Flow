@@ -143,8 +143,8 @@ Deno.serve(async (req: Request) => {
     }
 
     const origin = req.headers.get("origin") ?? "http://localhost:5173";
-    const finalSuccessUrl = successUrl ?? `${origin}/?subscription_success=1&session_id={CHECKOUT_SESSION_ID}`;
-    const finalCancelUrl = cancelUrl ?? `${origin}/?subscription_cancel=1`;
+    const finalSuccessUrl = successUrl ?? `${origin}/dashboard?subscription_success=1&session_id={CHECKOUT_SESSION_ID}`;
+    const finalCancelUrl = cancelUrl ?? `${origin}/dashboard?subscription_cancel=1`;
 
     const sessionBody = new URLSearchParams({
       mode: "subscription",
