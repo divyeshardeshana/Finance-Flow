@@ -8,6 +8,10 @@ const corsHeaders = {
 };
 
 async function getStripeSecretKey(supabaseAdmin: ReturnType<typeof createClient>): Promise<string | null> {
+  // Prefer env var (set via edge function secrets) — fall back to DB for backwards compat
+  const envKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (envKey?.trim()) return envKey.trim();
+
   const { data: settings } = await supabaseAdmin
     .from("system_settings")
     .select("setting_key, setting_value")

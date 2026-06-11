@@ -8,6 +8,14 @@ const corsHeaders = {
 };
 
 async function getStripeConfig(supabaseAdmin: ReturnType<typeof createClient>) {
+  // Prefer env vars (set via edge function secrets) — fall back to DB for backwards compat
+  const envWebhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
+  const envSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
+
+  if (envSecretKey && envWebhookSecret) {
+    return { env: "env", secretKey: envSecretKey, webhookSecret: envWebhookSecret };
+  }
+
   const { data: settings } = await supabaseAdmin
     .from("system_settings")
     .select("setting_key, setting_value")
@@ -25,8 +33,8 @@ async function getStripeConfig(supabaseAdmin: ReturnType<typeof createClient>) {
   }
 
   const env = map["stripe_environment"] ?? "test";
-  const secretKey = env === "production" ? map["stripe_live_secret_key"] : map["stripe_test_secret_key"];
-  const webhookSecret = env === "production" ? map["stripe_live_webhook_secret"] : map["stripe_test_webhook_secret"];
+  const secretKey = envSecretKey || (env === "production" ? map["stripe_live_secret_key"] : map["stripe_test_secret_key"]);
+  const webhookSecret = envWebhookSecret || (env === "production" ? map["stripe_live_webhook_secret"] : map["stripe_test_webhook_secret"]);
 
   return { env, secretKey, webhookSecret };
 }
