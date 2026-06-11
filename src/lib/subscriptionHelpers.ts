@@ -17,7 +17,7 @@ const featureTierMap: Record<string, SubscriptionTier> = {
   literacy_gamification: 'free',
 
   financial_assistant: 'paid',
-  expense_prediction: 'paid',
+  expense_predictions: 'paid',
   ai_recommendations: 'paid',
   price_comparison: 'paid',
   bill_reminders: 'paid',
@@ -27,8 +27,9 @@ const featureTierMap: Record<string, SubscriptionTier> = {
   advanced_reports: 'paid',
   email_alerts: 'paid',
 
-  stock_prediction: 'premium',
+  stock_predictions: 'premium',
   net_worth_tracker: 'premium',
+  net_worth_tracking: 'premium',
   advanced_investments: 'premium',
   retirement_planning: 'premium',
   estate_planning: 'premium',

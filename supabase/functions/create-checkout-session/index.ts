@@ -8,6 +8,12 @@ const corsHeaders = {
 };
 
 async function getStripeConfig(supabaseAdmin: ReturnType<typeof createClient>) {
+  // Prefer env var (set via edge function secrets) — fall back to DB for backwards compat
+  const envSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (envSecretKey?.trim()) {
+    return { env: "env", secretKey: envSecretKey.trim() };
+  }
+
   const { data: settings } = await supabaseAdmin
     .from("system_settings")
     .select("setting_key, setting_value")
@@ -159,6 +165,7 @@ Deno.serve(async (req: Request) => {
       "metadata[billing_cycle]": billingCycle,
       "subscription_data[metadata][user_id]": user.id,
       "subscription_data[metadata][plan_id]": planId,
+      "subscription_data[metadata][billing_cycle]": billingCycle,
     });
 
     const sessionRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {

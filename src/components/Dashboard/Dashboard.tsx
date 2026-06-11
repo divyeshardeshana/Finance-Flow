@@ -73,8 +73,8 @@ const PAGE_FEATURE_MAP: Partial<Record<Page, string>> = {
   investment: 'advanced_investments',
   retirement: 'retirement_planning',
   estate: 'estate_planning',
-  predictions: 'expense_prediction',
-  stockprediction: 'stock_prediction',
+  predictions: 'expense_predictions',
+  stockprediction: 'stock_predictions',
   recommendations: 'ai_recommendations',
   pricecomparison: 'price_comparison',
 };

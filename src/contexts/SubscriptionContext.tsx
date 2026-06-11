@@ -67,8 +67,9 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      // Fall back to user_profiles if subscription didn't yield a valid tier
-      if (resolvedTier === 'free' && !activeSub) {
+      // Fall back to user_profiles when subscription record still shows free
+      // (covers the window between webhook firing and DB write completing)
+      if (resolvedTier === 'free') {
         const { data: profile } = await supabase
           .from('user_profiles')
           .select('subscription_tier')
@@ -76,7 +77,10 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
           .maybeSingle();
 
         const profileTier = (profile?.subscription_tier as SubscriptionTier) || 'free';
-        resolvedTier = profileTier;
+        if (profileTier !== 'free') {
+          resolvedTier = profileTier;
+          resolvedTierId = null; // will be resolved below
+        }
       }
 
       // Resolve tier_id if we don't have it yet
