@@ -121,7 +121,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
         supabase.from('transactions').select('id', { count: 'exact', head: true }).eq('user_id', user.id).gte('date', startOfMonth),
         supabase.from('system_settings')
           .select('setting_key, setting_value')
-          .in('setting_key', ['stripe_environment', 'stripe_test_secret_key', 'stripe_live_secret_key']),
+          .in('setting_key', ['stripe_environment', 'stripe_configured']),
       ]);
 
       setPlans(plansRes.data || []);
@@ -151,10 +151,8 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
         stripeMap[s.setting_key] = s.setting_value ?? '';
       }
       const envValue = stripeMap['stripe_environment'] ?? 'test';
-      const activeSecretKey = envValue === 'production'
-        ? stripeMap['stripe_live_secret_key']
-        : stripeMap['stripe_test_secret_key'];
-      setStripeEnv({ isTest: envValue !== 'production', loaded: true, secretKeyConfigured: !!activeSecretKey });
+      const secretKeyConfigured = stripeMap['stripe_configured'] === 'true';
+      setStripeEnv({ isTest: envValue !== 'production', loaded: true, secretKeyConfigured });
     } catch (error) {
       console.error('Error loading subscription data:', error);
     } finally {
