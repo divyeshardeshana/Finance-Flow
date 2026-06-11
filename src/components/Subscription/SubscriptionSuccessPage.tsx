@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { CheckCircle, Crown, ArrowRight, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
+import { useSubscription } from '../../contexts/SubscriptionContext';
 
 interface SubscriptionSuccessPageProps {
   onNavigateToDashboard: () => void;
@@ -13,6 +14,7 @@ export default function SubscriptionSuccessPage({
   onNavigateToSubscription,
 }: SubscriptionSuccessPageProps) {
   const { user } = useAuth();
+  const { refreshSubscription } = useSubscription();
   const [planName, setPlanName] = useState<string | null>(null);
   const [nextBillingDate, setNextBillingDate] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ export default function SubscriptionSuccessPage({
     if (!user) return;
 
     const load = async () => {
-      const maxAttempts = 6;
+      const maxAttempts = 10;
       const delayMs = 2000;
 
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -29,15 +31,20 @@ export default function SubscriptionSuccessPage({
 
         const { data } = await supabase
           .from('user_subscriptions')
-          .select('next_billing_date, billing_cycle, subscription_tiers!tier_id(display_name)')
+          .select('next_billing_date, billing_cycle, subscription_tiers!tier_id(tier_name, display_name)')
           .eq('user_id', user.id)
           .eq('status', 'active')
           .maybeSingle();
 
         if (data) {
-          const tierInfo = data.subscription_tiers as { display_name: string } | null;
-          setPlanName(tierInfo?.display_name ?? null);
+          const tierInfo = data.subscription_tiers as { tier_name: string; display_name: string } | null;
+          // Keep polling until the webhook has upgraded the tier away from free
+          if (!tierInfo || tierInfo.tier_name === 'free') continue;
+
+          setPlanName(tierInfo.display_name ?? null);
           setNextBillingDate(data.next_billing_date ?? null);
+          // Refresh the global subscription context so the rest of the UI updates
+          refreshSubscription();
           break;
         }
       }
@@ -72,7 +79,7 @@ export default function SubscriptionSuccessPage({
         {loading ? (
           <div className="bg-white dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 mb-8 flex items-center justify-center gap-3">
             <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
-            <span className="text-gray-600 dark:text-gray-400 text-sm">Loading your subscription details...</span>
+            <span className="text-gray-600 dark:text-gray-400 text-sm">Activating your plan, please wait…</span>
           </div>
         ) : (
           <div className="bg-white dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 mb-8">
