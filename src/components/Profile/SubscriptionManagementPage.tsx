@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Crown, Check, Calendar, TrendingUp, Zap, Shield, Target, Clock,
@@ -92,6 +92,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
   const [downgradingToFree, setDowngradingToFree] = useState(false);
   const [downgradeError, setDowngradeError] = useState<string | null>(null);
   const [showDowngradeConfirm, setShowDowngradeConfirm] = useState(false);
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   const loadData = useCallback(async () => {
     if (!user) return;
@@ -164,6 +165,17 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel(`sub-mgmt-${user.id}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'user_subscriptions', filter: `user_id=eq.${user.id}` }, () => { loadData(); })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'subscription_tiers' }, () => { loadData(); })
+      .subscribe();
+    channelRef.current = channel;
+    return () => { supabase.removeChannel(channel); };
+  }, [user, loadData]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -1059,6 +1071,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                 </div>
               </div>
 
+              {currentTier === 'free' && (
               <div className={`${cardClass} p-5`}>
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-sm shadow-blue-500/20">
@@ -1079,6 +1092,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                   </button>
                 </div>
               </div>
+              )}
             </div>
           )}
         </div>
