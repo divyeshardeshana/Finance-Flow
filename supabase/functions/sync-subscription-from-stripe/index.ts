@@ -66,20 +66,61 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    // Body is optional — session_id is passed from the success redirect URL so
+    // we can resolve the customer/subscription directly from Stripe without
+    // depending on user_profiles.stripe_customer_id being set.
+    let bodySessionId: string | null = null;
+    try {
+      const body = await req.json();
+      bodySessionId = body?.session_id ?? null;
+    } catch {
+      // empty body is fine
+    }
+
     const { data: profile } = await supabaseAdmin
       .from("user_profiles")
       .select("stripe_customer_id, email")
       .eq("id", user.id)
       .maybeSingle();
 
-    if (!profile?.stripe_customer_id) {
+    let stripeCustomerId: string | null = profile?.stripe_customer_id ?? null;
+
+    // If customer is not linked in our DB, try to resolve it via the Stripe
+    // checkout session that was just completed. This handles the case where
+    // create-checkout-session silently failed to persist the customer ID.
+    if (!stripeCustomerId && bodySessionId) {
+      console.log(`stripe_customer_id missing for user ${user.id} — resolving via session ${bodySessionId}`);
+      const sessionRes = await fetch(
+        `https://api.stripe.com/v1/checkout/sessions/${bodySessionId}`,
+        { headers: { Authorization: `Bearer ${secretKey}` } }
+      );
+      if (sessionRes.ok) {
+        const sessionData = await sessionRes.json();
+        const resolvedCustomerId = sessionData.customer as string | null;
+        if (resolvedCustomerId) {
+          stripeCustomerId = resolvedCustomerId;
+          // Persist the customer ID so future syncs don't need the session_id.
+          const { error: patchErr } = await supabaseAdmin
+            .from("user_profiles")
+            .update({ stripe_customer_id: stripeCustomerId })
+            .eq("id", user.id);
+          if (patchErr) {
+            console.error("Failed to backfill stripe_customer_id:", patchErr);
+          } else {
+            console.log(`Backfilled stripe_customer_id ${stripeCustomerId} for user ${user.id}`);
+          }
+        }
+      } else {
+        console.error("Failed to fetch Stripe session:", await sessionRes.text());
+      }
+    }
+
+    if (!stripeCustomerId) {
       return new Response(
         JSON.stringify({ synced: false, message: "No Stripe customer linked to this account.", tier: "free" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-
-    const stripeCustomerId = profile.stripe_customer_id;
 
     const subsRes = await fetch(
       `https://api.stripe.com/v1/subscriptions?customer=${stripeCustomerId}&status=all&limit=10&expand[]=data.default_payment_method`,
