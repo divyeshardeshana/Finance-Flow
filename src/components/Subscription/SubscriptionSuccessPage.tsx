@@ -7,11 +7,13 @@ import { useSubscription } from '../../contexts/SubscriptionContext';
 interface SubscriptionSuccessPageProps {
   onNavigateToDashboard: () => void;
   onNavigateToSubscription: () => void;
+  stripeSessionId?: string | null;
 }
 
 export default function SubscriptionSuccessPage({
   onNavigateToDashboard,
   onNavigateToSubscription,
+  stripeSessionId,
 }: SubscriptionSuccessPageProps) {
   const { user } = useAuth();
   const { refreshSubscription } = useSubscription();
@@ -22,12 +24,38 @@ export default function SubscriptionSuccessPage({
   useEffect(() => {
     if (!user) return;
 
+    const callSync = async (accessToken: string) => {
+      try {
+        await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-subscription-from-stripe`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+              apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({ session_id: stripeSessionId ?? null }),
+          }
+        );
+      } catch {
+        // Fire-and-forget — polling will pick up DB change
+      }
+    };
+
     const load = async () => {
-      const maxAttempts = 10;
-      const delayMs = 2000;
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const maxAttempts = 12;
+      const delayMs = 2500;
 
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        await new Promise((r) => setTimeout(r, attempt === 0 ? 1000 : delayMs));
+        await new Promise((r) => setTimeout(r, attempt === 0 ? 800 : delayMs));
+
+        // Re-trigger sync on every even attempt so transient failures self-heal.
+        if (session && attempt % 2 === 0) {
+          callSync(session.access_token);
+        }
 
         const { data } = await supabase
           .from('user_subscriptions')
@@ -38,13 +66,11 @@ export default function SubscriptionSuccessPage({
 
         if (data) {
           const tierInfo = data.subscription_tiers as { tier_name: string; display_name: string } | null;
-          // Keep polling until the webhook has upgraded the tier away from free
           if (!tierInfo || tierInfo.tier_name === 'free') continue;
 
           setPlanName(tierInfo.display_name ?? null);
           setNextBillingDate(data.next_billing_date ?? null);
-          // Refresh the global subscription context so the rest of the UI updates
-          refreshSubscription();
+          await refreshSubscription();
           break;
         }
       }
@@ -53,7 +79,7 @@ export default function SubscriptionSuccessPage({
     };
 
     load();
-  }, [user]);
+  }, [user, stripeSessionId]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center px-4">
