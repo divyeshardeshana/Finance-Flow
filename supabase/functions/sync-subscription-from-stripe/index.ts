@@ -123,7 +123,7 @@ Deno.serve(async (req: Request) => {
     }
 
     const subsRes = await fetch(
-      `https://api.stripe.com/v1/subscriptions?customer=${stripeCustomerId}&status=all&limit=10&expand[]=data.default_payment_method`,
+      `https://api.stripe.com/v1/subscriptions?customer=${stripeCustomerId}&status=all&limit=10&expand[]=data.default_payment_method&expand[]=data.items.data.price`,
       { headers: { Authorization: `Bearer ${secretKey}` } }
     );
 
@@ -199,6 +199,8 @@ Deno.serve(async (req: Request) => {
     let tierId: string | null = null;
     let tierName: string | null = null;
 
+    console.log(`sync-subscription: resolving tier — planId=${planId ?? "null"}, stripePriceId=${stripePriceId ?? "null"}, stripeStatus=${stripeStatus}`);
+
     if (planId) {
       const { data: tier } = await supabaseAdmin
         .from("subscription_tiers")
@@ -208,6 +210,9 @@ Deno.serve(async (req: Request) => {
       if (tier) {
         tierId = tier.id;
         tierName = tier.tier_name;
+        console.log(`sync-subscription: resolved via planId → ${tierName}`);
+      } else {
+        console.warn(`sync-subscription: planId ${planId} not found in subscription_tiers`);
       }
     }
 
@@ -220,29 +225,39 @@ Deno.serve(async (req: Request) => {
       if (tierByPrice) {
         tierId = tierByPrice.id;
         tierName = tierByPrice.tier_name;
+        console.log(`sync-subscription: resolved via stripePriceId → ${tierName}`);
+      } else {
+        console.warn(`sync-subscription: stripePriceId ${stripePriceId} not matched in subscription_tiers`);
       }
     }
 
+    // Only fall back to existing DB tier if it is NOT free — writing free back when
+    // Stripe shows an active subscription would corrupt the user's plan.
     if (!tierId) {
       const { data: existingSub } = await supabaseAdmin
         .from("user_subscriptions")
         .select("tier_id, tier")
         .eq("user_id", user.id)
         .maybeSingle();
-      if (existingSub?.tier_id) {
+      if (existingSub?.tier_id && existingSub.tier !== "free") {
         tierId = existingSub.tier_id;
         tierName = existingSub.tier;
+        console.log(`sync-subscription: resolved via existing non-free sub → ${tierName}`);
       }
     }
 
     if (!tierId) {
-      const { data: freeTier } = await supabaseAdmin
-        .from("subscription_tiers")
-        .select("id")
-        .eq("tier_name", "free")
-        .maybeSingle();
-      tierId = freeTier?.id ?? null;
-      tierName = "free";
+      // Cannot determine the paid tier from Stripe metadata or price ID.
+      // Return an error so we do NOT silently overwrite the plan with "free".
+      console.error(`sync-subscription: cannot resolve tier for active Stripe subscription ${stripeSubId}. planId=${planId}, stripePriceId=${stripePriceId}`);
+      return new Response(
+        JSON.stringify({
+          synced: false,
+          error: "Cannot resolve subscription tier — plan_id missing from Stripe metadata and price ID not matched in subscription_tiers. Check edge-function logs.",
+          debug: { planId, stripePriceId, stripeSubId, stripeStatus },
+        }),
+        { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const upsertPayload: Record<string, unknown> = {
