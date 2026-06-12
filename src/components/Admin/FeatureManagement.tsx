@@ -177,7 +177,7 @@ export default function FeatureManagement() {
       await loadData();
     } catch (error: unknown) {
       console.error('Error saving feature config:', error);
-      const msg = error instanceof Error ? error.message : 'Unknown error';
+      const msg = error instanceof Error ? error.message : (error as { message?: string })?.message ?? JSON.stringify(error);
       setSaveMessage({ type: 'error', text: `Failed to save: ${msg}` });
     } finally {
       setSaving(false);
