@@ -96,6 +96,7 @@ export function Dashboard({ onNavigatePublic }: DashboardProps = {}) {
 
   useEffect(() => {
     if (searchParams.get('subscription_success') === '1') {
+      const stripeSessionId = searchParams.get('session_id');
       setCurrentPage('subscription-success');
       setSearchParams({}, { replace: true });
       supabase.auth.getSession().then(({ data: { session } }) => {
@@ -109,7 +110,7 @@ export function Dashboard({ onNavigatePublic }: DashboardProps = {}) {
               'Content-Type': 'application/json',
               apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
             },
-            body: JSON.stringify({}),
+            body: JSON.stringify({ session_id: stripeSessionId }),
           }
         ).then(() => refreshSubscription()).catch(() => refreshSubscription());
       });
