@@ -90,6 +90,7 @@ export function Dashboard({ onNavigatePublic }: DashboardProps = {}) {
     return 'home';
   });
   const [subscriptionDefaultSection, setSubscriptionDefaultSection] = useState<'overview' | 'plans'>('overview');
+  const [pendingStripeSessionId, setPendingStripeSessionId] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [openProfileTab, setOpenProfileTab] = useState<string | null>(null);
@@ -97,6 +98,7 @@ export function Dashboard({ onNavigatePublic }: DashboardProps = {}) {
   useEffect(() => {
     if (searchParams.get('subscription_success') === '1') {
       const stripeSessionId = searchParams.get('session_id');
+      setPendingStripeSessionId(stripeSessionId);
       setCurrentPage('subscription-success');
       setSearchParams({}, { replace: true });
       supabase.auth.getSession().then(({ data: { session } }) => {
@@ -202,6 +204,7 @@ export function Dashboard({ onNavigatePublic }: DashboardProps = {}) {
               setSubscriptionDefaultSection('overview');
               setCurrentPage('subscription');
             }}
+            stripeSessionId={pendingStripeSessionId}
           />
         );
       default:
