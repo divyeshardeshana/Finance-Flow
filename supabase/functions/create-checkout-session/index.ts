@@ -142,10 +142,14 @@ Deno.serve(async (req: Request) => {
       const customer = await createCustomerRes.json();
       stripeCustomerId = customer.id;
 
-      await supabaseAdmin
+      const { error: profileUpdateError } = await supabaseAdmin
         .from("user_profiles")
         .update({ stripe_customer_id: stripeCustomerId })
         .eq("id", user.id);
+
+      if (profileUpdateError) {
+        console.error("Failed to save stripe_customer_id to user_profiles:", profileUpdateError);
+      }
     }
 
     const origin = req.headers.get("origin") ?? "http://localhost:5173";
