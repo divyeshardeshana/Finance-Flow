@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import SEOHead from '../SEO/SEOHead';
 
 interface Props {
   onNavigate: (view: PublicView) => void;
@@ -120,6 +121,16 @@ export default function SecurityPage({ onNavigate, onSignIn }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
+      <SEOHead
+        title="Security & Trust — FinanceFlow AI | Bank-Grade Data Protection"
+        description="FinanceFlow AI uses 256-bit AES encryption, row-level security, JWT auth, and SOC 2 compliant infrastructure. GDPR compliant. Your financial data is protected."
+        keywords="FinanceFlow security, personal finance data protection, encrypted finance app, GDPR finance, bank-grade security, financial data privacy"
+        canonical="https://financeflow.ai/security"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Security & Trust', url: 'https://financeflow.ai/security' },
+        ]}
+      />
       <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="security" />
 
       {/* Hero */}
