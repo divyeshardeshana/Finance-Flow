@@ -224,12 +224,17 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
   return (
     <>
       <SEOHead
-        title="Use Cases – FinanceFlow"
-        description="See how individuals, freelancers, families, and students use FinanceFlow to take control of their money and reach their financial goals."
-        keywords="personal finance app, budgeting for freelancers, family budget app, student money management"
+        title="Use Cases — FinanceFlow AI | For Individuals, Freelancers, Families & Students"
+        description="See how FinanceFlow AI helps salaried professionals, freelancers, families, and students budget smarter, save more, and reach financial goals faster."
+        keywords="personal finance app use cases, budgeting for freelancers, family budget tracker, student money management, salary budgeting app"
+        canonical="https://financeflow.ai/use-cases"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Use Cases', url: 'https://financeflow.ai/use-cases' },
+        ]}
       />
       <div className="min-h-screen bg-white dark:bg-[#0B0F1A]">
-        <PublicNavbar currentView="home" onNavigate={onNavigate} onSignIn={onSignIn} />
+        <PublicNavbar currentView="use-cases" onNavigate={onNavigate} onSignIn={onSignIn} />
 
         {/* Hero */}
         <section ref={heroRef} className="pt-28 pb-12 px-4 text-center relative overflow-hidden">
