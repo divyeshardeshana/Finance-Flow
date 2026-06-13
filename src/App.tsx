@@ -67,6 +67,13 @@ function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
   return <AdminLayout>{children}</AdminLayout>;
 }
 
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  if (loading) return <LoadingSpinner />;
+  if (!user) return <Navigate to="/signin" replace />;
+  return <>{children}</>;
+}
+
 // ── Route wrappers ────────────────────────────────────────────────────────────
 
 function BlogPostRoute() {
@@ -209,9 +216,9 @@ function AppContent() {
         <Route path="/forgot-password" element={<ForgotPasswordRoute />} />
         <Route path="/reset-password" element={<ResetPasswordRoute />} />
 
-        {/* ── Payment routes (always accessible) ── */}
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/orders" element={<OrdersPage />} />
+        {/* ── Payment routes (auth required) ── */}
+        <Route path="/products" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
         <Route path="/checkout/success" element={<PaymentSuccess />} />
         <Route path="/checkout/cancel" element={<PaymentCancel />} />
 
