@@ -9,7 +9,7 @@ const BLOG_CONFIG: DOMPurify.Config = {
     'table', 'thead', 'tbody', 'tr', 'th', 'td',
     'hr', 'sup', 'sub',
   ],
-  ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'style', 'target', 'rel', 'title'],
+  ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'target', 'rel', 'title'],
   ALLOW_DATA_ATTR: false,
 };
 
@@ -20,7 +20,7 @@ const EMAIL_CONFIG: DOMPurify.Config = {
     'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
   ],
   ALLOWED_ATTR: [
-    'href', 'src', 'alt', 'class', 'style', 'target', 'rel',
+    'href', 'src', 'alt', 'class', 'target', 'rel',
     'width', 'height', 'cellpadding', 'cellspacing', 'border', 'align',
   ],
   ALLOW_DATA_ATTR: false,
