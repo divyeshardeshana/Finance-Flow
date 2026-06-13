@@ -80,6 +80,7 @@ export function SignUp({ onToggle, onBackToHome, onNavigate }: SignUpProps) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -102,6 +103,11 @@ export function SignUp({ onToggle, onBackToHome, onNavigate }: SignUpProps) {
 
     if (password.length < 8) {
       setError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (!agreedToTerms) {
+      setError('You must agree to the Privacy Policy to create an account');
       return;
     }
 
@@ -350,9 +356,29 @@ export function SignUp({ onToggle, onBackToHome, onNavigate }: SignUpProps) {
                 </div>
               </div>
 
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={agreedToTerms}
+                  onChange={e => setAgreedToTerms(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
+                />
+                <span className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                  I agree to FinanceFlow's{' '}
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate('privacy')}
+                    className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                  >
+                    Privacy Policy
+                  </button>
+                  {' '}and consent to processing of my financial data to provide the service. You can request deletion of your data at any time from your Profile settings.
+                </span>
+              </label>
+
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !agreedToTerms}
                 className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white rounded-xl font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0"
               >
                 {loading ? (
