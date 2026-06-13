@@ -35,6 +35,8 @@ import FeaturesPage from './components/Public/FeaturesPage';
 import PublicPricingPage from './components/Public/PublicPricingPage';
 import ContactUsPage from './components/Public/ContactUsPage';
 import PrivacyPolicyPage from './components/Public/PrivacyPolicyPage';
+import FAQPage from './components/Public/FAQPage';
+import UseCasesPage from './components/Public/UseCasesPage';
 import ProductsPage from './pages/ProductsPage';
 import OrdersPage from './pages/OrdersPage';
 import { PaymentSuccess } from './components/payment/PaymentSuccess';
@@ -195,7 +197,9 @@ function AppContent() {
         />
         <Route path="/about" element={<AboutUsPage {...navHandlers} />} />
         <Route path="/features" element={<FeaturesPage {...navHandlers} />} />
+        <Route path="/use-cases" element={<UseCasesPage {...navHandlers} />} />
         <Route path="/pricing" element={<PublicPricingPage {...navHandlers} />} />
+        <Route path="/faq" element={<FAQPage {...navHandlers} />} />
         <Route path="/contact" element={<ContactUsPage {...navHandlers} />} />
         <Route path="/privacy" element={<PrivacyPolicyPage {...navHandlers} />} />
         <Route
