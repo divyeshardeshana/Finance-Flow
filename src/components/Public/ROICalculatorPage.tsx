@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { Calculator, ArrowRight, TrendingUp, Target, DollarSign, Zap, PieChart } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import SEOHead from '../SEO/SEOHead';
 
 interface Props {
   onNavigate: (view: PublicView) => void;
@@ -64,6 +65,16 @@ export default function ROICalculatorPage({ onNavigate, onSignIn }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
+      <SEOHead
+        title="ROI Calculator — How Much Could You Save with FinanceFlow AI?"
+        description="Calculate your potential savings with FinanceFlow AI. Enter your income and spending habits to see how much extra you could save per month and per year."
+        keywords="personal finance ROI calculator, how much can I save, budgeting app savings calculator, finance app return on investment"
+        canonical="https://financeflow.ai/roi-calculator"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'ROI Calculator', url: 'https://financeflow.ai/roi-calculator' },
+        ]}
+      />
       <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="roi-calculator" />
 
       {/* Hero */}
