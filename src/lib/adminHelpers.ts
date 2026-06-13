@@ -147,26 +147,21 @@ export async function updateSubscriptionPlan(planId: string, updates: Partial<Su
   return data;
 }
 
-export async function getAllPayments(
-  searchTerm?: string,
-  filterStatus?: string,
-  offset = 0,
-  limit = 50
-) {
-  let query = supabase
-    .from('billing_history')
-    .select('*, user_profiles!billing_history_user_id_fkey(full_name, email)', { count: 'exact' })
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1);
-
-  if (filterStatus && filterStatus !== 'all') {
-    query = query.eq('status', filterStatus);
-  }
-
-  const { data, error, count } = await query;
+export async function getAllPayments() {
+  const { data, error } = await supabase.rpc('get_all_payments_for_admin', {
+    filter_status: 'all',
+    offset_count: 0,
+    limit_count: 1000,
+  });
 
   if (error) throw error;
-  return { data, count };
+
+  const mapped = (data || []).map((row: any) => ({
+    ...row,
+    user_profiles: { full_name: row.user_full_name, email: row.user_email },
+  }));
+
+  return { data: mapped, count: mapped.length };
 }
 
 export async function processRefund(_paymentId: string, _amount: number, _adminId: string) {

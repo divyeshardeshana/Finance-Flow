@@ -36,21 +36,17 @@ export default function UserManagement() {
   }, []);
 
   const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('id, email, full_name, subscription_tier, is_admin, created_at, onboarding_completed, country, user_type, is_active, last_login_at')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setUsers(data || []);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const { data, error } = await supabase.rpc('get_all_users_for_admin');
+    if (error) throw error;
+    setUsers(data || []);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const userCountries = useMemo(() => {
     const unique = new Set(users.map((u) => u.country).filter(Boolean));

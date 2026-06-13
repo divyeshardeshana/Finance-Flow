@@ -15,15 +15,31 @@ import { useAdmin } from '../../contexts/AdminContext';
 import { updateSystemSetting } from '../../lib/adminHelpers';
 
 const OPENAI_MODELS = [
-  { value: 'gpt-4o', label: 'GPT-4o', description: 'Latest flagship model - fast and intelligent' },
-  { value: 'gpt-4o-mini', label: 'GPT-4o Mini', description: 'Small, fast, and affordable' },
-  { value: 'gpt-4-turbo', label: 'GPT-4 Turbo', description: 'Previous flagship with vision capabilities' },
-  { value: 'gpt-4', label: 'GPT-4', description: 'Standard GPT-4 model' },
-  { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo', description: 'Fast and cost-effective' },
-  { value: 'o3-mini', label: 'o3-mini', description: 'Small reasoning model' },
-  { value: 'o1', label: 'o1', description: 'Reasoning model for complex tasks' },
-  { value: 'o1-mini', label: 'o1-mini', description: 'Fast reasoning model' },
-  { value: 'o1-preview', label: 'o1-preview', description: 'Reasoning model preview' },
+  // GPT-4o family
+  { value: 'gpt-4o',                label: 'GPT-4o',                description: 'Latest flagship - fast, intelligent, multimodal' },
+  { value: 'gpt-4o-mini',           label: 'GPT-4o Mini',           description: 'Small, fast, and affordable' },
+  { value: 'gpt-4o-2024-11-20',     label: 'GPT-4o (Nov 2024)',     description: 'Snapshot: creative writing improvements' },
+  { value: 'gpt-4o-2024-08-06',     label: 'GPT-4o (Aug 2024)',     description: 'Snapshot: structured outputs support' },
+  { value: 'chatgpt-4o-latest',     label: 'ChatGPT-4o Latest',     description: 'Dynamic model used in ChatGPT' },
+  // GPT-4.1 family
+  { value: 'gpt-4.1',               label: 'GPT-4.1',               description: 'Latest GPT-4.1 - improved coding & instruction following' },
+  { value: 'gpt-4.1-mini',          label: 'GPT-4.1 Mini',          description: 'Fast and cost-efficient GPT-4.1' },
+  { value: 'gpt-4.1-nano',          label: 'GPT-4.1 Nano',          description: 'Smallest and fastest GPT-4.1 model' },
+  // GPT-4 family
+  { value: 'gpt-4-turbo',           label: 'GPT-4 Turbo',           description: 'Previous flagship with vision capabilities' },
+  { value: 'gpt-4',                 label: 'GPT-4',                 description: 'Standard GPT-4 model' },
+  { value: 'gpt-3.5-turbo',         label: 'GPT-3.5 Turbo',        description: 'Fast and cost-effective' },
+  // o3 family
+  { value: 'o3',                    label: 'o3',                    description: 'Most powerful reasoning model' },
+  { value: 'o3-mini',               label: 'o3-mini',               description: 'Fast, flexible, intelligent reasoning' },
+  { value: 'o3-mini-high',          label: 'o3-mini (high)',        description: 'o3-mini with high reasoning effort' },
+  // o4 family
+  { value: 'o4-mini',               label: 'o4-mini',               description: 'Fast, affordable reasoning model' },
+  { value: 'o4-mini-high',          label: 'o4-mini (high)',        description: 'o4-mini with high reasoning effort' },
+  // o1 family
+  { value: 'o1',                    label: 'o1',                    description: 'Reasoning model for complex tasks' },
+  { value: 'o1-mini',               label: 'o1-mini',               description: 'Fast reasoning model' },
+  { value: 'o1-preview',            label: 'o1-preview',            description: 'Reasoning model preview' },
 ];
 
 interface OpenAITabProps {

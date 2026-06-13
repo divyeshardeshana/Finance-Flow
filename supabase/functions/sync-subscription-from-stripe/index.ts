@@ -66,9 +66,9 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Body is optional — session_id is passed from the success redirect URL so
-    // we can resolve the customer/subscription directly from Stripe without
-    // depending on user_profiles.stripe_customer_id being set.
+    console.log(`sync-subscription: called for user ${user.id}`);
+
+    // Parse optional body — session_id comes from Stripe's success redirect URL
     let bodySessionId: string | null = null;
     try {
       const body = await req.json();
@@ -77,43 +77,118 @@ Deno.serve(async (req: Request) => {
       // empty body is fine
     }
 
+    console.log(`sync-subscription: session_id=${bodySessionId ?? "none"}`);
+
+    // ── Fast path: when session_id is available, fetch the Stripe checkout
+    // session directly. The session contains metadata.plan_id and metadata.user_id
+    // that WE set in create-checkout-session, so this is 100% reliable and does
+    // not depend on user_profiles.stripe_customer_id being pre-populated.
+    if (bodySessionId) {
+      console.log(`sync-subscription: using fast-path via session ${bodySessionId}`);
+      const sessionRes = await fetch(
+        `https://api.stripe.com/v1/checkout/sessions/${bodySessionId}?expand[]=subscription`,
+        { headers: { Authorization: `Bearer ${secretKey}` } }
+      );
+
+      if (!sessionRes.ok) {
+        console.error(`sync-subscription: failed to fetch session ${bodySessionId}:`, await sessionRes.text());
+        // Fall through to customer-based path below
+      } else {
+        const sess = await sessionRes.json();
+        console.log(`sync-subscription: session status=${sess.status}, payment_status=${sess.payment_status}`);
+
+        const sessCustomerId = sess.customer as string | null;
+        const sessPlanId = (sess.metadata as Record<string, string> | null)?.plan_id ?? null;
+        const sessBillingCycle = (sess.metadata as Record<string, string> | null)?.billing_cycle ?? "monthly";
+        const sessUserId = (sess.metadata as Record<string, string> | null)?.user_id ?? null;
+
+        console.log(`sync-subscription: session meta — user_id=${sessUserId}, plan_id=${sessPlanId}, billing_cycle=${sessBillingCycle}`);
+
+        // Safety: verify session belongs to this authenticated user
+        if (sessUserId && sessUserId !== user.id) {
+          console.error(`sync-subscription: session user_id mismatch: session=${sessUserId}, auth=${user.id}`);
+          return new Response(JSON.stringify({ error: "Session user mismatch" }), {
+            status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        // Backfill stripe_customer_id so future syncs don't need session_id
+        if (sessCustomerId) {
+          const { error: patchErr } = await supabaseAdmin
+            .from("user_profiles")
+            .update({ stripe_customer_id: sessCustomerId })
+            .eq("id", user.id);
+          if (patchErr) console.error("sync-subscription: failed to backfill stripe_customer_id:", patchErr);
+          else console.log(`sync-subscription: backfilled stripe_customer_id=${sessCustomerId}`);
+        }
+
+        if (sessPlanId) {
+          const { data: tier } = await supabaseAdmin
+            .from("subscription_tiers")
+            .select("id, tier_name, display_name")
+            .eq("id", sessPlanId)
+            .maybeSingle();
+
+          console.log(`sync-subscription: tier lookup for planId=${sessPlanId} → ${tier ? tier.tier_name : "NOT FOUND"}`);
+
+          if (tier) {
+            // Get subscription dates from the expanded subscription object
+            const stripeSub = typeof sess.subscription === "object" ? sess.subscription as Record<string, unknown> : null;
+            const stripeSubId = stripeSub?.id as string ?? (typeof sess.subscription === "string" ? sess.subscription : null);
+            const currentPeriodEnd = stripeSub?.current_period_end as number | null;
+            const currentPeriodStart = stripeSub?.current_period_start as number | null;
+            const startDateUnix = (stripeSub?.start_date as number | null) ?? currentPeriodStart;
+            const now = new Date().toISOString();
+            const nextBillingDate = currentPeriodEnd ? new Date(currentPeriodEnd * 1000).toISOString() : null;
+            const startDate = startDateUnix ? new Date(startDateUnix * 1000).toISOString() : now;
+
+            const upsertPayload: Record<string, unknown> = {
+              user_id: user.id,
+              tier_id: tier.id,
+              tier: tier.tier_name,
+              status: "active",
+              billing_cycle: sessBillingCycle,
+              auto_renew: true,
+              cancelled_at: null,
+              start_date: startDate,
+              next_billing_date: nextBillingDate,
+              updated_at: now,
+            };
+            if (stripeSubId) upsertPayload.stripe_subscription_id = stripeSubId;
+            if (sessCustomerId) upsertPayload.stripe_customer_id = sessCustomerId;
+
+            const { error: upsertErr } = await supabaseAdmin
+              .from("user_subscriptions")
+              .upsert(upsertPayload, { onConflict: "user_id" });
+
+            if (upsertErr) {
+              console.error("sync-subscription: upsert error (fast path):", upsertErr);
+            } else {
+              console.log(`sync-subscription: fast-path upsert success → tier=${tier.tier_name}`);
+              await supabaseAdmin
+                .from("user_profiles")
+                .update({ subscription_tier: tier.tier_name })
+                .eq("id", user.id);
+              return new Response(
+                JSON.stringify({ synced: true, tier: tier.tier_name, method: "session" }),
+                { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+              );
+            }
+          }
+        }
+      }
+    }
+
+    // ── Standard path: look up customer from user_profiles, fetch subscriptions ──
+
     const { data: profile } = await supabaseAdmin
       .from("user_profiles")
       .select("stripe_customer_id, email")
       .eq("id", user.id)
       .maybeSingle();
 
-    let stripeCustomerId: string | null = profile?.stripe_customer_id ?? null;
-
-    // If customer is not linked in our DB, try to resolve it via the Stripe
-    // checkout session that was just completed. This handles the case where
-    // create-checkout-session silently failed to persist the customer ID.
-    if (!stripeCustomerId && bodySessionId) {
-      console.log(`stripe_customer_id missing for user ${user.id} — resolving via session ${bodySessionId}`);
-      const sessionRes = await fetch(
-        `https://api.stripe.com/v1/checkout/sessions/${bodySessionId}`,
-        { headers: { Authorization: `Bearer ${secretKey}` } }
-      );
-      if (sessionRes.ok) {
-        const sessionData = await sessionRes.json();
-        const resolvedCustomerId = sessionData.customer as string | null;
-        if (resolvedCustomerId) {
-          stripeCustomerId = resolvedCustomerId;
-          // Persist the customer ID so future syncs don't need the session_id.
-          const { error: patchErr } = await supabaseAdmin
-            .from("user_profiles")
-            .update({ stripe_customer_id: stripeCustomerId })
-            .eq("id", user.id);
-          if (patchErr) {
-            console.error("Failed to backfill stripe_customer_id:", patchErr);
-          } else {
-            console.log(`Backfilled stripe_customer_id ${stripeCustomerId} for user ${user.id}`);
-          }
-        }
-      } else {
-        console.error("Failed to fetch Stripe session:", await sessionRes.text());
-      }
-    }
+    const stripeCustomerId: string | null = profile?.stripe_customer_id ?? null;
+    console.log(`sync-subscription: standard-path stripe_customer_id=${stripeCustomerId ?? "NULL"}`);
 
     if (!stripeCustomerId) {
       return new Response(
@@ -199,7 +274,7 @@ Deno.serve(async (req: Request) => {
     let tierId: string | null = null;
     let tierName: string | null = null;
 
-    console.log(`sync-subscription: resolving tier — planId=${planId ?? "null"}, stripePriceId=${stripePriceId ?? "null"}, stripeStatus=${stripeStatus}`);
+    console.log(`sync-subscription: standard-path resolving tier — planId=${planId ?? "null"}, stripePriceId=${stripePriceId ?? "null"}, stripeStatus=${stripeStatus}`);
 
     if (planId) {
       const { data: tier } = await supabaseAdmin
@@ -231,8 +306,7 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // Only fall back to existing DB tier if it is NOT free — writing free back when
-    // Stripe shows an active subscription would corrupt the user's plan.
+    // Only fall back to existing DB tier if it is NOT free
     if (!tierId) {
       const { data: existingSub } = await supabaseAdmin
         .from("user_subscriptions")
@@ -247,13 +321,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (!tierId) {
-      // Cannot determine the paid tier from Stripe metadata or price ID.
-      // Return an error so we do NOT silently overwrite the plan with "free".
-      console.error(`sync-subscription: cannot resolve tier for active Stripe subscription ${stripeSubId}. planId=${planId}, stripePriceId=${stripePriceId}`);
+      console.error(`sync-subscription: cannot resolve tier — planId=${planId}, stripePriceId=${stripePriceId}, stripeSubId=${stripeSubId}`);
       return new Response(
         JSON.stringify({
           synced: false,
-          error: "Cannot resolve subscription tier — plan_id missing from Stripe metadata and price ID not matched in subscription_tiers. Check edge-function logs.",
+          error: "Cannot resolve subscription tier",
           debug: { planId, stripePriceId, stripeSubId, stripeStatus },
         }),
         { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }

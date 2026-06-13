@@ -101,17 +101,18 @@ export default function BlogTab() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [cats, { data: postsData }] = await Promise.all([
-        getAllBlogCategories(),
-        getAllBlogPosts(filterStatus),
-      ]);
+      const cats = await getAllBlogCategories();
       setCategories(cats);
+    } catch (err) {
+      console.error('Error loading categories:', err);
+    }
+    try {
+      const { data: postsData } = await getAllBlogPosts(filterStatus);
       setPosts(postsData);
     } catch (err) {
-      console.error('Error loading blog data:', err);
-    } finally {
-      setLoading(false);
+      console.error('Error loading posts:', err);
     }
+    setLoading(false);
   }, [filterStatus]);
 
   useEffect(() => {
@@ -242,9 +243,9 @@ export default function BlogTab() {
       } as Partial<BlogPost>, user.id);
       await logActivity('generate_blog_content', 'blog_post', post.id);
       loadData();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error generating content:', err);
-      alert('Failed to generate blog content. Check OpenAI settings.');
+      alert(`Failed to generate blog content: ${err?.message || String(err)}`);
     } finally {
       setGeneratingId(null);
     }
