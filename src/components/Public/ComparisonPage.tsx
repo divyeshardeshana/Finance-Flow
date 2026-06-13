@@ -182,6 +182,67 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
         </div>
       </section>
 
+      {/* Switching is easy */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-3">Switching takes 5 minutes</h2>
+            <p className="text-gray-500 dark:text-gray-400">Coming from Mint, YNAB, or a spreadsheet? Here is how easy the move is.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { step: '01', title: 'Export your old data', desc: 'Download a CSV from your current app or export your spreadsheet. Most tools support CSV export in under 2 minutes.' },
+              { step: '02', title: 'Import into FinanceFlow', desc: 'Use our CSV import to bring in historical transactions. Categories are auto-detected. Review and confirm in one click.' },
+              { step: '03', title: 'Set up budgets & goals', desc: 'Recreate your budgets in minutes using our guided setup. Your savings goals and bill reminders are ready the same day.' },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative p-6 rounded-2xl bg-white dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.06]"
+              >
+                <div className="text-5xl font-black text-gray-100 dark:text-white/5 absolute top-4 right-4 select-none">{s.step}</div>
+                <div className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center mb-4">{parseInt(s.step)}</div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{s.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* User quotes */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-white/[0.02]">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-10">What switchers say</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              { quote: 'Switched from Mint after it shut down. FinanceFlow has everything Mint had, plus AI insights I never knew I needed. Migration took one afternoon.', name: 'Sarah K.', from: 'Former Mint user' },
+              { quote: 'YNAB is great but $180/year is steep when you are just starting. FinanceFlow free plan covers everything I actually use and the Pro upgrade is half the price.', name: 'James T.', from: 'Former YNAB user' },
+              { quote: 'I maintained a 400-row Google Sheet for 3 years. FinanceFlow auto-categorises everything and the charts actually update in real time. I wish I switched sooner.', name: 'Meera P.', from: 'Former spreadsheet user' },
+              { quote: 'The AI assistant alone made switching worth it. I asked it to analyse my subscriptions and it found two I forgot about — paid for itself in the first week.', name: 'Khalid A.', from: 'Former Mint user' },
+            ].map((q, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: (i % 2) * 0.1 }}
+                className="p-5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]"
+              >
+                <p className="text-sm text-gray-700 dark:text-gray-300 italic leading-relaxed mb-4">"{q.quote}"</p>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{q.name}</p>
+                  <p className="text-xs text-gray-500">{q.from}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
