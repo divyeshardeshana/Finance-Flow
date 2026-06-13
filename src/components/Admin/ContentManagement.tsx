@@ -19,7 +19,12 @@ export default function ContentManagement() {
   const canManage = hasPermission(activeTab === 'quizzes' ? 'manage_quizzes' : 'manage_faqs');
 
   useEffect(() => {
-    loadContent();
+    // always load FAQs when switching to faqs or website tab
+    if (activeTab === 'quizzes') {
+      loadContent();
+    } else {
+      loadContent();
+    }
   }, [activeTab]);
 
   const loadContent = async () => {
@@ -29,6 +34,7 @@ export default function ContentManagement() {
         const { data } = await getAllQuizQuestions();
         setQuizzes(data || []);
       } else {
+        // load FAQs for both 'faqs' and 'website' tabs
         const { data } = await getAllFAQs();
         setFAQs(data || []);
       }
@@ -64,8 +70,9 @@ export default function ContentManagement() {
         question: '',
         answer: '',
         category: 'getting_started',
-        order_index: 0,
+        order_index: faqs.length,
         is_published: true,
+        show_on_website: false,
       });
     }
     setShowCreateForm(true);
@@ -96,10 +103,26 @@ export default function ContentManagement() {
         }
       } else {
         if (editingId) {
-          await updateFAQ(editingId, formData, user.id);
+          const faqUpdates = {
+            question: formData.question,
+            answer: formData.answer,
+            category: formData.category,
+            order_index: formData.order_index,
+            is_published: formData.is_published,
+            show_on_website: formData.show_on_website,
+          };
+          await updateFAQ(editingId, faqUpdates, user.id);
           await logActivity('update_faq', 'faq_article', editingId);
         } else {
-          await createFAQ(formData, user.id);
+          const faqCreate = {
+            question: formData.question,
+            answer: formData.answer,
+            category: formData.category,
+            order_index: formData.order_index,
+            is_published: formData.is_published,
+            show_on_website: formData.show_on_website,
+          };
+          await createFAQ(faqCreate, user.id);
           await logActivity('create_faq', 'faq_article');
         }
       }
@@ -321,37 +344,78 @@ export default function ContentManagement() {
                 <div key={faq.id} className="border border-slate-200 dark:border-gray-700 rounded-lg p-4 dark:bg-gray-900">
                   {editingId === faq.id ? (
                     <div className="space-y-3">
-                      <select
-                        value={formData.category}
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                      >
-                        <option value="getting_started">Getting Started</option>
-                        <option value="account">Account</option>
-                        <option value="billing">Billing</option>
-                        <option value="features">Features</option>
-                        <option value="troubleshooting">Troubleshooting</option>
-                      </select>
-                      <input
-                        type="text"
-                        value={formData.question}
-                        onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                        placeholder="Question"
-                        className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                      />
-                      <textarea
-                        value={formData.answer}
-                        onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
-                        placeholder="Answer"
-                        rows={5}
-                        className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                      />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Category</label>
+                          <select
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                          >
+                            <option value="getting_started">Getting Started</option>
+                            <option value="account">Account</option>
+                            <option value="billing">Billing</option>
+                            <option value="features">Features</option>
+                            <option value="troubleshooting">Troubleshooting</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Order</label>
+                          <input
+                            type="number"
+                            value={formData.order_index}
+                            onChange={(e) => setFormData({ ...formData, order_index: parseInt(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Question</label>
+                        <input
+                          type="text"
+                          value={formData.question}
+                          onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+                          placeholder="Question"
+                          className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Answer</label>
+                        <textarea
+                          value={formData.answer}
+                          onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+                          placeholder="Answer"
+                          rows={5}
+                          className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                        />
+                      </div>
+                      <div className="flex items-center gap-6">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={!!formData.is_published}
+                            onChange={(e) => setFormData({ ...formData, is_published: e.target.checked })}
+                            className="w-4 h-4 rounded border-gray-300 text-blue-600"
+                          />
+                          <span className="text-sm text-slate-700 dark:text-gray-300">Published</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={!!formData.show_on_website}
+                            onChange={(e) => setFormData({ ...formData, show_on_website: e.target.checked })}
+                            className="w-4 h-4 rounded border-gray-300 text-emerald-600"
+                          />
+                          <span className="text-sm text-slate-700 dark:text-gray-300">Show on Website</span>
+                        </label>
+                      </div>
                       <div className="flex space-x-2">
-                        <button onClick={saveContent} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                          <Save size={18} className="inline mr-2" />Save
+                        <button onClick={saveContent} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                          <Save size={15} className="inline mr-1.5" />Save
                         </button>
-                        <button onClick={cancelEdit} className="px-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 dark:text-white">
-                          <X size={18} className="inline mr-2" />Cancel
+                        <button onClick={cancelEdit} className="px-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 dark:text-white text-sm">
+                          <X size={15} className="inline mr-1.5" />Cancel
                         </button>
                       </div>
                     </div>
@@ -439,31 +503,72 @@ export default function ContentManagement() {
                 </>
               ) : (
                 <>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg"
-                  >
-                    <option value="getting_started">Getting Started</option>
-                    <option value="account">Account</option>
-                    <option value="billing">Billing</option>
-                    <option value="features">Features</option>
-                    <option value="troubleshooting">Troubleshooting</option>
-                  </select>
-                  <input
-                    type="text"
-                    value={formData.question}
-                    onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                    placeholder="Question"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg"
-                  />
-                  <textarea
-                    value={formData.answer}
-                    onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
-                    placeholder="Answer"
-                    rows={5}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg"
-                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Category</label>
+                      <select
+                        value={formData.category}
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                      >
+                        <option value="getting_started">Getting Started</option>
+                        <option value="account">Account</option>
+                        <option value="billing">Billing</option>
+                        <option value="features">Features</option>
+                        <option value="troubleshooting">Troubleshooting</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Order Index</label>
+                      <input
+                        type="number"
+                        value={formData.order_index}
+                        onChange={(e) => setFormData({ ...formData, order_index: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Question</label>
+                    <input
+                      type="text"
+                      value={formData.question}
+                      onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+                      placeholder="e.g. How do I reset my password?"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Answer</label>
+                    <textarea
+                      value={formData.answer}
+                      onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+                      placeholder="Write a clear, helpful answer..."
+                      rows={5}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                    />
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!!formData.is_published}
+                        onChange={(e) => setFormData({ ...formData, is_published: e.target.checked })}
+                        className="w-4 h-4 rounded border-gray-300 text-blue-600"
+                      />
+                      <span className="text-sm text-slate-700">Published</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!!formData.show_on_website}
+                        onChange={(e) => setFormData({ ...formData, show_on_website: e.target.checked })}
+                        className="w-4 h-4 rounded border-gray-300 text-emerald-600"
+                      />
+                      <span className="text-sm text-slate-700">Show on Website</span>
+                    </label>
+                  </div>
                 </>
               )}
               <div className="flex space-x-2">
