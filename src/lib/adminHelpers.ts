@@ -430,11 +430,7 @@ export async function updateFAQ(
 ) {
   const { data, error } = await supabase
     .from('faq_articles')
-    .update({
-      ...updates,
-      last_edited_by: adminId,
-      last_edited_at: new Date().toISOString(),
-    })
+    .update(updates)
     .eq('id', faqId)
     .select()
     .single();
