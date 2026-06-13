@@ -108,7 +108,7 @@ export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
       {faqs.length > 0 && <FAQSchemaScript faqs={faqs} />}
 
       <div className="min-h-screen bg-white dark:bg-[#0B0F1A]">
-        <PublicNavbar currentView="home" onNavigate={onNavigate} onSignIn={onSignIn} />
+        <PublicNavbar currentView="faq" onNavigate={onNavigate} onSignIn={onSignIn} />
 
         {/* Hero */}
         <section ref={heroRef} className="pt-28 pb-16 px-4 text-center relative overflow-hidden">
