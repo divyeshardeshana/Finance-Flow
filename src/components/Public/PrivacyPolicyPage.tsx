@@ -163,7 +163,17 @@ For EEA/UK users: If you are unsatisfied with our response to a privacy concern,
 export default function PrivacyPolicyPage({ onNavigate, onSignIn }: PrivacyPolicyPageProps) {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-800">
-      <SEOHead pageKey="privacy" />
+      <SEOHead
+        pageKey="privacy"
+        title="Privacy Policy — FinanceFlow AI | GDPR Compliant"
+        description="FinanceFlow AI privacy policy — how we collect, use, and protect your personal and financial data. GDPR Article 17 & 20 compliant. You own your data."
+        keywords="FinanceFlow privacy policy, GDPR finance app, data protection personal finance, financial data privacy"
+        canonical="https://financeflow.ai/privacy"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Privacy Policy', url: 'https://financeflow.ai/privacy' },
+        ]}
+      />
       <PublicNavbar currentView="home" onNavigate={onNavigate} onSignIn={onSignIn} />
 
       <section className="pt-28 pb-16 bg-gradient-to-br from-blue-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
