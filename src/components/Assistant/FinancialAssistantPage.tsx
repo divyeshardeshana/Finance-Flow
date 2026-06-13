@@ -163,25 +163,15 @@ export function FinancialAssistantPage() {
   const isLimitReached = featureAccess.promptLimit !== null && promptsUsed >= featureAccess.promptLimit;
 
   const getValidToken = async (): Promise<string> => {
-    console.group('[FinancialAssistant] getValidToken');
     const token = await refreshSession();
-    console.log('Token obtained:', token ? `${token.substring(0, 20)}...` : 'null');
-    console.groupEnd();
-
     if (!token) {
       throw new Error('AUTH_ERROR: No active session found. Please sign in again.');
     }
-
     return token;
   };
 
   const callAssistantApi = async (token: string, messageToSend: string, currentMessages: Message[]): Promise<string> => {
     const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/financial-assistant`;
-
-    console.group('[FinancialAssistant] callAssistantApi');
-    console.log('URL:', apiUrl);
-    console.log('Token (first 20 chars):', token.substring(0, 20) + '...');
-    console.log('apikey present:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
     let response: Response;
     try {
@@ -190,7 +180,6 @@ export function FinancialAssistantPage() {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
         },
         body: JSON.stringify({
           question: messageToSend,
@@ -201,10 +190,7 @@ export function FinancialAssistantPage() {
           })),
         }),
       });
-      console.log('HTTP status:', response.status, response.statusText);
     } catch (fetchErr) {
-      console.error('Fetch failed (network error):', fetchErr);
-      console.groupEnd();
       throw new Error('NETWORK_ERROR: Unable to reach the financial assistant service. Please check your internet connection.');
     }
 
@@ -212,19 +198,13 @@ export function FinancialAssistantPage() {
     let rawText = '';
     try {
       rawText = await response.text();
-      console.log('Raw response body:', rawText.substring(0, 500));
       result = JSON.parse(rawText);
-      console.log('Parsed result:', { answer: result.answer ? '[present]' : undefined, error: result.error, errorCode: result.errorCode });
     } catch {
-      console.error('Failed to parse response as JSON. Raw text:', rawText.substring(0, 500));
-      console.groupEnd();
       throw new Error(`SERVER_ERROR: The server returned an invalid response (HTTP ${response.status}).`);
     }
 
     if (!response.ok) {
       const serverMsg = result?.error || '';
-      console.log('Response not OK. Branch detection — serverMsg:', serverMsg, '| errorCode:', result?.errorCode, '| status:', response.status);
-      console.groupEnd();
       if (serverMsg.toLowerCase().includes('openai') || result?.errorCode === 'OPENAI_ERROR') {
         throw new Error('OpenAI service connection error - please verify API configuration in Admin › Settings.');
       }
@@ -236,9 +216,6 @@ export function FinancialAssistantPage() {
       }
       throw new Error(serverMsg || `Server error (HTTP ${response.status}). Please try again.`);
     }
-
-    console.log('Success — answer length:', result.answer?.length ?? 0);
-    console.groupEnd();
 
     if (!result.answer) {
       throw new Error('The assistant returned an empty response. Please try rephrasing your question.');
@@ -288,12 +265,9 @@ export function FinancialAssistantPage() {
         answer = await callAssistantApi(token, messageToSend, historySnapshot.slice(0, -1));
       } catch (firstErr) {
         const raw = firstErr instanceof Error ? firstErr.message : String(firstErr);
-        console.warn('[FinancialAssistant] First attempt error:', raw);
         if (raw !== 'AUTH_RETRY') throw firstErr;
 
-        console.log('[FinancialAssistant] AUTH_RETRY triggered — attempting forceRefreshSession');
         const newToken = await forceRefreshSession();
-        console.log('[FinancialAssistant] forceRefreshSession result:', newToken ? `${newToken.substring(0, 20)}...` : 'null');
         if (!newToken) {
           throw new Error('Your session could not be renewed. Please sign out and sign back in.');
         }
@@ -302,7 +276,6 @@ export function FinancialAssistantPage() {
           answer = await callAssistantApi(newToken, messageToSend, historySnapshot.slice(0, -1));
         } catch (retryErr) {
           const retryRaw = retryErr instanceof Error ? retryErr.message : String(retryErr);
-          console.error('[FinancialAssistant] Retry attempt also failed:', retryRaw);
           if (retryRaw === 'AUTH_RETRY') {
             throw new Error('Authentication failed after retry. Please sign out and sign back in.');
           }
@@ -318,7 +291,6 @@ export function FinancialAssistantPage() {
       }]);
       setPromptsUsed((prev) => prev + 1);
     } catch (err) {
-      console.error('Financial assistant error:', err);
       const raw = err instanceof Error ? err.message : String(err);
 
       let displayMessage: string;
