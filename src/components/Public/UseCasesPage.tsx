@@ -136,7 +136,7 @@ const USE_CASES: UseCase[] = [
   },
 ];
 
-function UseCaseCard({ uc, index }: { uc: UseCase; index: number }) {
+function UseCaseCard({ uc, index, onSignIn }: { uc: UseCase; index: number; onSignIn: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });
   const isEven = index % 2 === 0;
@@ -206,6 +206,7 @@ function UseCaseCard({ uc, index }: { uc: UseCase; index: number }) {
 
         <motion.button
           variants={fadeUp} custom={0.6}
+          onClick={onSignIn}
           className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r ${uc.gradient} text-white font-semibold text-sm shadow-lg ${uc.shadowColor} hover:opacity-90 transition-opacity`}
         >
           {uc.cta}
@@ -273,7 +274,7 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
         <section className="max-w-6xl mx-auto px-4">
           {USE_CASES.map((uc, i) => (
             <div key={uc.id} id={uc.id}>
-              <UseCaseCard uc={uc} index={i} />
+              <UseCaseCard uc={uc} index={i} onSignIn={onSignIn} />
             </div>
           ))}
         </section>
@@ -312,7 +313,7 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
           </motion.div>
         </section>
 
-        <PublicFooter onNavigate={onNavigate} onSignIn={onSignIn} />
+        <PublicFooter onNavigate={onNavigate} />
       </div>
     </>
   );
