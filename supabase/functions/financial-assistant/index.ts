@@ -194,22 +194,14 @@ Deno.serve(async (req: Request) => {
 
   try {
     const authHeader = req.headers.get('Authorization');
-    const apikeyHeader = req.headers.get('apikey');
-    console.log('[DEBUG] Authorization header present:', !!authHeader);
-    console.log('[DEBUG] apikey header present:', !!apikeyHeader);
-    console.log('[DEBUG] Authorization prefix:', authHeader ? authHeader.substring(0, 15) + '...' : 'none');
 
     if (!authHeader) {
-      console.error('[DEBUG] No authorization header — returning 401');
       throw new Error('No authorization header');
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    console.log('[DEBUG] SUPABASE_URL present:', !!supabaseUrl);
-    console.log('[DEBUG] SUPABASE_ANON_KEY present:', !!supabaseAnonKey);
-    console.log('[DEBUG] SUPABASE_SERVICE_ROLE_KEY present:', !!supabaseServiceKey);
 
     const supabaseUser = createClient(supabaseUrl, supabaseAnonKey, {
       global: {
@@ -217,12 +209,9 @@ Deno.serve(async (req: Request) => {
       },
     });
 
-    console.log('[DEBUG] Calling auth.getUser()...');
     const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
-    console.log('[DEBUG] auth.getUser() result — user:', user ? user.id : 'null', '| error:', authError ? authError.message : 'none');
 
     if (authError || !user) {
-      console.error('[DEBUG] Auth failed — authError:', authError?.message, '| user present:', !!user);
       return new Response(
         JSON.stringify({ error: 'Unauthorized', errorCode: 'AUTH_EXPIRED' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -230,7 +219,6 @@ Deno.serve(async (req: Request) => {
     }
 
     const userId = user.id;
-    console.log('[DEBUG] Auth successful for userId:', userId);
 
     const { question, currency = 'USD', conversationHistory = [] }: AssistantRequest = await req.json();
 
