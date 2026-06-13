@@ -26,4 +26,4 @@ Disallow: /subscription
 Disallow: /reset-password
 Disallow: /forgot-password
 
-Sitemap: https://app.financeflow.ai/sitemap.xml
+Sitemap: https://financeflow.ai/sitemap.xml
