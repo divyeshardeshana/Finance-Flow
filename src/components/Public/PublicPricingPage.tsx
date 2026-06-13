@@ -152,7 +152,17 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
-      <SEOHead pageKey="pricing" />
+      <SEOHead
+        pageKey="pricing"
+        title="Pricing — FinanceFlow AI | Free, Pro & Premium Plans"
+        description="FinanceFlow AI pricing: Free plan with core budgeting, Pro at $9.99/month with AI assistant and investments, Premium with full features. No credit card for free plan."
+        keywords="FinanceFlow pricing, personal finance app pricing, budgeting app cost, free finance app, Pro plan, Premium plan"
+        canonical="https://financeflow.ai/pricing"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Pricing', url: 'https://financeflow.ai/pricing' },
+        ]}
+      />
       <PublicNavbar currentView="pricing" onNavigate={onNavigate} onSignIn={onSignIn} />
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
