@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import SEOHead from '../SEO/SEOHead';
 
 interface Props {
   onNavigate: (view: PublicView) => void;
@@ -107,6 +108,16 @@ export default function HowItWorksPage({ onNavigate, onSignIn }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
+      <SEOHead
+        title="How It Works — FinanceFlow AI | 4 Simple Steps to Financial Clarity"
+        description="Learn how FinanceFlow AI works in 4 steps: create an account, track transactions, set goals, and get AI-powered financial insights. Setup takes under 60 seconds."
+        keywords="how FinanceFlow works, personal finance app setup, budgeting app guide, AI financial assistant how to use"
+        canonical="https://financeflow.ai/how-it-works"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'How It Works', url: 'https://financeflow.ai/how-it-works' },
+        ]}
+      />
       <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="how-it-works" />
 
       {/* Hero */}
