@@ -129,9 +129,9 @@ export default function ContentManagement() {
 
       await loadContent();
       cancelEdit();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving content:', error);
-      alert('Error saving. Please try again.');
+      alert(`Error saving: ${error?.message || JSON.stringify(error)}`);
     }
   };
 
