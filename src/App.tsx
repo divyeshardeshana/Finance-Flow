@@ -42,6 +42,7 @@ import OrdersPage from './pages/OrdersPage';
 import { PaymentSuccess } from './components/payment/PaymentSuccess';
 import { PaymentCancel } from './components/payment/PaymentCancel';
 import { type PublicView } from './components/Common/PublicNavbar';
+import { CookieConsentBanner } from './components/Common/CookieConsentBanner';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -183,6 +184,7 @@ function AppContent() {
   return (
     <>
       <ScrollToTop />
+      <CookieConsentBanner gaMeasurementId={import.meta.env.VITE_GA_MEASUREMENT_ID} />
       <Routes>
         {/* ── Public pages ── */}
         <Route
