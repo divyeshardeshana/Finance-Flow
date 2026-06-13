@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { Star, Quote, ArrowRight, Users, TrendingUp, Target, Zap } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import SEOHead from '../SEO/SEOHead';
 
 interface Props {
   onNavigate: (view: PublicView) => void;
@@ -111,6 +112,16 @@ export default function TestimonialsPage({ onNavigate, onSignIn }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
+      <SEOHead
+        title="Testimonials — FinanceFlow AI | Real User Stories"
+        description="Read real stories from FinanceFlow AI users worldwide — individuals, freelancers, families, and students who transformed their finances. 10,000+ active users."
+        keywords="FinanceFlow reviews, personal finance app testimonials, budgeting app success stories, FinanceFlow AI user reviews"
+        canonical="https://financeflow.ai/testimonials"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Testimonials', url: 'https://financeflow.ai/testimonials' },
+        ]}
+      />
       <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="testimonials" />
 
       {/* Hero */}
