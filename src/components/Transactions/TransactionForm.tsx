@@ -87,6 +87,12 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
     e.preventDefault();
     if (!user) return;
 
+    const parsedAmount = parseFloat(formData.amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      alert('Amount must be a positive number.');
+      return;
+    }
+
     setLoading(true);
 
     try {
