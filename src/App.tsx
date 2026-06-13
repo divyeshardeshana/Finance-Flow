@@ -37,6 +37,11 @@ import ContactUsPage from './components/Public/ContactUsPage';
 import PrivacyPolicyPage from './components/Public/PrivacyPolicyPage';
 import FAQPage from './components/Public/FAQPage';
 import UseCasesPage from './components/Public/UseCasesPage';
+import HowItWorksPage from './components/Public/HowItWorksPage';
+import TestimonialsPage from './components/Public/TestimonialsPage';
+import SecurityPage from './components/Public/SecurityPage';
+import ComparisonPage from './components/Public/ComparisonPage';
+import ROICalculatorPage from './components/Public/ROICalculatorPage';
 import ProductsPage from './pages/ProductsPage';
 import OrdersPage from './pages/OrdersPage';
 import { PaymentSuccess } from './components/payment/PaymentSuccess';
@@ -204,6 +209,11 @@ function AppContent() {
         <Route path="/faq" element={<FAQPage {...navHandlers} />} />
         <Route path="/contact" element={<ContactUsPage {...navHandlers} />} />
         <Route path="/privacy" element={<PrivacyPolicyPage {...navHandlers} />} />
+        <Route path="/how-it-works" element={<HowItWorksPage {...navHandlers} />} />
+        <Route path="/testimonials" element={<TestimonialsPage {...navHandlers} />} />
+        <Route path="/security" element={<SecurityPage {...navHandlers} />} />
+        <Route path="/comparison" element={<ComparisonPage {...navHandlers} />} />
+        <Route path="/roi-calculator" element={<ROICalculatorPage {...navHandlers} />} />
         <Route
           path="/blog"
           element={
