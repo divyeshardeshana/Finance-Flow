@@ -216,40 +216,132 @@ export default function ContentManagement() {
               <div className="flex items-center gap-2 mb-4 p-3 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg border border-emerald-200 dark:border-emerald-500/20">
                 <Globe size={16} className="text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                 <p className="text-sm text-emerald-700 dark:text-emerald-400">
-                  Toggle which FAQ articles appear on the public <strong>/faq</strong> page. Only published FAQs can be shown.
+                  Edit content and toggle visibility for the public <strong>/faq</strong> page. Only published FAQs can be shown.
                 </p>
               </div>
               {faqs.length === 0 && (
                 <p className="text-center py-8 text-slate-500 dark:text-gray-400">No FAQ articles yet. Create some in the FAQ Articles tab first.</p>
               )}
               {faqs.map((faq) => (
-                <div key={faq.id} className="flex items-start justify-between border border-slate-200 dark:border-gray-700 rounded-lg p-4 dark:bg-gray-900 gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2 py-0.5 text-xs font-medium rounded bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300">
-                        {faq.category?.replace('_', ' ')}
-                      </span>
-                      {!faq.is_published && (
-                        <span className="px-2 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">
-                          Draft
-                        </span>
-                      )}
+                <div key={faq.id} className="border border-slate-200 dark:border-gray-700 rounded-lg p-4 dark:bg-gray-900">
+                  {editingId === faq.id ? (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Category</label>
+                          <select
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                          >
+                            <option value="getting_started">Getting Started</option>
+                            <option value="account">Account</option>
+                            <option value="billing">Billing</option>
+                            <option value="features">Features</option>
+                            <option value="troubleshooting">Troubleshooting</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Order</label>
+                          <input
+                            type="number"
+                            value={formData.order_index}
+                            onChange={(e) => setFormData({ ...formData, order_index: parseInt(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Question</label>
+                        <input
+                          type="text"
+                          value={formData.question}
+                          onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+                          className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">Answer</label>
+                        <textarea
+                          value={formData.answer}
+                          onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+                          rows={5}
+                          className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                        />
+                      </div>
+                      <div className="flex items-center gap-6">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={!!formData.is_published}
+                            onChange={(e) => setFormData({ ...formData, is_published: e.target.checked })}
+                            className="w-4 h-4 rounded border-gray-300 text-blue-600"
+                          />
+                          <span className="text-sm text-slate-700 dark:text-gray-300">Published</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={!!formData.show_on_website}
+                            onChange={(e) => setFormData({ ...formData, show_on_website: e.target.checked })}
+                            className="w-4 h-4 rounded border-gray-300 text-emerald-600"
+                          />
+                          <span className="text-sm text-slate-700 dark:text-gray-300">Show on Website</span>
+                        </label>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button onClick={saveContent} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                          <Save size={15} className="inline mr-1.5" />Save
+                        </button>
+                        <button onClick={cancelEdit} className="px-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 dark:text-white text-sm">
+                          <X size={15} className="inline mr-1.5" />Cancel
+                        </button>
+                      </div>
                     </div>
-                    <p className="font-medium text-slate-900 dark:text-white text-sm truncate">{faq.question}</p>
-                  </div>
-                  <button
-                    onClick={() => toggleWebsitePublish(faq.id, !!faq.show_on_website)}
-                    disabled={!faq.is_published}
-                    title={!faq.is_published ? 'Publish the FAQ first before showing on website' : faq.show_on_website ? 'Remove from website' : 'Show on website'}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0 ${
-                      faq.show_on_website
-                        ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:hover:bg-emerald-500/30'
-                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
-                    } disabled:opacity-40 disabled:cursor-not-allowed`}
-                  >
-                    {faq.show_on_website ? <Eye size={13} /> : <EyeOff size={13} />}
-                    {faq.show_on_website ? 'Published' : 'Hidden'}
-                  </button>
+                  ) : (
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="px-2 py-0.5 text-xs font-medium rounded bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300">
+                            {faq.category?.replace('_', ' ')}
+                          </span>
+                          {!faq.is_published && (
+                            <span className="px-2 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                              Draft
+                            </span>
+                          )}
+                        </div>
+                        <p className="font-medium text-slate-900 dark:text-white text-sm mb-1">{faq.question}</p>
+                        <p className="text-xs text-slate-500 dark:text-gray-400 line-clamp-2">{faq.answer}</p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button
+                          onClick={() => toggleWebsitePublish(faq.id, !!faq.show_on_website)}
+                          disabled={!faq.is_published}
+                          title={!faq.is_published ? 'Publish FAQ first' : faq.show_on_website ? 'Remove from website' : 'Show on website'}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                            faq.show_on_website
+                              ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400'
+                              : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400'
+                          } disabled:opacity-40 disabled:cursor-not-allowed`}
+                        >
+                          {faq.show_on_website ? <Eye size={13} /> : <EyeOff size={13} />}
+                          {faq.show_on_website ? 'Published' : 'Hidden'}
+                        </button>
+                        {canManage && (
+                          <>
+                            <button onClick={() => startEdit(faq)} className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg">
+                              <Edit size={15} />
+                            </button>
+                            <button onClick={() => deleteContent(faq.id)} className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg">
+                              <Trash2 size={15} />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
