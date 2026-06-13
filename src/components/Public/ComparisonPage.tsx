@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { Check, X, ArrowRight, Zap, Trophy } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import SEOHead from '../SEO/SEOHead';
 
 interface Props {
   onNavigate: (view: PublicView) => void;
@@ -58,6 +59,16 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
+      <SEOHead
+        title="FinanceFlow AI vs Mint vs YNAB — Personal Finance App Comparison"
+        description="Compare FinanceFlow AI vs Mint, YNAB, and spreadsheets. FinanceFlow offers AI assistant, multi-currency, global availability, and GDPR compliance — available free."
+        keywords="FinanceFlow vs Mint, FinanceFlow vs YNAB, best personal finance app, budgeting app comparison, Mint alternative, YNAB alternative"
+        canonical="https://financeflow.ai/comparison"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Comparison', url: 'https://financeflow.ai/comparison' },
+        ]}
+      />
       <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="comparison" />
 
       {/* Hero */}
