@@ -166,9 +166,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   }, [user, loadSubscription]);
 
   const hasFeatureAccessCheck = (featureName: string): boolean => {
-    // If no features loaded yet (still loading), default to allowing access
-    // to avoid flicker on page load
-    if (loading) return true;
+    if (loading) return false;
     return enabledFeatures.has(featureName);
   };
 
