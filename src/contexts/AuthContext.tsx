@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (currentSession) {
       const now = Math.floor(Date.now() / 1000);
       const expiresAt = currentSession.expires_at;
-      if (expiresAt && expiresAt > 0 && expiresAt - now > 180) {
+      if (expiresAt && expiresAt > 0 && expiresAt - now > 60) {
         return currentSession.access_token;
       }
     }
