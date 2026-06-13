@@ -136,7 +136,17 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
-      <SEOHead pageKey="contact" />
+      <SEOHead
+        pageKey="contact"
+        title="Contact Us — FinanceFlow AI | Support & Help"
+        description="Contact FinanceFlow AI support. Get help with your account, billing, or technical issues. We reply within 24 hours."
+        keywords="FinanceFlow contact, finance app support, help desk, customer service personal finance"
+        canonical="https://financeflow.ai/contact"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Contact', url: 'https://financeflow.ai/contact' },
+        ]}
+      />
       <PublicNavbar currentView="contact" onNavigate={onNavigate} onSignIn={onSignIn} />
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
