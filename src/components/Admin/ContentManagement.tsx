@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, Globe, Eye, EyeOff } from 'lucide-react';
 import { getAllQuizQuestions, getAllFAQs, createQuizQuestion, updateQuizQuestion, createFAQ, updateFAQ, deleteQuizQuestion, deleteFAQ } from '../../lib/adminHelpers';
 import { useAdmin } from '../../contexts/AdminContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
 
 export default function ContentManagement() {
-  const [activeTab, setActiveTab] = useState<'quizzes' | 'faqs'>('quizzes');
+  const [activeTab, setActiveTab] = useState<'quizzes' | 'faqs' | 'website'>('quizzes');
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [faqs, setFAQs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +37,14 @@ export default function ContentManagement() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleWebsitePublish = async (faqId: string, current: boolean) => {
+    await supabase
+      .from('faq_articles')
+      .update({ show_on_website: !current })
+      .eq('id', faqId);
+    setFAQs(prev => prev.map(f => f.id === faqId ? { ...f, show_on_website: !current } : f));
   };
 
   const startCreate = () => {
@@ -147,6 +156,17 @@ export default function ContentManagement() {
             >
               FAQ Articles
             </button>
+            <button
+              onClick={() => setActiveTab('website')}
+              className={`py-4 px-2 border-b-2 font-medium text-sm flex items-center gap-1.5 ${
+                activeTab === 'website'
+                  ? 'border-emerald-500 text-emerald-600'
+                  : 'border-transparent text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-300'
+              }`}
+            >
+              <Globe size={14} />
+              Website
+            </button>
           </div>
         </div>
 
@@ -168,6 +188,48 @@ export default function ContentManagement() {
 
           {loading ? (
             <div className="text-center py-8 text-slate-600 dark:text-gray-400">Loading...</div>
+          ) : activeTab === 'website' ? (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 mb-4 p-3 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg border border-emerald-200 dark:border-emerald-500/20">
+                <Globe size={16} className="text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                <p className="text-sm text-emerald-700 dark:text-emerald-400">
+                  Toggle which FAQ articles appear on the public <strong>/faq</strong> page. Only published FAQs can be shown.
+                </p>
+              </div>
+              {faqs.length === 0 && (
+                <p className="text-center py-8 text-slate-500 dark:text-gray-400">No FAQ articles yet. Create some in the FAQ Articles tab first.</p>
+              )}
+              {faqs.map((faq) => (
+                <div key={faq.id} className="flex items-start justify-between border border-slate-200 dark:border-gray-700 rounded-lg p-4 dark:bg-gray-900 gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="px-2 py-0.5 text-xs font-medium rounded bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300">
+                        {faq.category?.replace('_', ' ')}
+                      </span>
+                      {!faq.is_published && (
+                        <span className="px-2 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                          Draft
+                        </span>
+                      )}
+                    </div>
+                    <p className="font-medium text-slate-900 dark:text-white text-sm truncate">{faq.question}</p>
+                  </div>
+                  <button
+                    onClick={() => toggleWebsitePublish(faq.id, !!faq.show_on_website)}
+                    disabled={!faq.is_published}
+                    title={!faq.is_published ? 'Publish the FAQ first before showing on website' : faq.show_on_website ? 'Remove from website' : 'Show on website'}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0 ${
+                      faq.show_on_website
+                        ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:hover:bg-emerald-500/30'
+                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
+                    } disabled:opacity-40 disabled:cursor-not-allowed`}
+                  >
+                    {faq.show_on_website ? <Eye size={13} /> : <EyeOff size={13} />}
+                    {faq.show_on_website ? 'Published' : 'Hidden'}
+                  </button>
+                </div>
+              ))}
+            </div>
           ) : activeTab === 'quizzes' ? (
             <div className="space-y-3">
               {quizzes.map((quiz) => (
