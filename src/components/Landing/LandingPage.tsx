@@ -249,12 +249,12 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
 
   const getDisplayPrice = (plan: PricingPlan) => {
     if (plan.monthlyPrice === 0) return '$0';
-    return isAnnual ? `$${(plan.annualPrice / 12).toFixed(0)}` : `$${plan.monthlyPrice}`;
+    return isAnnual ? `$${plan.annualPrice}` : `$${plan.monthlyPrice}`;
   };
 
   const getDisplayPeriod = (plan: PricingPlan) => {
     if (plan.monthlyPrice === 0) return 'forever';
-    return isAnnual ? '/mo, billed yearly' : '/month';
+    return isAnnual ? '/year' : '/month';
   };
 
   return (
