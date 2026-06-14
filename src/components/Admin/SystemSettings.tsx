@@ -5,6 +5,7 @@ import {
   EyeOff,
   Bot,
   Settings as SettingsIcon,
+  Key,
   Loader2,
   CheckCircle2,
   Shield,
