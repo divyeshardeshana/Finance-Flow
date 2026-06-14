@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import SEOHead from '../SEO/SEOHead';
+import { PublicFooter } from '../Common/PublicFooter';
 import {
   CheckCircle2,
   ArrowRight,
@@ -502,8 +503,9 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
         </div>
       </section>
 
-      {/* ── FOOTER ────────────────────────────────────────────────────────── */}
-      <footer className="bg-gray-950 dark:bg-[#060810] text-gray-500 pt-16 pb-8 px-4">
+      <PublicFooter onNavigate={onNavigate} />
+
+      {false && <footer className="bg-gray-950 dark:bg-[#060810] text-gray-500 pt-16 pb-8 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div className="md:col-span-2">
