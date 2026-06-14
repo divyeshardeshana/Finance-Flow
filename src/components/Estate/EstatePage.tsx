@@ -416,7 +416,7 @@ function DocumentForm({
 
 export function EstatePage() {
   const { user } = useAuth();
-  const { checkAndLogAccess, tier } = useSubscription();
+  const { checkAndLogAccess, hasFeatureAccess } = useSubscription();
   const { currency } = useAppPreferences();
 
   const [loading, setLoading] = useState(true);
@@ -498,7 +498,7 @@ export function EstatePage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Estate Planning</h1>
@@ -565,13 +565,13 @@ export function EstatePage() {
       )}
 
       {/* Tabs */}
-      {tier !== 'premium' ? (
+      {!hasFeatureAccess('estate_planning') ? (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
           <Users className="w-14 h-14 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Premium Feature</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Feature Not Available on Your Plan</h3>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Estate Planning is available for Premium Plan users. Upgrade to manage beneficiaries,
-            insurance policies, and estate documents.
+            Estate Planning is not included in your current plan.
+            Upgrade to a higher tier to get access.
           </p>
         </div>
       ) : (
