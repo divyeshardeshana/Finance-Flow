@@ -38,23 +38,13 @@ export function PublicFooter({ onNavigate }: PublicFooterProps) {
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('how-it-works')} className="text-gray-400 hover:text-white transition-colors">
-                  How It Works
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onNavigate('use-cases')} className="text-gray-400 hover:text-white transition-colors">
-                  Use Cases
-                </button>
-              </li>
-              <li>
                 <button onClick={() => onNavigate('pricing')} className="text-gray-400 hover:text-white transition-colors">
                   Pricing
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('faq')} className="text-gray-400 hover:text-white transition-colors">
-                  FAQ
+                <button onClick={() => onNavigate('currency-converter')} className="text-gray-400 hover:text-white transition-colors">
+                  Currency Converter
                 </button>
               </li>
             </ul>
@@ -73,11 +63,6 @@ export function PublicFooter({ onNavigate }: PublicFooterProps) {
                   Blog
                 </button>
               </li>
-              <li>
-                <button onClick={() => onNavigate('contact')} className="text-gray-400 hover:text-white transition-colors">
-                  Contact Us
-                </button>
-              </li>
             </ul>
           </div>
 
@@ -85,23 +70,8 @@ export function PublicFooter({ onNavigate }: PublicFooterProps) {
             <h3 className="text-white font-semibold mb-5 text-sm tracking-wide uppercase">Support</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <button onClick={() => onNavigate('testimonials')} className="text-gray-400 hover:text-white transition-colors">
-                  Testimonials
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onNavigate('security')} className="text-gray-400 hover:text-white transition-colors">
-                  Security & Trust
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onNavigate('comparison')} className="text-gray-400 hover:text-white transition-colors">
-                  Comparison
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onNavigate('roi-calculator')} className="text-gray-400 hover:text-white transition-colors">
-                  ROI Calculator
+                <button onClick={() => onNavigate('contact')} className="text-gray-400 hover:text-white transition-colors">
+                  Contact Us
                 </button>
               </li>
               <li>

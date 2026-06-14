@@ -985,72 +985,18 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
 
               <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/[0.06]">
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-red-400 dark:text-red-500/60 mb-4">Danger Zone</p>
-                <div className="space-y-3">
-                  <div className="rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[13px] font-medium text-gray-900 dark:text-white mb-1">Export My Data</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500">Download all your financial data as JSON (GDPR Article 20 — data portability).</p>
-                      </div>
-                      <button
-                        onClick={async () => {
-                          try {
-                            const [txRes, budRes, savRes, goalsRes] = await Promise.all([
-                              supabase.from('transactions').select('*').eq('user_id', user?.id),
-                              supabase.from('budgets').select('*').eq('user_id', user?.id),
-                              supabase.from('savings_goals').select('*').eq('user_id', user?.id),
-                              supabase.from('financial_goals').select('*').eq('user_id', user?.id),
-                            ]);
-                            const exportData = {
-                              exported_at: new Date().toISOString(),
-                              transactions: txRes.data || [],
-                              budgets: budRes.data || [],
-                              savings_goals: savRes.data || [],
-                              financial_goals: goalsRes.data || [],
-                            };
-                            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `financeflow-data-${new Date().toISOString().split('T')[0]}.json`;
-                            a.click();
-                            URL.revokeObjectURL(url);
-                          } catch {
-                            alert('Export failed. Please try again.');
-                          }
-                        }}
-                        className="flex-shrink-0 px-3.5 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 text-[12px] font-medium hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-                      >
-                        Export
-                      </button>
+                <div className="rounded-xl border border-red-100 dark:border-red-500/[0.12] bg-red-50/50 dark:bg-red-500/[0.04] p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[13px] font-medium text-gray-900 dark:text-white mb-1">Delete Account</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500">Permanently delete your account and all associated data. This action cannot be undone.</p>
                     </div>
-                  </div>
-                  <div className="rounded-xl border border-red-100 dark:border-red-500/[0.12] bg-red-50/50 dark:bg-red-500/[0.04] p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[13px] font-medium text-gray-900 dark:text-white mb-1">Delete Account</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500">Permanently delete your account and all associated data. This action cannot be undone. (GDPR Article 17 — right to erasure)</p>
-                      </div>
-                      <button
-                        onClick={async () => {
-                          const confirmed = window.confirm(
-                            'Are you absolutely sure you want to delete your account?\n\nThis will permanently delete:\n• All your transactions\n• Budgets and savings goals\n• Profile and preferences\n\nThis action CANNOT be undone.'
-                          );
-                          if (!confirmed) return;
-                          const doubleConfirm = window.prompt('Type DELETE to confirm:');
-                          if (doubleConfirm !== 'DELETE') return;
-                          try {
-                            await supabase.rpc('delete_user_account', { user_id_param: user?.id });
-                            await supabase.auth.signOut();
-                          } catch {
-                            alert('Account deletion failed. Please contact support at divyesh3@gmail.com');
-                          }
-                        }}
-                        className="flex-shrink-0 px-3.5 py-1.5 rounded-lg border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-[12px] font-medium hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    <button
+                      disabled
+                      className="flex-shrink-0 px-3.5 py-1.5 rounded-lg border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-[12px] font-medium hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>

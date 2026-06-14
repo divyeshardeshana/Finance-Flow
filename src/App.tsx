@@ -35,19 +35,11 @@ import FeaturesPage from './components/Public/FeaturesPage';
 import PublicPricingPage from './components/Public/PublicPricingPage';
 import ContactUsPage from './components/Public/ContactUsPage';
 import PrivacyPolicyPage from './components/Public/PrivacyPolicyPage';
-import FAQPage from './components/Public/FAQPage';
-import UseCasesPage from './components/Public/UseCasesPage';
-import HowItWorksPage from './components/Public/HowItWorksPage';
-import TestimonialsPage from './components/Public/TestimonialsPage';
-import SecurityPage from './components/Public/SecurityPage';
-import ComparisonPage from './components/Public/ComparisonPage';
-import ROICalculatorPage from './components/Public/ROICalculatorPage';
 import ProductsPage from './pages/ProductsPage';
 import OrdersPage from './pages/OrdersPage';
 import { PaymentSuccess } from './components/payment/PaymentSuccess';
 import { PaymentCancel } from './components/payment/PaymentCancel';
 import { type PublicView } from './components/Common/PublicNavbar';
-import { CookieConsentBanner } from './components/Common/CookieConsentBanner';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -189,7 +181,6 @@ function AppContent() {
   return (
     <>
       <ScrollToTop />
-      <CookieConsentBanner gaMeasurementId={import.meta.env.VITE_GA_MEASUREMENT_ID} />
       <Routes>
         {/* ── Public pages ── */}
         <Route
@@ -204,16 +195,9 @@ function AppContent() {
         />
         <Route path="/about" element={<AboutUsPage {...navHandlers} />} />
         <Route path="/features" element={<FeaturesPage {...navHandlers} />} />
-        <Route path="/use-cases" element={<UseCasesPage {...navHandlers} />} />
         <Route path="/pricing" element={<PublicPricingPage {...navHandlers} />} />
-        <Route path="/faq" element={<FAQPage {...navHandlers} />} />
         <Route path="/contact" element={<ContactUsPage {...navHandlers} />} />
         <Route path="/privacy" element={<PrivacyPolicyPage {...navHandlers} />} />
-        <Route path="/how-it-works" element={<HowItWorksPage {...navHandlers} />} />
-        <Route path="/testimonials" element={<TestimonialsPage {...navHandlers} />} />
-        <Route path="/security" element={<SecurityPage {...navHandlers} />} />
-        <Route path="/comparison" element={<ComparisonPage {...navHandlers} />} />
-        <Route path="/roi-calculator" element={<ROICalculatorPage {...navHandlers} />} />
         <Route
           path="/blog"
           element={

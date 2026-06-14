@@ -3,7 +3,7 @@ import { Zap, Menu, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
-export type PublicView = 'home' | 'about' | 'features' | 'use-cases' | 'pricing' | 'faq' | 'blog' | 'contact' | 'privacy' | 'how-it-works' | 'testimonials' | 'security' | 'comparison' | 'roi-calculator';
+export type PublicView = 'home' | 'about' | 'features' | 'pricing' | 'blog' | 'contact' | 'privacy';
 
 interface PublicNavbarProps {
   currentView: PublicView;
@@ -13,10 +13,9 @@ interface PublicNavbarProps {
 
 const navLinks: { label: string; view: PublicView }[] = [
   { label: 'Home', view: 'home' },
+  { label: 'About', view: 'about' },
   { label: 'Features', view: 'features' },
-  { label: 'Use Cases', view: 'use-cases' },
   { label: 'Pricing', view: 'pricing' },
-  { label: 'FAQ', view: 'faq' },
   { label: 'Blog', view: 'blog' },
   { label: 'Contact', view: 'contact' },
 ];

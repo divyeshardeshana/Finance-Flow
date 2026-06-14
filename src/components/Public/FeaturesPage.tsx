@@ -397,32 +397,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
-      <SEOHead
-        pageKey="features"
-        title="Features — FinanceFlow AI | AI Budgeting, Investments & More"
-        description="Explore all FinanceFlow AI features: AI financial assistant, budget tracking, expense categorisation, investment tracking, savings goals, bill reminders, net worth tracker, and retirement planning."
-        keywords="personal finance features, AI budgeting app, expense tracker, investment tracker, savings goals app, bill reminders, net worth calculator, retirement planner"
-        canonical="https://financeflow.ai/features"
-        breadcrumbs={[
-          { name: 'Home', url: 'https://financeflow.ai' },
-          { name: 'Features', url: 'https://financeflow.ai/features' },
-        ]}
-        howToSchema={{
-          '@context': 'https://schema.org',
-          '@type': 'HowTo',
-          name: 'How to manage your personal finances with FinanceFlow AI',
-          description: 'A step-by-step guide to setting up budgets, tracking expenses, and reaching financial goals using FinanceFlow AI.',
-          totalTime: 'PT5M',
-          step: [
-            { '@type': 'HowToStep', position: 1, name: 'Create a free account', text: 'Sign up with your email — no credit card required. Takes under 60 seconds.' },
-            { '@type': 'HowToStep', position: 2, name: 'Set your income and currency', text: 'Enter your monthly income and select your preferred currency from 150+ options.' },
-            { '@type': 'HowToStep', position: 3, name: 'Add transactions', text: 'Log your income and expenses manually or import via CSV. Categorise automatically or by hand.' },
-            { '@type': 'HowToStep', position: 4, name: 'Create budgets', text: 'Set monthly spending limits per category — food, transport, entertainment, and more.' },
-            { '@type': 'HowToStep', position: 5, name: 'Set savings goals', text: 'Add a target amount and date. FinanceFlow calculates how much you need to save each month.' },
-            { '@type': 'HowToStep', position: 6, name: 'Ask the AI assistant', text: 'On Pro or Premium, ask the AI questions about your finances and get personalised answers based on your data.' },
-          ],
-        }}
-      />
+      <SEOHead pageKey="features" />
       <PublicNavbar currentView="features" onNavigate={onNavigate} onSignIn={onSignIn} />
 
       {/* HERO */}
