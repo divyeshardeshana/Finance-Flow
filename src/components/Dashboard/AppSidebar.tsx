@@ -68,12 +68,6 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: 'Account',
-    items: [
-      { id: 'subscription-details', name: 'My Plan', icon: CreditCard, featureKey: null },
-    ],
-  },
-  {
     label: 'Support',
     items: [
       { id: 'support', name: 'Support', icon: MessageCircle, featureKey: null },
