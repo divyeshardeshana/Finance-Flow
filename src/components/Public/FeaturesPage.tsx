@@ -11,6 +11,8 @@ import {
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
 import { supabase } from '../../lib/supabase';
+import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
+import { calculateAnnualDiscount } from '../../lib/pricingHelpers';
 
 interface FeaturesPageProps {
   onNavigate: (view: PublicView) => void;
@@ -49,20 +51,13 @@ interface FeatureItem {
   featureKey?: string;
 }
 
-const planBadge: Record<PlanTier, { label: string; className: string }> = {
-  free: {
-    label: 'Free',
-    className: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/25',
-  },
-  pro: {
-    label: 'Pro',
-    className: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/25',
-  },
-  premium: {
-    label: 'Premium',
-    className: 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/25',
-  },
+const planBadgeStyle: Record<PlanTier, string> = {
+  free: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/25',
+  pro: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/25',
+  premium: 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/25',
 };
+
+const TIER_ORDER: Record<string, number> = { free: 1, paid: 2, premium: 3 };
 
 const featureGroups: {
   category: string;
@@ -351,15 +346,6 @@ const planComparisonRows = [
   { feature: 'Stock Predictions (AI)', free: false, pro: false, premium: true },
 ];
 
-function PlanBadge({ plan }: { plan: PlanTier }) {
-  const badge = planBadge[plan];
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${badge.className}`}>
-      {badge.label}
-    </span>
-  );
-}
-
 function CheckMark({ checked }: { checked: boolean }) {
   if (checked) {
     return <CheckCircle2 size={18} className="text-emerald-500 mx-auto" />;
@@ -369,8 +355,34 @@ function CheckMark({ checked }: { checked: boolean }) {
 
 export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps) {
   const [featureImages, setFeatureImages] = useState<Record<string, string>>({});
+  const [featureTierMap, setFeatureTierMap] = useState<Record<string, { tierName: string; displayName: string }>>({});
+  const [isAnnual, setIsAnnual] = useState(false);
+
+  const { plans } = useSubscriptionPlans({ activeOnly: true });
+
+  // Map tier_name → display_name from loaded plans
+  const planDisplayNames: Record<string, string> = {};
+  plans.forEach(p => { planDisplayNames[p.name] = p.displayName; });
+
+  // Map tier_name → monthly price for comparison table header
+  const planPrices: Record<string, number> = {};
+  plans.forEach(p => { planPrices[p.name] = p.monthlyPrice; });
+
+  // Resolve badge label: use DB display name if available, fallback to defaults
+  const getBadgeLabel = (feature: FeatureItem): string => {
+    // featureKey → tier lookup from feature_tier_config
+    if (feature.featureKey && featureTierMap[feature.featureKey]) {
+      return featureTierMap[feature.featureKey].displayName;
+    }
+    // Fall back to plan display names from subscription_tiers
+    const tierName = feature.plan === 'pro' ? 'paid' : feature.plan;
+    if (planDisplayNames[tierName]) return planDisplayNames[tierName];
+    // Hard fallback
+    return { free: 'Free', pro: 'Pro', premium: 'Premium' }[feature.plan];
+  };
 
   useEffect(() => {
+    // Load feature images
     supabase
       .from('app_features')
       .select('feature_name, image_url')
@@ -381,6 +393,27 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
           data.forEach(f => { if (f.image_url) map[f.feature_name] = f.image_url; });
           setFeatureImages(map);
         }
+      });
+
+    // Load feature → tier mapping (lowest tier wins)
+    supabase
+      .from('feature_tier_config')
+      .select('feature_name, is_enabled, subscription_tiers(tier_name, display_name)')
+      .eq('is_enabled', true)
+      .then(({ data }) => {
+        if (!data) return;
+        const map: Record<string, { tierName: string; displayName: string }> = {};
+        (data as any[]).forEach(item => {
+          const tier = item.subscription_tiers;
+          if (!tier) return;
+          const existing = map[item.feature_name];
+          const newOrder = TIER_ORDER[tier.tier_name] ?? 99;
+          const existOrder = existing ? TIER_ORDER[existing.tierName] ?? 99 : 99;
+          if (!existing || newOrder < existOrder) {
+            map[item.feature_name] = { tierName: tier.tier_name, displayName: tier.display_name };
+          }
+        });
+        setFeatureTierMap(map);
       });
   }, []);
 
@@ -393,11 +426,62 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
     useScrollInView(),
   ];
   const planTableSection = useScrollInView();
+  const pricingCardsSection = useScrollInView();
   const ctaSection = useScrollInView();
+
+  // Comparison table column config built dynamically
+  const tableColumns = plans.length > 0
+    ? plans.map(p => {
+        const colorMap: Record<string, { color: string; bg: string }> = {
+          free: { color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
+          paid: { color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-500/10' },
+          premium: { color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-500/10' },
+        };
+        const style = colorMap[p.name] ?? colorMap['paid'];
+        const price = p.monthlyPrice === 0 ? '$0' : `$${p.monthlyPrice}/mo`;
+        return { label: p.displayName, price, color: style.color, bg: style.bg, tierName: p.name };
+      })
+    : [
+        { label: 'Free', price: '$0', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-500/10', tierName: 'free' },
+        { label: 'Pro', price: '$9/mo', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-500/10', tierName: 'paid' },
+        { label: 'Premium', price: '$19/mo', color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-500/10', tierName: 'premium' },
+      ];
+
+  // CTA button colors per tier for comparison table
+  const ctaBtnClass: Record<string, string> = {
+    free: 'bg-emerald-600 hover:bg-emerald-500',
+    paid: 'bg-blue-600 hover:bg-blue-500',
+    premium: 'bg-amber-500 hover:bg-amber-400',
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
-      <SEOHead pageKey="features" />
+      <SEOHead
+        pageKey="features"
+        title="Features — FinanceFlow AI | AI Budgeting, Investments & More"
+        description="Explore all FinanceFlow AI features: AI financial assistant, budget tracking, expense categorisation, investment tracking, savings goals, bill reminders, net worth tracker, and retirement planning."
+        keywords="personal finance features, AI budgeting app, expense tracker, investment tracker, savings goals app, bill reminders, net worth calculator, retirement planner"
+        canonical="https://financeflow.ai/features"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'Features', url: 'https://financeflow.ai/features' },
+        ]}
+        howToSchema={{
+          '@context': 'https://schema.org',
+          '@type': 'HowTo',
+          name: 'How to manage your personal finances with FinanceFlow AI',
+          description: 'A step-by-step guide to setting up budgets, tracking expenses, and reaching financial goals using FinanceFlow AI.',
+          totalTime: 'PT5M',
+          step: [
+            { '@type': 'HowToStep', position: 1, name: 'Create a free account', text: 'Sign up with your email — no credit card required. Takes under 60 seconds.' },
+            { '@type': 'HowToStep', position: 2, name: 'Set your income and currency', text: 'Enter your monthly income and select your preferred currency from 150+ options.' },
+            { '@type': 'HowToStep', position: 3, name: 'Add transactions', text: 'Log your income and expenses manually or import via CSV. Categorise automatically or by hand.' },
+            { '@type': 'HowToStep', position: 4, name: 'Create budgets', text: 'Set monthly spending limits per category — food, transport, entertainment, and more.' },
+            { '@type': 'HowToStep', position: 5, name: 'Set savings goals', text: 'Add a target amount and date. FinanceFlow calculates how much you need to save each month.' },
+            { '@type': 'HowToStep', position: 6, name: 'Ask the AI assistant', text: 'On Pro or Premium, ask the AI questions about your finances and get personalised answers based on your data.' },
+          ],
+        }}
+      />
       <PublicNavbar currentView="features" onNavigate={onNavigate} onSignIn={onSignIn} />
 
       {/* HERO */}
@@ -419,7 +503,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
             </span>
-            3 Plans. 20+ Features. One Platform.
+            {plans.length > 0 ? `${plans.length} Plans. 20+ Features. One Platform.` : '3 Plans. 20+ Features. One Platform.'}
           </motion.div>
 
           <motion.h1
@@ -481,7 +565,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
         </div>
       </section>
 
-      {/* COMPARISON */}
+      {/* COMPARISON WITHOUT / WITH */}
       <section className="py-24 px-4 bg-gray-50/70 dark:bg-[#0D1220]">
         <motion.div
           ref={comparisonSection.ref}
@@ -577,6 +661,8 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
             <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 ${group.features.length === 4 ? 'lg:grid-cols-4' : group.features.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2 max-w-3xl mx-auto'}`}>
               {group.features.map((feature, fi) => {
                 const imgUrl = feature.featureKey ? featureImages[feature.featureKey] : undefined;
+                const badgeLabel = getBadgeLabel(feature);
+                const badgeStyle = planBadgeStyle[feature.plan];
                 return (
                   <motion.div
                     key={fi}
@@ -594,7 +680,9 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                         <div className="absolute top-3 right-3">
-                          <PlanBadge plan={feature.plan} />
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${badgeStyle}`}>
+                            {badgeLabel}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -603,7 +691,11 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
                         <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} shadow-sm group-hover:shadow-md transition-shadow ${imgUrl ? 'mr-3' : ''}`}>
                           <feature.icon className="w-6 h-6 text-white" />
                         </div>
-                        {!imgUrl && <PlanBadge plan={feature.plan} />}
+                        {!imgUrl && (
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${badgeStyle}`}>
+                            {badgeLabel}
+                          </span>
+                        )}
                       </div>
                       <div className="text-[11px] font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-2">
                         {feature.benefit}
@@ -647,17 +739,13 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
             custom={1}
             className="bg-white dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.08] rounded-2xl overflow-hidden shadow-lg"
           >
-            {/* Table header */}
+            {/* Table header — dynamic */}
             <div className="grid grid-cols-4 border-b border-gray-100 dark:border-white/[0.06]">
               <div className="px-5 py-5 col-span-1">
                 <span className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">Feature</span>
               </div>
-              {[
-                { label: 'Free', price: '$0', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
-                { label: 'Pro', price: '$9/mo', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-500/10' },
-                { label: 'Premium', price: '$19.99/mo', color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-500/10' },
-              ].map(col => (
-                <div key={col.label} className={`px-3 py-5 text-center ${col.bg} border-l border-gray-100 dark:border-white/[0.06]`}>
+              {tableColumns.map(col => (
+                <div key={col.tierName} className={`px-3 py-5 text-center ${col.bg} border-l border-gray-100 dark:border-white/[0.06]`}>
                   <div className={`text-sm font-bold ${col.color}`}>{col.label}</div>
                   <div className="text-xs text-gray-500 dark:text-gray-500 mt-0.5">{col.price}</div>
                 </div>
@@ -685,33 +773,19 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
               </div>
             ))}
 
-            {/* CTA row */}
+            {/* CTA row — dynamic button labels */}
             <div className="grid grid-cols-4 bg-gray-50/80 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/[0.06]">
               <div className="px-5 py-5" />
-              <div className="px-3 py-5 border-l border-gray-100 dark:border-white/[0.06]">
-                <button
-                  onClick={onSignIn}
-                  className="w-full py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors"
-                >
-                  Get Started
-                </button>
-              </div>
-              <div className="px-3 py-5 border-l border-gray-100 dark:border-white/[0.06]">
-                <button
-                  onClick={() => onNavigate('pricing')}
-                  className="w-full py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors"
-                >
-                  Try Pro
-                </button>
-              </div>
-              <div className="px-3 py-5 border-l border-gray-100 dark:border-white/[0.06]">
-                <button
-                  onClick={() => onNavigate('pricing')}
-                  className="w-full py-2 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-white transition-colors"
-                >
-                  Go Premium
-                </button>
-              </div>
+              {tableColumns.map((col, idx) => (
+                <div key={col.tierName} className="px-3 py-5 border-l border-gray-100 dark:border-white/[0.06]">
+                  <button
+                    onClick={idx === 0 ? onSignIn : () => onNavigate('pricing')}
+                    className={`w-full py-2 rounded-lg text-xs font-semibold text-white transition-colors ${ctaBtnClass[col.tierName] ?? 'bg-blue-600 hover:bg-blue-500'}`}
+                  >
+                    {idx === 0 ? 'Get Started' : `Get ${col.label}`}
+                  </button>
+                </div>
+              ))}
             </div>
           </motion.div>
 
@@ -725,8 +799,150 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
         </motion.div>
       </section>
 
+      {/* PRICING CARDS — dynamic from admin */}
+      <section className="py-24 px-4 bg-white dark:bg-[#0B0F1A]">
+        <motion.div
+          ref={pricingCardsSection.ref}
+          variants={staggerContainer}
+          initial="hidden"
+          animate={pricingCardsSection.isInView ? 'visible' : 'hidden'}
+          className="max-w-6xl mx-auto"
+        >
+          <div className="text-center mb-12">
+            <motion.div variants={fadeUp} custom={0}>
+              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-blue-600 dark:text-blue-400 mb-3">
+                Pricing
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                A plan for every{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-400">
+                  financial journey
+                </span>
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+                Start free and upgrade as your financial life grows.
+              </p>
+            </motion.div>
+
+            {/* Annual / Monthly toggle */}
+            <motion.div variants={fadeUp} custom={1} className="mt-8 inline-flex items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-white/[0.06] border border-gray-200 dark:border-white/[0.08]">
+              {(['Monthly', 'Annual'] as const).map(period => {
+                const active = (period === 'Annual') === isAnnual;
+                const maxDiscount = plans.length > 0
+                  ? Math.max(...plans.map(p => calculateAnnualDiscount(p.monthlyPrice, p.annualPrice)))
+                  : 13;
+                return (
+                  <button
+                    key={period}
+                    onClick={() => setIsAnnual(period === 'Annual')}
+                    className={`relative px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${active ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
+                  >
+                    {period}
+                    {period === 'Annual' && maxDiscount > 0 && (
+                      <span className="ml-2 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
+                        -{maxDiscount}%
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {plans.map((plan, i) => {
+              const savingsPercent = calculateAnnualDiscount(plan.monthlyPrice, plan.annualPrice);
+              const showSavings = isAnnual && plan.monthlyPrice > 0 && savingsPercent > 0;
+              const displayPrice = plan.monthlyPrice === 0
+                ? '$0'
+                : isAnnual
+                  ? `$${Math.round(plan.annualPrice / 12)}`
+                  : `$${plan.monthlyPrice}`;
+              const displayPeriod = plan.monthlyPrice === 0 ? 'forever' : '/month';
+
+              return (
+                <motion.div
+                  key={plan.id}
+                  variants={fadeUp}
+                  custom={i + 2}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className={`relative rounded-2xl p-7 flex flex-col transition-all duration-300 ${
+                    plan.highlighted
+                      ? 'bg-gradient-to-b from-blue-600 to-blue-700 text-white shadow-2xl shadow-blue-500/30 scale-[1.02]'
+                      : 'bg-white dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.08] hover:border-blue-200 dark:hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5'
+                  }`}
+                >
+                  {plan.highlighted && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                      <span className="px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-400 text-white text-xs font-bold shadow-md whitespace-nowrap">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+                  {showSavings && (
+                    <div className="absolute top-4 right-4">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${plan.highlighted ? 'bg-white/20 text-white' : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'}`}>
+                        Save {savingsPercent}%
+                      </span>
+                    </div>
+                  )}
+
+                  <h3 className={`text-xl font-bold mb-1 ${plan.highlighted ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                    {plan.displayName}
+                  </h3>
+                  <p className={`text-sm mb-5 ${plan.highlighted ? 'text-blue-100' : 'text-gray-500 dark:text-gray-500'}`}>
+                    {plan.description}
+                  </p>
+
+                  <div className="flex items-end gap-1 mb-6">
+                    <span className={`text-5xl font-bold tracking-tight ${plan.highlighted ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                      {displayPrice}
+                    </span>
+                    <span className={`ml-1 text-sm mb-2 ${plan.highlighted ? 'text-blue-200' : 'text-gray-500 dark:text-gray-500'}`}>
+                      {displayPeriod}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={onSignIn}
+                    className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 mb-7 ${
+                      plan.highlighted
+                        ? 'bg-white text-blue-700 hover:bg-blue-50 shadow-md'
+                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-sm hover:shadow-md'
+                    }`}
+                  >
+                    {plan.ctaText || 'Get Started'}
+                  </button>
+
+                  <ul className="space-y-3 flex-1">
+                    {plan.features.map((feat, fi) => (
+                      <li key={fi} className="flex items-start gap-2.5">
+                        <CheckCircle2 size={15} className={`flex-shrink-0 mt-0.5 ${plan.highlighted ? 'text-blue-200' : 'text-emerald-500'}`} />
+                        <span className={`text-sm leading-snug ${plan.highlighted ? 'text-blue-50' : 'text-gray-600 dark:text-gray-400'}`}>
+                          {feat}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <motion.div variants={fadeUp} custom={plans.length + 2} className="text-center mt-10">
+            <button
+              onClick={() => onNavigate('pricing')}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
+            >
+              View full pricing details
+              <ChevronRight size={16} />
+            </button>
+          </motion.div>
+        </motion.div>
+      </section>
+
       {/* SOCIAL PROOF STATS */}
-      <section className="py-20 px-4 bg-white dark:bg-[#0B0F1A]">
+      <section className="py-20 px-4 bg-gray-50/70 dark:bg-[#0D1220]">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
@@ -770,7 +986,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/90 text-sm font-medium mb-7">
               <Zap size={14} className="text-cyan-200" />
-              3 plans starting at $0. Cancel any time.
+              {plans.length > 0 ? `${plans.length} plans starting at $0. Cancel any time.` : '3 plans starting at $0. Cancel any time.'}
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight tracking-tight">
               Everything you need to master your finances.
