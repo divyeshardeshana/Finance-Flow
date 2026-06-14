@@ -38,7 +38,7 @@ interface SubscriptionRecord {
   cancelled_at: string | null;
   auto_renew: boolean;
   stripe_subscription_id: string | null;
-  stripe_customer_id: string | null;
+  stripe_customer_id?: string | null;
   tier: SubscriptionTierData | null;
 }
 
@@ -116,7 +116,7 @@ export default function SubscriptionDetailsPage() {
         .from('user_subscriptions')
         .select(`
           id, status, billing_cycle, start_date, next_billing_date,
-          cancelled_at, auto_renew, stripe_subscription_id, stripe_customer_id,
+          cancelled_at, auto_renew, stripe_subscription_id,
           subscription_tiers!tier_id(
             id, tier_name, display_name, monthly_price, annual_price,
             features, max_goals, is_active, coming_soon, description
@@ -146,7 +146,7 @@ export default function SubscriptionDetailsPage() {
           cancelled_at: null,
           auto_renew: false,
           stripe_subscription_id: null,
-          stripe_customer_id: null,
+
           tier: freeTier || null,
         });
       }
