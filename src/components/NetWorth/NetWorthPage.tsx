@@ -153,7 +153,7 @@ export function NetWorthPage() {
   }, []);
 
   async function checkFeatureAccess() {
-    const hasAccess = await checkAndLogAccess('net_worth_tracking');
+    const hasAccess = await checkAndLogAccess('net_worth_tracker');
     if (hasAccess) {
       loadData();
     } else {
