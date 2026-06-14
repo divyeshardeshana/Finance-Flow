@@ -4,6 +4,7 @@ import { Check, X, ArrowRight, Zap, Trophy } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
 import SEOHead from '../SEO/SEOHead';
+import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
 
 interface Props {
   onNavigate: (view: PublicView) => void;
@@ -38,11 +39,10 @@ const FEATURES: { label: string; financeflow: CellValue; mint: CellValue; ynab: 
   { label: 'No ads',                        financeflow: true,        mint: false,       ynab: true,        excel: true },
 ];
 
-const COLS = [
-  { key: 'financeflow', label: 'FinanceFlow AI', highlight: true, price: 'Free / $9.99/mo' },
-  { key: 'mint',        label: 'Mint',           highlight: false, price: 'Discontinued' },
-  { key: 'ynab',        label: 'YNAB',           highlight: false, price: '$14.99/mo' },
-  { key: 'excel',       label: 'Spreadsheet',    highlight: false, price: 'Free (DIY)' },
+const COMPETITOR_COLS = [
+  { key: 'mint',  label: 'Mint',        highlight: false, price: 'Discontinued' },
+  { key: 'ynab',  label: 'YNAB',        highlight: false, price: '$14.99/mo' },
+  { key: 'excel', label: 'Spreadsheet', highlight: false, price: 'Free (DIY)' },
 ];
 
 function Cell({ value, highlight }: { value: CellValue; highlight: boolean }) {
@@ -52,6 +52,23 @@ function Cell({ value, highlight }: { value: CellValue; highlight: boolean }) {
 }
 
 export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
+  const { plans } = useSubscriptionPlans({ activeOnly: true });
+
+  // Build FinanceFlow price label dynamically from DB
+  const ffPriceLabel = (() => {
+    if (plans.length === 0) return 'Free / from $9/mo';
+    const free = plans.find(p => p.name === 'free');
+    const paid = plans.find(p => p.name === 'paid');
+    if (free && paid) return `Free / $${paid.monthlyPrice}/mo`;
+    if (paid) return `From $${paid.monthlyPrice}/mo`;
+    return 'Free plan available';
+  })();
+
+  const COLS = [
+    { key: 'financeflow', label: 'FinanceFlow AI', highlight: true, price: ffPriceLabel },
+    ...COMPETITOR_COLS,
+  ];
+
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
   const tableRef = useRef(null);
