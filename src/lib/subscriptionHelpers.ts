@@ -29,7 +29,6 @@ const featureTierMap: Record<string, SubscriptionTier> = {
 
   stock_predictions: 'premium',
   net_worth_tracker: 'premium',
-  net_worth_tracking: 'premium',
   advanced_investments: 'premium',
   retirement_planning: 'premium',
   estate_planning: 'premium',
