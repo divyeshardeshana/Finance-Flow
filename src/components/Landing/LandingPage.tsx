@@ -843,77 +843,58 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
       </section>
 
       {/* ── FOOTER ────────────────────────────────────────────────────── */}
-      <footer className="bg-gray-950 dark:bg-[#060810] text-gray-500 pt-16 pb-8 px-4">
+      <footer style={{ backgroundColor: '#0A0D14' }} className="text-gray-400 py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
-            <div className="md:col-span-2">
-              <button onClick={() => onNavigate && onNavigate('home')} className="flex items-center gap-2.5 mb-4 group">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
-                  <Zap size={16} className="text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div className="md:col-span-1">
+              <button onClick={() => onNavigate && onNavigate('home')} className="flex items-center gap-2.5 mb-5 group">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-shadow flex-shrink-0">
+                  <Zap className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-lg font-bold text-white">
-                  Finance<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Flow AI</span>
+                <span className="text-lg font-bold text-white tracking-tight">
+                  Finance<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Flow</span>
                 </span>
               </button>
-              <p className="text-sm leading-relaxed mb-6 max-w-xs">
-                Intelligent financial management for individuals, families, freelancers, and businesses — anywhere in the world.
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Smart financial management for everyone.
+                Take control of your money and achieve your goals.
               </p>
-              <div className="flex items-center gap-3">
-                {[Globe, Shield, Lock].map((Icon, i) => (
-                  <div key={i} className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer">
-                    <Icon size={14} className="text-gray-400" />
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {[
-              {
-                title: 'Product',
-                links: [
-                  { label: 'Features', action: () => onNavigate && onNavigate('features') },
-                  { label: 'Pricing', action: () => onNavigate && onNavigate('pricing') },
-                  { label: 'Blog', action: onBlogClick },
-                ],
-              },
-              {
-                title: 'Company',
-                links: [
-                  { label: 'About Us', action: () => onNavigate && onNavigate('about') },
-                  { label: 'Contact', action: () => onNavigate && onNavigate('contact') },
-                ],
-              },
-              {
-                title: 'Support',
-                links: [
-                  { label: 'Help Center', action: () => onNavigate && onNavigate('helpcenter' as PublicView) },
-                  { label: 'Privacy Policy', action: () => onNavigate && onNavigate('privacy') },
-                  { label: 'Security', action: () => onNavigate && onNavigate('privacy') },
-                ],
-              },
-            ].map(({ title, links }) => (
-              <div key={title}>
-                <h4 className="text-white text-sm font-semibold mb-4">{title}</h4>
-                <ul className="space-y-2.5">
-                  {links.map(({ label, action }) => (
-                    <li key={label}>
-                      <button onClick={action} className="text-sm hover:text-white transition-colors">
-                        {label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            <div>
+              <h3 className="text-white font-semibold mb-5 text-sm tracking-wide uppercase">Product</h3>
+              <ul className="space-y-3 text-sm">
+                <li><button onClick={() => onNavigate && onNavigate('features')} className="text-gray-400 hover:text-white transition-colors">Features</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('how-it-works')} className="text-gray-400 hover:text-white transition-colors">How It Works</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('use-cases')} className="text-gray-400 hover:text-white transition-colors">Use Cases</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('pricing')} className="text-gray-400 hover:text-white transition-colors">Pricing</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('faq')} className="text-gray-400 hover:text-white transition-colors">FAQ</button></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-white font-semibold mb-5 text-sm tracking-wide uppercase">Company</h3>
+              <ul className="space-y-3 text-sm">
+                <li><button onClick={() => onNavigate && onNavigate('about')} className="text-gray-400 hover:text-white transition-colors">About Us</button></li>
+                <li><button onClick={onBlogClick} className="text-gray-400 hover:text-white transition-colors">Blog</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('contact')} className="text-gray-400 hover:text-white transition-colors">Contact Us</button></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-white font-semibold mb-5 text-sm tracking-wide uppercase">Support</h3>
+              <ul className="space-y-3 text-sm">
+                <li><button onClick={() => onNavigate && onNavigate('testimonials')} className="text-gray-400 hover:text-white transition-colors">Testimonials</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('security')} className="text-gray-400 hover:text-white transition-colors">Security &amp; Trust</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('comparison')} className="text-gray-400 hover:text-white transition-colors">Comparison</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('roi-calculator')} className="text-gray-400 hover:text-white transition-colors">ROI Calculator</button></li>
+                <li><button onClick={() => onNavigate && onNavigate('privacy')} className="text-gray-400 hover:text-white transition-colors">Privacy Policy</button></li>
+              </ul>
+            </div>
           </div>
 
-          <div className="border-t border-white/[0.06] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-gray-600">&copy; {new Date().getFullYear()} FinanceFlow AI. All rights reserved.</p>
-            <div className="flex items-center gap-4 text-xs">
-              <button onClick={() => onNavigate && onNavigate('privacy')} className="hover:text-white transition-colors">Privacy</button>
-              <button onClick={() => onNavigate && onNavigate('privacy')} className="hover:text-white transition-colors">Terms</button>
-              <button onClick={() => onNavigate && onNavigate('contact')} className="hover:text-white transition-colors">Contact</button>
-            </div>
+          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+            <p>&copy; 2026 FinanceFlow. All rights reserved.</p>
           </div>
         </div>
       </footer>
