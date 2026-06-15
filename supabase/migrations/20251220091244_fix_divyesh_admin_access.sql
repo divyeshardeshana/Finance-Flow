@@ -1,8 +1,8 @@
 /*
-  # Fix Admin Access for divyesh3@gmail.com
+  # Fix Admin Access for [ADMIN_EMAIL]
 
   ## Overview
-  Ensures that the user with email divyesh3@gmail.com has proper admin access
+  Ensures that the user with email [ADMIN_EMAIL] has proper admin access
   and can see the Admin Panel option in the user menu.
 
   ## Changes
@@ -22,7 +22,7 @@ BEGIN
   -- Find the user ID from auth.users by email
   SELECT id INTO target_user_id
   FROM auth.users
-  WHERE email = 'divyesh3@gmail.com'
+  WHERE email = '[ADMIN_EMAIL]'
   LIMIT 1;
 
   -- If user exists, update their profile
@@ -38,6 +38,6 @@ BEGIN
     -- Log the action
     RAISE NOTICE 'Admin access granted to user: %', target_user_id;
   ELSE
-    RAISE NOTICE 'User divyesh3@gmail.com not found in auth.users';
+    RAISE NOTICE 'User [ADMIN_EMAIL] not found in auth.users';
   END IF;
 END $$;

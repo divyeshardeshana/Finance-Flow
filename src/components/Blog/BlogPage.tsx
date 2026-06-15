@@ -4,6 +4,7 @@ import SEOHead from '../SEO/SEOHead';
 import { Search, Calendar, BookOpen, ArrowRight, ChevronDown, Zap, Lock, Globe } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
+import { PublicFooter } from '../Common/PublicFooter';
 
 interface BlogCategory {
   id: string;
@@ -446,76 +447,7 @@ export default function BlogPage({ onBack, onPostClick, onNavigate, onSignIn }: 
         )}
       </div>
 
-      {/* ── FOOTER ────────────────────────────────────────────────────────── */}
-      <footer className="mt-24 bg-gray-950 text-gray-400 py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-400">
-                  <Zap size={16} className="text-white" />
-                </div>
-                <span className="text-white font-bold text-lg tracking-tight">FinanceFlow <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">AI</span></span>
-              </div>
-              <p className="text-sm leading-relaxed mb-6 text-gray-500">
-                Smart financial management for everyone. Take control of your money and achieve your goals.
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center hover:bg-white/[0.08] transition-colors cursor-pointer">
-                  <Globe size={14} className="text-gray-400" />
-                </div>
-                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center hover:bg-white/[0.08] transition-colors cursor-pointer">
-                  <Lock size={14} className="text-gray-400" />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Product</h3>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <button onClick={() => navigate('features')} className="hover:text-white transition-colors">Features</button>
-                </li>
-                <li>
-                  <button onClick={() => navigate('pricing')} className="hover:text-white transition-colors">Pricing</button>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Company</h3>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <button onClick={() => navigate('about')} className="hover:text-white transition-colors">About</button>
-                </li>
-                <li>
-                  <button onClick={() => navigate('blog')} className="hover:text-white transition-colors">Blog</button>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Support</h3>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <button onClick={() => navigate('contact')} className="hover:text-white transition-colors">Contact</button>
-                </li>
-                <li>
-                  <button onClick={() => navigate('privacy')} className="hover:text-white transition-colors">Privacy Policy</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-white/[0.06] pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-gray-600">&copy; {new Date().getFullYear()} FinanceFlow AI. All rights reserved.</p>
-            <div className="flex items-center gap-1.5 text-xs text-gray-600">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              All systems operational
-            </div>
-          </div>
-        </div>
-      </footer>
+      <PublicFooter onNavigate={navigate} />
     </div>
   );
 }

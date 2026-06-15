@@ -97,26 +97,21 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       setTier(resolvedTier);
       setPlanDisplayName(resolvedDisplayName);
 
-      // Load enabled features from feature_tier_config for this tier
-      // A feature is accessible if it is enabled for the user's tier OR any lower tier
-      // (i.e., free features are also accessible to paid/premium users)
-      const tierOrder: Record<SubscriptionTier, number> = { free: 0, paid: 1, premium: 2 };
-      const userTierLevel = tierOrder[resolvedTier];
-
+      // Load enabled features from feature_tier_config for the user's EXACT tier only.
+      // Admin explicitly checks each tier that should have access to a feature.
+      // No inheritance — if admin checks "Free Plan" only, only Free users get the feature.
       const { data: allTiers } = await supabase
         .from('subscription_tiers')
         .select('id, tier_name')
         .eq('is_active', true);
 
-      const eligibleTierIds = (allTiers || [])
-        .filter(t => tierOrder[t.tier_name as SubscriptionTier] <= userTierLevel)
-        .map(t => t.id);
+      const userTierRow = (allTiers || []).find(t => t.tier_name === resolvedTier);
 
-      if (eligibleTierIds.length > 0) {
+      if (userTierRow) {
         const { data: configs } = await supabase
           .from('feature_tier_config')
           .select('feature_name, is_enabled')
-          .in('tier_id', eligibleTierIds)
+          .eq('tier_id', userTierRow.id)
           .eq('is_enabled', true);
 
         const featureSet = new Set((configs || []).map(c => c.feature_name));

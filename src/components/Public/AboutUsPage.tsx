@@ -120,7 +120,17 @@ export default function AboutUsPage({ onNavigate, onSignIn }: AboutUsPageProps) 
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
-      <SEOHead pageKey="about" />
+      <SEOHead
+        pageKey="about"
+        title="About Us — FinanceFlow AI | Our Mission & Team"
+        description="Learn about FinanceFlow AI — our mission to make personal finance simple, intelligent, and accessible for everyone worldwide. Meet the team behind the platform."
+        keywords="FinanceFlow AI about, personal finance startup, fintech company, financial wellness mission"
+        canonical="https://financeflow.ai/about"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://financeflow.ai' },
+          { name: 'About Us', url: 'https://financeflow.ai/about' },
+        ]}
+      />
       <PublicNavbar currentView="about" onNavigate={onNavigate} onSignIn={onSignIn} />
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}

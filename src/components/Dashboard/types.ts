@@ -19,5 +19,4 @@ export type Page =
   | 'stockprediction'
   | 'profile'
   | 'subscription'
-  | 'subscription-details'
   | 'subscription-success';

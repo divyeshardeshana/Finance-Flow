@@ -5,6 +5,8 @@
 DROP POLICY IF EXISTS "Authenticated users can read system settings" ON system_settings;
 DROP POLICY IF EXISTS "Users can read system settings" ON system_settings;
 DROP POLICY IF EXISTS "Allow public read of system settings" ON system_settings;
+DROP POLICY IF EXISTS "Authenticated users can read non-sensitive settings" ON system_settings;
+DROP POLICY IF EXISTS "Admins can read all system settings" ON system_settings;
 
 -- Non-sensitive settings readable by all authenticated users (branding, currency, etc.)
 CREATE POLICY "Authenticated users can read non-sensitive settings"
