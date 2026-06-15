@@ -38,7 +38,7 @@ interface SubscriptionRecord {
   cancelled_at: string | null;
   auto_renew: boolean;
   stripe_subscription_id: string | null;
-  stripe_customer_id?: string | null;
+  stripe_customer_id: string | null;
   tier: SubscriptionTierData | null;
 }
 
@@ -112,13 +112,11 @@ export default function SubscriptionDetailsPage() {
       const now = new Date();
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
-      // Try full join first; fall back to simple select if join fails (e.g. missing column in some envs)
-      let subRow: any = null;
-      const { data: subData, error: subErr } = await supabase
+      const { data: subRow, error: subErr } = await supabase
         .from('user_subscriptions')
         .select(`
-          id, status, start_date, next_billing_date, auto_renew,
-          billing_cycle, cancelled_at, stripe_subscription_id,
+          id, status, billing_cycle, start_date, next_billing_date,
+          cancelled_at, auto_renew, stripe_subscription_id, stripe_customer_id,
           subscription_tiers!tier_id(
             id, tier_name, display_name, monthly_price, annual_price,
             features, max_goals, is_active, coming_soon, description
@@ -127,22 +125,11 @@ export default function SubscriptionDetailsPage() {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (subErr) {
-        // Fallback: select without join to avoid column-not-found errors
-        console.warn('Subscription join failed, using fallback:', subErr.message);
-        const { data: subSimple } = await supabase
-          .from('user_subscriptions')
-          .select('id, status, start_date, auto_renew')
-          .eq('user_id', user.id)
-          .maybeSingle();
-        subRow = subSimple;
-      } else {
-        subRow = subData;
-      }
+      if (subErr) throw subErr;
 
       if (subRow) {
         const tierRaw = subRow.subscription_tiers as SubscriptionTierData | null;
-        setSubscription({ ...subRow, tier: tierRaw ?? null });
+        setSubscription({ ...subRow, tier: tierRaw });
       } else {
         const { data: freeTier } = await supabase
           .from('subscription_tiers')
@@ -159,6 +146,7 @@ export default function SubscriptionDetailsPage() {
           cancelled_at: null,
           auto_renew: false,
           stripe_subscription_id: null,
+          stripe_customer_id: null,
           tier: freeTier || null,
         });
       }

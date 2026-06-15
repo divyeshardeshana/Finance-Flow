@@ -3,7 +3,7 @@ import {
   Home, Receipt, TrendingUp, Target, PiggyBank, FileText, X,
   MessageCircle, Activity, Lightbulb, Bell, Wallet,
   Calendar, ChevronLeft, Zap, Crown, CreditCard,
-  BarChart3, Bot, BookOpen, ScrollText,
+  BarChart3, Bot, BookOpen,
 } from 'lucide-react';
 
 import { useSubscription } from '../../contexts/SubscriptionContext';
@@ -48,7 +48,6 @@ const navGroups: NavGroup[] = [
       { id: 'investment', name: 'Investment', icon: TrendingUp, featureKey: 'advanced_investments' },
       { id: 'networth', name: 'Net Worth', icon: Wallet, featureKey: 'net_worth_tracker' },
       { id: 'retirement', name: 'Retirement', icon: Calendar, featureKey: 'retirement_planning' },
-      { id: 'estate', name: 'Estate Planning', icon: ScrollText, featureKey: 'estate_planning' },
       { id: 'bills', name: 'Bill Reminders', icon: Bell, featureKey: 'bill_reminders' },
     ],
   },
@@ -65,6 +64,12 @@ const navGroups: NavGroup[] = [
     label: 'Tools',
     items: [
       { id: 'literacy', name: 'Learning Challenge', icon: BookOpen, featureKey: null },
+    ],
+  },
+  {
+    label: 'Account',
+    items: [
+      { id: 'subscription-details', name: 'My Plan', icon: CreditCard, featureKey: null },
     ],
   },
   {
@@ -169,8 +174,6 @@ export function AppSidebar({
                     const isActive = currentPage === item.id;
                     const isLocked = item.featureKey ? !hasFeatureAccess(item.featureKey) : false;
 
-                    if (isLocked) return null;
-
                     return (
                       <button
                         key={item.id}
@@ -181,7 +184,9 @@ export function AppSidebar({
                         } ${
                           isActive
                             ? 'bg-blue-50 dark:bg-blue-500/[0.12] text-blue-600 dark:text-blue-400'
-                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-gray-200'
+                            : isLocked
+                              ? 'text-gray-400 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-white/[0.04] opacity-60'
+                              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-gray-200'
                         }`}
                       >
                         <Icon
@@ -198,6 +203,9 @@ export function AppSidebar({
                             >
                               {item.name}
                             </span>
+                            {isLocked && (
+                              <Crown className="w-3 h-3 text-amber-400 flex-shrink-0" />
+                            )}
                           </>
                         )}
                         {isActive && (

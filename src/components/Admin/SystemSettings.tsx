@@ -4,18 +4,23 @@ import {
   Eye,
   EyeOff,
   Bot,
+  Mail,
   Settings as SettingsIcon,
   Key,
   Loader2,
   CheckCircle2,
   Shield,
+  FileText,
+  Send,
   RefreshCw,
+  XCircle,
   HardDrive,
   CreditCard,
 } from 'lucide-react';
 import { getSystemSettings, updateSystemSetting } from '../../lib/adminHelpers';
 import { useAdmin } from '../../contexts/AdminContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
 import BackupTab from './BackupTab';
 import OpenAITab from './OpenAITab';
 import StripeTab from './StripeTab';
@@ -30,6 +35,20 @@ interface TabConfig {
 }
 
 const TABS: TabConfig[] = [
+  {
+    id: 'email',
+    label: 'Email',
+    icon: <Mail size={18} />,
+    description: 'Configure SMTP settings and email templates.',
+    isCustom: true,
+  },
+  {
+    id: 'email-content',
+    label: 'Email Content',
+    icon: <FileText size={18} />,
+    description: 'Customize email content and templates sent to users.',
+    isCustom: true,
+  },
   {
     id: 'security',
     label: 'Security',
@@ -72,9 +91,12 @@ export default function SystemSettings() {
   const [loading, setLoading] = useState(true);
   const [showSensitive, setShowSensitive] = useState<Record<string, boolean>>({});
   const [editingValues, setEditingValues] = useState<Record<string, string>>({});
-  const [activeTab, setActiveTab] = useState('security');
+  const [activeTab, setActiveTab] = useState('email');
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [savedKey, setSavedKey] = useState<string | null>(null);
+  const [testingConnection, setTestingConnection] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<{ success: boolean; message: string } | null>(null);
+  const [testEmailRecipient, setTestEmailRecipient] = useState('');
 
   const { logActivity, hasPermission, adminRole } = useAdmin();
   const { user } = useAuth();
@@ -105,11 +127,14 @@ export default function SystemSettings() {
     setShowSensitive((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const [validationError, setValidationError] = useState<string | null>(null);
+
   const handleSave = async (settingKey: string) => {
     if (!user || !canEdit) return;
 
     const trimmedValue = (editingValues[settingKey] || '').trim();
 
+    setValidationError(null);
     setSavingKey(settingKey);
 
     try {
@@ -131,6 +156,49 @@ export default function SystemSettings() {
 
   const getSettingByKey = (key: string) => {
     return settings.find((s) => s.setting_key === key);
+  };
+
+  const handleTestConnection = async () => {
+    if (!testEmailRecipient || !testEmailRecipient.includes('@')) {
+      setConnectionStatus({ success: false, message: 'Please enter a valid recipient email address.' });
+      return;
+    }
+
+    setTestingConnection(true);
+    setConnectionStatus(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setConnectionStatus({ success: false, message: 'Not authenticated. Please log in again.' });
+        return;
+      }
+
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-test-email`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ recipientEmail: testEmailRecipient }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        const detail = result.details ? ` (${result.details})` : '';
+        setConnectionStatus({ success: false, message: (result.error || 'Test failed.') + detail });
+        return;
+      }
+
+      setConnectionStatus({ success: result.success, message: result.message });
+    } catch (error) {
+      setConnectionStatus({ success: false, message: 'Network error. Could not reach the server.' });
+    } finally {
+      setTestingConnection(false);
+    }
   };
 
   const generateSecret = () => {
@@ -219,6 +287,178 @@ export default function SystemSettings() {
         {setting.description && (
           <p className="text-xs text-slate-500 dark:text-gray-400">{setting.description}</p>
         )}
+      </div>
+    );
+  };
+
+  const renderEmailTab = () => {
+    return (
+      <div className="space-y-6">
+        <div className="border border-slate-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 className="text-md font-semibold text-slate-900 dark:text-white mb-4">SMTP Configuration</h3>
+          <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">
+            Configure your email service provider settings (Zoho, Gmail, Office 365, etc.)
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-2">
+              {renderSettingField('smtp_provider', 'Email Provider')}
+            </div>
+            <div className="col-span-2 grid grid-cols-2 gap-4">
+              {renderSettingField('smtp_host', 'SMTP Host')}
+              {renderSettingField('smtp_port', 'SMTP Port')}
+            </div>
+            <div className="col-span-2 grid grid-cols-2 gap-4">
+              {renderSettingField('smtp_username', 'SMTP Username')}
+              {renderSettingField('smtp_password', 'SMTP Password')}
+            </div>
+            <div className="col-span-2 grid grid-cols-2 gap-4">
+              {renderSettingField('smtp_from_email', 'From Email')}
+              {renderSettingField('smtp_from_name', 'From Name')}
+            </div>
+            <div className="col-span-2">
+              {renderSettingField('smtp_use_tls', 'Use TLS/STARTTLS')}
+            </div>
+          </div>
+          <div className="mt-5 pt-4 border-t border-slate-200 dark:border-gray-700">
+            <h4 className="text-sm font-medium text-slate-700 dark:text-gray-300 mb-3">Send Test Email</h4>
+            <div className="flex items-center gap-3 flex-wrap">
+              <input
+                type="email"
+                value={testEmailRecipient}
+                onChange={(e) => setTestEmailRecipient(e.target.value)}
+                placeholder="Recipient email address"
+                className="flex-1 min-w-[240px] px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              />
+              <button
+                onClick={handleTestConnection}
+                disabled={testingConnection || !canEdit}
+                className="flex items-center space-x-2 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium transition-all shadow-sm"
+              >
+                {testingConnection ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={16} />
+                    <span>Send Test Email</span>
+                  </>
+                )}
+              </button>
+            </div>
+            {connectionStatus && (
+              <div className={`mt-3 flex items-center space-x-2 text-sm px-3 py-2 rounded-lg ${
+                connectionStatus.success
+                  ? 'bg-emerald-50 dark:bg-green-900/20 text-emerald-700 border border-emerald-200'
+                  : 'bg-red-50 dark:bg-red-900/20 text-red-700 border border-red-200'
+              }`}>
+                {connectionStatus.success ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                <span>{connectionStatus.message}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="border border-slate-200 dark:border-gray-700 rounded-lg p-5 bg-slate-50 dark:bg-gray-900">
+          <h3 className="text-md font-semibold text-slate-900 dark:text-white mb-2">Email Identity</h3>
+          <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">
+            Configure how emails appear to recipients
+          </p>
+          <div className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <Mail className="text-slate-400 mt-1" size={18} />
+              <div className="flex-1">
+                <h4 className="text-sm font-medium text-slate-900 dark:text-white">From Name</h4>
+                <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">{editingValues['smtp_from_name'] || 'YourApp'}</p>
+                <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
+                  The sender name that appears in recipient email clients
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderEmailContentTab = () => {
+    const subjectTemplate = editingValues['email_subject_template'] || 'Your [EVENT_TYPE] - [EVENT_DATE]';
+    const footerText = editingValues['email_footer_text'] || 'Created with ❤️ by YourApp';
+    const helpText = editingValues['email_help_text'] || 'Need help? Reply to this email.';
+
+    return (
+      <div className="space-y-6">
+        <div className="border border-slate-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 className="text-md font-semibold text-slate-900 dark:text-white mb-2">Email Subject Line</h3>
+          <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">
+            Customize the subject line for event plan emails. Use [EVENT_TYPE] and [EVENT_DATE] as placeholders.
+          </p>
+          {renderSettingField('email_subject_template', 'Email Subject Template')}
+          <div className="mt-3 p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-lg">
+            <p className="text-xs font-medium text-slate-700 dark:text-gray-300 mb-1">Available placeholders:</p>
+            <p className="text-xs text-slate-600 dark:text-gray-400">[EVENT_TYPE], [EVENT_DATE], [USER_NAME], [GUEST_COUNT]</p>
+          </div>
+          <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 rounded-lg">
+            <p className="text-xs font-medium text-blue-800 mb-1">Preview Example:</p>
+            <p className="text-sm text-blue-700">Your Wedding Event Plan - 2024-06-15</p>
+          </div>
+        </div>
+
+        <div className="border border-slate-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 className="text-md font-semibold text-slate-900 dark:text-white mb-2">Email Footer Text</h3>
+          <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">
+            Customize the footer text that appears at the bottom of event plan emails.
+          </p>
+          {renderSettingField('email_footer_text', 'Footer Text')}
+          <p className="text-xs text-slate-500 dark:text-gray-400 mt-2">
+            This text will appear as the first line in the email footer.
+          </p>
+        </div>
+
+        <div className="border border-slate-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 className="text-md font-semibold text-slate-900 dark:text-white mb-2">Help Text</h3>
+          <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">
+            Customize the help text that appears in the email footer to guide users on getting support.
+          </p>
+          {renderSettingField('email_help_text', 'Help Text')}
+          <p className="text-xs text-slate-500 dark:text-gray-400 mt-2">
+            This text will appear as the second line in the email footer.
+          </p>
+        </div>
+
+        <div className="border border-slate-200 dark:border-gray-700 rounded-lg p-5 bg-slate-50 dark:bg-gray-900">
+          <h3 className="text-md font-semibold text-slate-900 dark:text-white mb-2">Email Preview</h3>
+          <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">
+            Preview how the email footer will appear to users
+          </p>
+          <div className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg p-6 text-center">
+            <p className="text-sm text-slate-700 dark:text-gray-300 mb-1">{footerText}</p>
+            <p className="text-sm text-slate-600 dark:text-gray-400">{helpText}</p>
+          </div>
+        </div>
+
+        <div className="border border-slate-200 dark:border-gray-700 rounded-lg p-5 bg-blue-50 dark:bg-blue-900/30">
+          <h3 className="text-md font-semibold text-blue-900 mb-2">Configuration Notes</h3>
+          <ul className="space-y-2 text-sm text-blue-800">
+            <li className="flex items-start space-x-2">
+              <span className="text-blue-600 mt-0.5">•</span>
+              <span><strong>Placeholders:</strong> Use [EVENT_TYPE], [EVENT_DATE], [USER_NAME], and [GUEST_COUNT] in the subject line for dynamic content.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <span className="text-blue-600 mt-0.5">•</span>
+              <span><strong>Instant Updates:</strong> Changes will be applied immediately to all new event plan emails.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <span className="text-blue-600 mt-0.5">•</span>
+              <span><strong>Formatting:</strong> Basic HTML formatting is supported in footer text if needed.</span>
+            </li>
+            <li className="flex items-start space-x-2">
+              <span className="text-blue-600 mt-0.5">•</span>
+              <span><strong>Best Practice:</strong> Keep email content professional and helpful for the best user experience.</span>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   };
@@ -382,6 +622,8 @@ export default function SystemSettings() {
 
           {currentTab.isCustom ? (
             <>
+              {activeTab === 'email' && renderEmailTab()}
+              {activeTab === 'email-content' && renderEmailContentTab()}
               {activeTab === 'security' && renderSecurityTab()}
               {activeTab === 'openai' && (
                 <OpenAITab
