@@ -333,18 +333,6 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
         language: profileData.language,
         timezone: profileData.timezone,
         theme: profileData.theme,
-        alert_budget_threshold: profileData.alert_budget_threshold,
-        alert_budget_threshold_pct: profileData.alert_budget_threshold_pct,
-        alert_large_transaction: profileData.alert_large_transaction,
-        alert_large_transaction_amount: profileData.alert_large_transaction_amount,
-        alert_bill_reminder: profileData.alert_bill_reminder,
-        alert_bill_reminder_days: profileData.alert_bill_reminder_days,
-        alert_monthly_summary: profileData.alert_monthly_summary,
-        alert_savings_goal_milestone: profileData.alert_savings_goal_milestone,
-        alert_low_balance: profileData.alert_low_balance,
-        alert_low_balance_amount: profileData.alert_low_balance_amount,
-        alert_weekly_digest: profileData.alert_weekly_digest,
-        alert_unusual_activity: profileData.alert_unusual_activity,
         updated_at: new Date().toISOString(),
       };
 

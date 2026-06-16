@@ -937,7 +937,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                         <tr key={record.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
                           <td className="py-3.5 pr-4">
                             <span className="text-[12px] font-mono text-gray-600 dark:text-gray-400">
-                              {record.stripe_invoice_id.slice(0, 18)}...
+                              {record.stripe_invoice_id ? `${record.stripe_invoice_id.slice(0, 18)}...` : record.id.slice(0, 8)}
                             </span>
                           </td>
                           <td className="py-3.5 pr-4">
