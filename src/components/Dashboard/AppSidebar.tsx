@@ -2,8 +2,8 @@ import { useState } from 'react';
 import {
   Home, Receipt, TrendingUp, Target, PiggyBank, FileText, X,
   MessageCircle, Activity, Lightbulb, Bell, Wallet,
-  Calendar, ChevronLeft, Zap, Crown, CreditCard,
-  BarChart3, Bot, BookOpen,
+  Calendar, ChevronLeft, Zap, Crown,
+  BarChart3, Bot, BookOpen, ScrollText,
 } from 'lucide-react';
 
 import { useSubscription } from '../../contexts/SubscriptionContext';
@@ -48,6 +48,7 @@ const navGroups: NavGroup[] = [
       { id: 'investment', name: 'Investment', icon: TrendingUp, featureKey: 'advanced_investments' },
       { id: 'networth', name: 'Net Worth', icon: Wallet, featureKey: 'net_worth_tracker' },
       { id: 'retirement', name: 'Retirement', icon: Calendar, featureKey: 'retirement_planning' },
+      { id: 'estate', name: 'Estate Planning', icon: ScrollText, featureKey: 'estate_planning' },
       { id: 'bills', name: 'Bill Reminders', icon: Bell, featureKey: 'bill_reminders' },
     ],
   },
@@ -64,12 +65,6 @@ const navGroups: NavGroup[] = [
     label: 'Tools',
     items: [
       { id: 'literacy', name: 'Learning Challenge', icon: BookOpen, featureKey: null },
-    ],
-  },
-  {
-    label: 'Account',
-    items: [
-      { id: 'subscription-details', name: 'My Plan', icon: CreditCard, featureKey: null },
     ],
   },
   {
