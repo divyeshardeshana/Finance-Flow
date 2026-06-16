@@ -3,12 +3,8 @@ import { motion, useInView } from 'framer-motion';
 import SEOHead from '../SEO/SEOHead';
 import {
   Mail,
-  MapPin,
-  Clock,
   Send,
   CheckCircle2,
-  MessageCircle,
-  Phone,
   AlertCircle,
 } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
@@ -47,30 +43,6 @@ const contactItems = [
     sub: 'We typically reply within 24 hours',
     gradient: 'from-blue-500 to-cyan-400',
     ring: 'shadow-blue-500/20',
-  },
-  {
-    icon: MessageCircle,
-    title: 'Live Chat',
-    detail: 'Available in-app',
-    sub: 'Mon–Fri, 9am–6pm UAE time',
-    gradient: 'from-emerald-500 to-teal-400',
-    ring: 'shadow-emerald-500/20',
-  },
-  {
-    icon: Phone,
-    title: 'Phone Support',
-    detail: 'Available via support ticket',
-    sub: 'Available for Premium users',
-    gradient: 'from-amber-500 to-orange-400',
-    ring: 'shadow-amber-500/20',
-  },
-  {
-    icon: MapPin,
-    title: 'Office',
-    detail: 'Dubai, UAE',
-    sub: 'Dubai Internet City',
-    gradient: 'from-rose-500 to-pink-400',
-    ring: 'shadow-rose-500/20',
   },
 ];
 
@@ -240,38 +212,6 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
                 </motion.div>
               ))}
 
-              {/* Business Hours Card */}
-              <motion.div
-                variants={fadeUp}
-                custom={5}
-                className="p-5 bg-gray-50 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.07] rounded-2xl"
-              >
-                <div className="flex items-center gap-2.5 mb-4">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 shadow-sm shadow-blue-500/25">
-                    <Clock className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="font-semibold text-gray-900 dark:text-white text-sm">
-                    Business Hours
-                  </span>
-                </div>
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Monday – Friday</span>
-                    <span className="font-medium text-gray-900 dark:text-gray-200">9:00 AM – 6:00 PM</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Saturday</span>
-                    <span className="font-medium text-gray-900 dark:text-gray-200">10:00 AM – 2:00 PM</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Sunday</span>
-                    <span className="font-medium text-rose-500 dark:text-rose-400">Closed</span>
-                  </div>
-                  <div className="pt-2 mt-2 border-t border-gray-200 dark:border-white/[0.07]">
-                    <span className="text-xs text-gray-400 dark:text-gray-500">UAE time (GMT+4)</span>
-                  </div>
-                </div>
-              </motion.div>
             </motion.div>
 
             {/* RIGHT – Contact form */}
