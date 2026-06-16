@@ -1,8 +1,8 @@
 /*
-  # Ensure Admin Access for [ADMIN_EMAIL]
+  # Ensure Admin Access for divyesh3@gmail.com
 
   ## Overview
-  This migration verifies and ensures that [ADMIN_EMAIL] has proper admin access.
+  This migration verifies and ensures that divyesh3@gmail.com has proper admin access.
   It's safe to run multiple times (idempotent).
 
   ## Changes
@@ -24,7 +24,7 @@ BEGIN
   -- Find the user ID from auth.users by email
   SELECT id INTO target_user_id
   FROM auth.users
-  WHERE email = '[ADMIN_EMAIL]'
+  WHERE email = 'divyesh3@gmail.com'
   LIMIT 1;
 
   IF target_user_id IS NOT NULL THEN
@@ -43,7 +43,7 @@ BEGIN
         updated_at = NOW()
       WHERE id = target_user_id;
       
-      RAISE NOTICE 'Admin access updated for [ADMIN_EMAIL] (user_id: %)', target_user_id;
+      RAISE NOTICE 'Admin access updated for divyesh3@gmail.com (user_id: %)', target_user_id;
     ELSE
       -- Create profile if it doesn't exist
       INSERT INTO user_profiles (
@@ -75,7 +75,7 @@ BEGIN
         'regular',
         'moderate',
         true,
-        'Admin User',
+        'Divyesh Ardeshana',
         'weekly',
         'USD',
         '',
@@ -86,9 +86,9 @@ BEGIN
         NOW()
       );
       
-      RAISE NOTICE 'Admin profile created for [ADMIN_EMAIL] (user_id: %)', target_user_id;
+      RAISE NOTICE 'Admin profile created for divyesh3@gmail.com (user_id: %)', target_user_id;
     END IF;
   ELSE
-    RAISE NOTICE 'User [ADMIN_EMAIL] not found in auth.users - they may need to sign up first';
+    RAISE NOTICE 'User divyesh3@gmail.com not found in auth.users - they may need to sign up first';
   END IF;
 END $$;

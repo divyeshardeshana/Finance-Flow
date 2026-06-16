@@ -6,6 +6,8 @@ import {
   Globe,
   DollarSign,
   Camera,
+  Bell,
+  BellOff,
   Save,
   Plus,
   Trash2,
@@ -17,12 +19,18 @@ import {
   XCircle,
   Crown,
   Shield,
+  AlertCircle,
   CreditCard,
   ChevronDown,
+  Calendar,
   ArrowRight,
   History,
-  Calendar,
-  AlertCircle,
+  TrendingDown,
+  Target,
+  Wallet,
+  BarChart3,
+  Activity,
+  Receipt,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -43,6 +51,18 @@ interface ProfileData {
   timezone: string;
   theme: 'light' | 'dark';
   created_at?: string;
+  alert_budget_threshold: boolean;
+  alert_budget_threshold_pct: number;
+  alert_large_transaction: boolean;
+  alert_large_transaction_amount: number;
+  alert_bill_reminder: boolean;
+  alert_bill_reminder_days: number;
+  alert_monthly_summary: boolean;
+  alert_savings_goal_milestone: boolean;
+  alert_low_balance: boolean;
+  alert_low_balance_amount: number;
+  alert_weekly_digest: boolean;
+  alert_unusual_activity: boolean;
 }
 
 interface CustomCategory {
@@ -63,7 +83,7 @@ interface ProfilePageProps {
   onTabChange?: () => void;
 }
 
-type ActiveTab = 'profile' | 'security' | 'preferences' | 'categories';
+type ActiveTab = 'profile' | 'security' | 'preferences' | 'email-alerts' | 'categories';
 
 const fieldClass =
   'w-full px-3.5 py-2.5 rounded-xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-white/[0.04] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 dark:focus:ring-blue-400/20 dark:focus:border-blue-400/30 transition-all';
@@ -83,7 +103,8 @@ const cardClass =
 export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) {
   const { user } = useAuth();
   const { preferences, updatePreferences } = useAppPreferences();
-  const { tier, planDisplayName } = useSubscription();
+  const { tier, planDisplayName, hasFeatureAccess } = useSubscription();
+  const canUseEmailAlerts = hasFeatureAccess('email_alerts');
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>(
     (initialTab as ActiveTab) || 'profile'
@@ -103,6 +124,18 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
     language: 'en',
     timezone: 'UTC',
     theme: 'light',
+    alert_budget_threshold: true,
+    alert_budget_threshold_pct: 80,
+    alert_large_transaction: true,
+    alert_large_transaction_amount: 500,
+    alert_bill_reminder: true,
+    alert_bill_reminder_days: 3,
+    alert_monthly_summary: true,
+    alert_savings_goal_milestone: true,
+    alert_low_balance: false,
+    alert_low_balance_amount: 100,
+    alert_weekly_digest: true,
+    alert_unusual_activity: true,
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -203,6 +236,18 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
           timezone: data.timezone || 'UTC',
           theme: data.theme || 'light',
           created_at: data.created_at,
+          alert_budget_threshold: data.alert_budget_threshold ?? true,
+          alert_budget_threshold_pct: data.alert_budget_threshold_pct ?? 80,
+          alert_large_transaction: data.alert_large_transaction ?? true,
+          alert_large_transaction_amount: data.alert_large_transaction_amount ?? 500,
+          alert_bill_reminder: data.alert_bill_reminder ?? true,
+          alert_bill_reminder_days: data.alert_bill_reminder_days ?? 3,
+          alert_monthly_summary: data.alert_monthly_summary ?? true,
+          alert_savings_goal_milestone: data.alert_savings_goal_milestone ?? true,
+          alert_low_balance: data.alert_low_balance ?? false,
+          alert_low_balance_amount: data.alert_low_balance_amount ?? 100,
+          alert_weekly_digest: data.alert_weekly_digest ?? true,
+          alert_unusual_activity: data.alert_unusual_activity ?? true,
         });
       }
     } catch (error) {
@@ -288,6 +333,18 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
         language: profileData.language,
         timezone: profileData.timezone,
         theme: profileData.theme,
+        alert_budget_threshold: profileData.alert_budget_threshold,
+        alert_budget_threshold_pct: profileData.alert_budget_threshold_pct,
+        alert_large_transaction: profileData.alert_large_transaction,
+        alert_large_transaction_amount: profileData.alert_large_transaction_amount,
+        alert_bill_reminder: profileData.alert_bill_reminder,
+        alert_bill_reminder_days: profileData.alert_bill_reminder_days,
+        alert_monthly_summary: profileData.alert_monthly_summary,
+        alert_savings_goal_milestone: profileData.alert_savings_goal_milestone,
+        alert_low_balance: profileData.alert_low_balance,
+        alert_low_balance_amount: profileData.alert_low_balance_amount,
+        alert_weekly_digest: profileData.alert_weekly_digest,
+        alert_unusual_activity: profileData.alert_unusual_activity,
         updated_at: new Date().toISOString(),
       };
 
@@ -550,6 +607,7 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'security', label: 'Security', icon: Shield },
     { id: 'preferences', label: 'Preferences', icon: Settings },
+    { id: 'email-alerts', label: 'Email Alerts', icon: Bell },
     { id: 'categories', label: 'Custom Fields', icon: Tag },
   ];
 
@@ -661,23 +719,31 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
       {/* Tab Navigation Card */}
       <div className={`${cardClass} overflow-hidden`}>
         <div className="flex border-b border-gray-200/80 dark:border-white/[0.06] overflow-x-auto">
-          {tabs.map(({ id, label, icon: Icon }) => (
+          {tabs.map(({ id, label, icon: Icon }) => {
+            const isEmailAlertsLocked = id === 'email-alerts' && !canUseEmailAlerts;
+            return (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
               className={`flex items-center gap-2 px-5 py-3.5 text-[13px] font-medium transition-all whitespace-nowrap relative ${
                 activeTab === id
                   ? 'text-blue-600 dark:text-blue-400'
+                  : isEmailAlertsLocked
+                  ? 'text-gray-400 dark:text-gray-600'
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
               }`}
             >
               <Icon className="w-4 h-4" />
               {label}
+              {isEmailAlertsLocked && (
+                <Crown className="w-3 h-3 text-amber-400 flex-shrink-0" />
+              )}
               {activeTab === id && (
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 dark:bg-blue-400 rounded-t-full" />
               )}
             </button>
-          ))}
+            );
+          })}
         </div>
 
         <div className="p-6">
@@ -919,72 +985,18 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
 
               <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/[0.06]">
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-red-400 dark:text-red-500/60 mb-4">Danger Zone</p>
-                <div className="space-y-3">
-                  <div className="rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[13px] font-medium text-gray-900 dark:text-white mb-1">Export My Data</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500">Download all your financial data as JSON (GDPR Article 20 — data portability).</p>
-                      </div>
-                      <button
-                        onClick={async () => {
-                          try {
-                            const [txRes, budRes, savRes, goalsRes] = await Promise.all([
-                              supabase.from('transactions').select('*').eq('user_id', user?.id),
-                              supabase.from('budgets').select('*').eq('user_id', user?.id),
-                              supabase.from('savings_goals').select('*').eq('user_id', user?.id),
-                              supabase.from('financial_goals').select('*').eq('user_id', user?.id),
-                            ]);
-                            const exportData = {
-                              exported_at: new Date().toISOString(),
-                              transactions: txRes.data || [],
-                              budgets: budRes.data || [],
-                              savings_goals: savRes.data || [],
-                              financial_goals: goalsRes.data || [],
-                            };
-                            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `financeflow-data-${new Date().toISOString().split('T')[0]}.json`;
-                            a.click();
-                            URL.revokeObjectURL(url);
-                          } catch {
-                            alert('Export failed. Please try again.');
-                          }
-                        }}
-                        className="flex-shrink-0 px-3.5 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 text-[12px] font-medium hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-                      >
-                        Export
-                      </button>
+                <div className="rounded-xl border border-red-100 dark:border-red-500/[0.12] bg-red-50/50 dark:bg-red-500/[0.04] p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[13px] font-medium text-gray-900 dark:text-white mb-1">Delete Account</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500">Permanently delete your account and all associated data. This action cannot be undone.</p>
                     </div>
-                  </div>
-                  <div className="rounded-xl border border-red-100 dark:border-red-500/[0.12] bg-red-50/50 dark:bg-red-500/[0.04] p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[13px] font-medium text-gray-900 dark:text-white mb-1">Delete Account</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500">Permanently delete your account and all associated data. This action cannot be undone. (GDPR Article 17 — right to erasure)</p>
-                      </div>
-                      <button
-                        onClick={async () => {
-                          const confirmed = window.confirm(
-                            'Are you absolutely sure you want to delete your account?\n\nThis will permanently delete:\n• All your transactions\n• Budgets and savings goals\n• Profile and preferences\n\nThis action CANNOT be undone.'
-                          );
-                          if (!confirmed) return;
-                          const doubleConfirm = window.prompt('Type DELETE to confirm:');
-                          if (doubleConfirm !== 'DELETE') return;
-                          try {
-                            await supabase.rpc('delete_user_account', { user_id_param: user?.id });
-                            await supabase.auth.signOut();
-                          } catch {
-                            alert('Account deletion failed. Please contact support at divyesh3@gmail.com');
-                          }
-                        }}
-                        className="flex-shrink-0 px-3.5 py-1.5 rounded-lg border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-[12px] font-medium hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    <button
+                      disabled
+                      className="flex-shrink-0 px-3.5 py-1.5 rounded-lg border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-[12px] font-medium hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1092,6 +1104,308 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
             </div>
           )}
 
+          {/* ─── EMAIL ALERTS TAB ─── */}
+          {activeTab === 'email-alerts' && (
+            <div className="space-y-6">
+              {!canUseEmailAlerts ? (
+                <div className="rounded-2xl border border-blue-100 dark:border-blue-500/[0.15] bg-gradient-to-br from-blue-50 to-cyan-50/60 dark:from-blue-500/[0.07] dark:to-cyan-500/[0.04] p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center flex-shrink-0 shadow-sm shadow-blue-500/20">
+                      <Crown className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-[14px] font-semibold text-gray-900 dark:text-white mb-1.5">Upgrade to Access Email Alerts</h4>
+                      <p className="text-[13px] text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">
+                        Email alert configuration is available for Paid and Premium plan users.
+                      </p>
+                      <div className="space-y-1.5">
+                        {[
+                          'Budget threshold exceeded alerts',
+                          'Large transaction detection',
+                          'Bill due date reminders',
+                          'Monthly financial summaries',
+                          'Savings goal milestone notifications',
+                          'Weekly spending digests',
+                        ].map(item => (
+                          <div key={item} className="flex items-center gap-2 text-[12px] text-gray-600 dark:text-gray-400">
+                            <CheckCircle className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+                            {item}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+              <div className="space-y-6">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className={sectionLabel}>Alert Frequency</p>
+                  <p className="text-[12px] text-gray-400 dark:text-gray-600 -mt-2 mb-4">How often you receive email digests</p>
+                </div>
+              </div>
+
+              <div>
+                <label className={inputLabel}>Email Digest Frequency</label>
+                <div className="relative">
+                  <Bell className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-600 pointer-events-none" />
+                  <select
+                    value={profileData.email_alerts}
+                    onChange={(e) => setProfileData({ ...profileData, email_alerts: e.target.value as any })}
+                    className={`${fieldClass} pl-10 pr-9 appearance-none`}
+                  >
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="none">None (disable all digests)</option>
+                  </select>
+                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-600 pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-gray-100 dark:border-white/[0.06]">
+                <p className={`${sectionLabel} pt-4`}>Alert Types</p>
+                <p className="text-[12px] text-gray-400 dark:text-gray-600 -mt-2 mb-4">Choose which events trigger an email notification</p>
+
+                <div className="space-y-3">
+                  {/* Budget Threshold */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/[0.1] border border-amber-100 dark:border-amber-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <BarChart3 className="w-4 h-4 text-amber-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Budget Threshold Exceeded</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Alert when spending reaches a % of your budget</p>
+                        {profileData.alert_budget_threshold && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">Trigger at</span>
+                            <input
+                              type="number"
+                              min={10}
+                              max={100}
+                              value={profileData.alert_budget_threshold_pct}
+                              onChange={(e) => setProfileData({ ...profileData, alert_budget_threshold_pct: Number(e.target.value) })}
+                              className="w-16 px-2 py-1 rounded-lg border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-white/[0.04] text-[12px] text-gray-900 dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                            />
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">% of budget</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_budget_threshold: !profileData.alert_budget_threshold })}
+                      className={`relative w-10 h-5.5 flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_budget_threshold ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_budget_threshold ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+
+                  {/* Large Transaction */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-500/[0.1] border border-red-100 dark:border-red-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Receipt className="w-4 h-4 text-red-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Large Transaction Detected</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Alert when a single transaction exceeds a set amount</p>
+                        {profileData.alert_large_transaction && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">Above</span>
+                            <input
+                              type="number"
+                              min={0}
+                              value={profileData.alert_large_transaction_amount}
+                              onChange={(e) => setProfileData({ ...profileData, alert_large_transaction_amount: Number(e.target.value) })}
+                              className="w-24 px-2 py-1 rounded-lg border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-white/[0.04] text-[12px] text-gray-900 dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                            />
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">{profileData.currency}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_large_transaction: !profileData.alert_large_transaction })}
+                      className={`relative flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_large_transaction ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_large_transaction ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+
+                  {/* Bill Reminder */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/[0.1] border border-blue-100 dark:border-blue-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Calendar className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Bill Due Reminder</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Remind me before a bill is due</p>
+                        {profileData.alert_bill_reminder && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">Alert</span>
+                            <select
+                              value={profileData.alert_bill_reminder_days}
+                              onChange={(e) => setProfileData({ ...profileData, alert_bill_reminder_days: Number(e.target.value) })}
+                              className="px-2 py-1 rounded-lg border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-white/[0.04] text-[12px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                            >
+                              <option value={1}>1 day</option>
+                              <option value={3}>3 days</option>
+                              <option value={7}>7 days</option>
+                              <option value={14}>14 days</option>
+                            </select>
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">before due date</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_bill_reminder: !profileData.alert_bill_reminder })}
+                      className={`relative flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_bill_reminder ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_bill_reminder ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+
+                  {/* Monthly Summary */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-cyan-50 dark:bg-cyan-500/[0.1] border border-cyan-100 dark:border-cyan-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Activity className="w-4 h-4 text-cyan-500" />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Monthly Summary Report</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Receive a monthly breakdown of income, spending, and savings</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_monthly_summary: !profileData.alert_monthly_summary })}
+                      className={`relative flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_monthly_summary ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_monthly_summary ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+
+                  {/* Weekly Digest */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/[0.1] border border-blue-100 dark:border-blue-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Bell className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Weekly Spending Digest</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">A weekly snapshot of your spending patterns and trends</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_weekly_digest: !profileData.alert_weekly_digest })}
+                      className={`relative flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_weekly_digest ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_weekly_digest ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+
+                  {/* Savings Goal Milestone */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/[0.1] border border-emerald-100 dark:border-emerald-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Target className="w-4 h-4 text-emerald-500" />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Savings Goal Milestone</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Notify when a savings goal reaches 25%, 50%, 75%, or 100%</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_savings_goal_milestone: !profileData.alert_savings_goal_milestone })}
+                      className={`relative flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_savings_goal_milestone ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_savings_goal_milestone ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+
+                  {/* Low Balance */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-orange-50 dark:bg-orange-500/[0.1] border border-orange-100 dark:border-orange-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Wallet className="w-4 h-4 text-orange-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Low Balance Warning</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Alert when net balance falls below a threshold</p>
+                        {profileData.alert_low_balance && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">Below</span>
+                            <input
+                              type="number"
+                              min={0}
+                              value={profileData.alert_low_balance_amount}
+                              onChange={(e) => setProfileData({ ...profileData, alert_low_balance_amount: Number(e.target.value) })}
+                              className="w-24 px-2 py-1 rounded-lg border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-white/[0.04] text-[12px] text-gray-900 dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                            />
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">{profileData.currency}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_low_balance: !profileData.alert_low_balance })}
+                      className={`relative flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_low_balance ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_low_balance ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+
+                  {/* Unusual Activity */}
+                  <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-500/[0.1] border border-red-100 dark:border-red-500/[0.2] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <TrendingDown className="w-4 h-4 text-red-500" />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium text-gray-900 dark:text-white">Unusual Spending Pattern</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Alert when spending in a category spikes compared to your average</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setProfileData({ ...profileData, alert_unusual_activity: !profileData.alert_unusual_activity })}
+                      className={`relative flex-shrink-0 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none ${profileData.alert_unusual_activity ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/[0.1]'}`}
+                      style={{ height: '22px', width: '40px' }}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${profileData.alert_unusual_activity ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2 rounded-xl border border-blue-100 dark:border-blue-500/[0.12] bg-blue-50/50 dark:bg-blue-500/[0.05] p-4 flex items-start gap-3">
+                <BellOff className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                  These preferences will be applied when email notifications are activated. Set your digest frequency above to control how often alerts are batched and delivered.
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  onClick={updateProfile}
+                  disabled={loading}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-[13px] font-semibold shadow-sm shadow-blue-500/20 hover:shadow-blue-500/30 hover:from-blue-500 hover:to-cyan-400 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <Save className="w-4 h-4" />
+                  {loading ? 'Saving…' : 'Save Alert Preferences'}
+                </button>
+              </div>
+              </div>
+              )}
+            </div>
+          )}
 
           {/* ─── CUSTOM FIELDS TAB ─── */}
           {activeTab === 'categories' && (

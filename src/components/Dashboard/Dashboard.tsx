@@ -31,6 +31,7 @@ import { SavingsPage } from '../Savings/SavingsPage';
 import { PriceComparisonPage } from '../PriceComparison/PriceComparisonPage';
 import { StockPredictionPage } from '../Predictions/StockPredictionPage';
 import { SubscriptionManagementPage } from '../Profile/SubscriptionManagementPage';
+import SubscriptionDetailsPage from '../Profile/SubscriptionDetailsPage';
 import SubscriptionSuccessPage from '../Subscription/SubscriptionSuccessPage';
 import type { Page } from './types';
 
@@ -59,6 +60,7 @@ const PAGE_NAMES: Partial<Record<Page, string>> = {
   pricecomparison: 'Price Comparison',
   profile: 'Profile',
   subscription: 'Subscription',
+  'subscription-details': 'My Plan',
   'subscription-success': 'Subscription Activated',
 };
 
@@ -192,6 +194,8 @@ export function Dashboard({ onNavigatePublic }: DashboardProps = {}) {
         );
       case 'subscription':
         return <SubscriptionManagementPage defaultSection={subscriptionDefaultSection} />;
+      case 'subscription-details':
+        return <SubscriptionDetailsPage />;
       case 'subscription-success':
         return (
           <SubscriptionSuccessPage

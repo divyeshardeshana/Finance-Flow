@@ -17,27 +17,15 @@ export interface SEOData {
   is_indexable?: boolean;
 }
 
-export interface BreadcrumbItem {
-  name: string;
-  url: string;
-}
-
 interface SEOHeadProps {
   pageKey?: string;
   overrides?: Partial<SEOData>;
-  /** Short-form props — merged into overrides for convenience */
-  title?: string;
-  description?: string;
-  keywords?: string;
-  canonical?: string;
-  breadcrumbs?: BreadcrumbItem[];
-  howToSchema?: object;
 }
 
 const SITE_NAME = 'FinanceFlow AI';
 const DEFAULT_OG_IMAGE = 'https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=1200';
 
-export default function SEOHead({ pageKey, overrides, title: titleProp, description: descProp, keywords: kwProp, canonical: canonProp, breadcrumbs, howToSchema }: SEOHeadProps) {
+export default function SEOHead({ pageKey, overrides }: SEOHeadProps) {
   const [seoData, setSeoData] = useState<SEOData | null>(null);
 
   useEffect(() => {
@@ -52,12 +40,7 @@ export default function SEOHead({ pageKey, overrides, title: titleProp, descript
       });
   }, [pageKey]);
 
-  const shortOverrides: Partial<SEOData> = {};
-  if (titleProp) shortOverrides.meta_title = titleProp;
-  if (descProp) shortOverrides.meta_description = descProp;
-  if (kwProp) shortOverrides.meta_keywords = kwProp;
-  if (canonProp) shortOverrides.canonical_url = canonProp;
-  const merged: SEOData = { ...seoData, ...shortOverrides, ...overrides };
+  const merged: SEOData = { ...seoData, ...overrides };
 
   const title = merged.meta_title || SITE_NAME;
   const description = merged.meta_description || '';
@@ -97,25 +80,6 @@ export default function SEOHead({ pageKey, overrides, title: titleProp, descript
       {structuredData && (
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
-        </script>
-      )}
-      {breadcrumbs && breadcrumbs.length > 0 && (
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: breadcrumbs.map((b, i) => ({
-              '@type': 'ListItem',
-              position: i + 1,
-              name: b.name,
-              item: b.url,
-            })),
-          })}
-        </script>
-      )}
-      {howToSchema && (
-        <script type="application/ld+json">
-          {JSON.stringify(howToSchema)}
         </script>
       )}
     </Helmet>
