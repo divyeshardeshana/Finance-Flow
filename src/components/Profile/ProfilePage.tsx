@@ -1091,8 +1091,7 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
             </div>
           )}
 
-          {/* ─── EMAIL ALERTS TAB ─── (removed — managed in Admin > Email Management)
-          {activeTab === 'email-alerts' && (
+          {false && activeTab === 'email-alerts' && (
             <div className="space-y-6">
               {!canUseEmailAlerts ? (
                 <div className="rounded-2xl border border-blue-100 dark:border-blue-500/[0.15] bg-gradient-to-br from-blue-50 to-cyan-50/60 dark:from-blue-500/[0.07] dark:to-cyan-500/[0.04] p-6">
@@ -1390,7 +1389,7 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
                 </button>
               </div>
               </div>
-          */}
+          )}
 
           {/* ─── CUSTOM FIELDS TAB ─── */}
           {activeTab === 'categories' && (
