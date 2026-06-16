@@ -83,7 +83,7 @@ interface ProfilePageProps {
   onTabChange?: () => void;
 }
 
-type ActiveTab = 'profile' | 'security' | 'preferences' | 'email-alerts' | 'categories';
+type ActiveTab = 'profile' | 'security' | 'preferences' | 'categories';
 
 const fieldClass =
   'w-full px-3.5 py-2.5 rounded-xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-white/[0.04] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 dark:focus:ring-blue-400/20 dark:focus:border-blue-400/30 transition-all';
@@ -595,7 +595,6 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'security', label: 'Security', icon: Shield },
     { id: 'preferences', label: 'Preferences', icon: Settings },
-    { id: 'email-alerts', label: 'Email Alerts', icon: Bell },
     { id: 'categories', label: 'Custom Fields', icon: Tag },
   ];
 
@@ -1092,7 +1091,7 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
             </div>
           )}
 
-          {/* ─── EMAIL ALERTS TAB ─── */}
+          {/* ─── EMAIL ALERTS TAB ─── (removed — managed in Admin > Email Management)
           {activeTab === 'email-alerts' && (
             <div className="space-y-6">
               {!canUseEmailAlerts ? (
@@ -1391,9 +1390,7 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
                 </button>
               </div>
               </div>
-              )}
-            </div>
-          )}
+          */}
 
           {/* ─── CUSTOM FIELDS TAB ─── */}
           {activeTab === 'categories' && (

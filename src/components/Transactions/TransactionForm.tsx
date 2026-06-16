@@ -33,9 +33,11 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
   });
   const [loading, setLoading] = useState(false);
   const [customTypes, setCustomTypes] = useState<string[]>([]);
+  const [customPaymentMethods, setCustomPaymentMethods] = useState<string[]>([]);
 
   useEffect(() => {
     loadCustomTypes();
+    loadCustomPaymentMethods();
   }, []);
 
   const loadCustomTypes = async () => {
@@ -50,6 +52,19 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
       setCustomTypes(data?.map(t => t.type_name) || []);
     } catch (error) {
       console.error('Error loading custom types:', error);
+    }
+  };
+
+  const loadCustomPaymentMethods = async () => {
+    try {
+      const { data } = await supabase
+        .from('custom_payment_methods')
+        .select('method_name')
+        .eq('user_id', user?.id)
+        .eq('is_active', true);
+      setCustomPaymentMethods(data?.map(m => m.method_name) || []);
+    } catch {
+      // silently skip
     }
   };
 
@@ -341,6 +356,9 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
                 <option value="Check">Check</option>
                 <option value="Mobile Payment">Mobile Payment</option>
                 <option value="Other">Other</option>
+                {customPaymentMethods.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
               </select>
             </div>
 
@@ -384,6 +402,9 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
                 <option value="Check">Check</option>
                 <option value="Mobile Payment">Mobile Payment</option>
                 <option value="Other">Other</option>
+                {customPaymentMethods.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
               </select>
             </div>
           </div>

@@ -109,7 +109,6 @@ export default function SystemSettings() {
 
     const trimmedValue = (editingValues[settingKey] || '').trim();
 
-    setValidationError(null);
     setSavingKey(settingKey);
 
     try {
