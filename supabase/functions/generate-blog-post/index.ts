@@ -230,8 +230,6 @@ Return ONLY valid JSON in this exact format:
       ],
       temperature: 0.7,
       max_tokens: 4000,
-      // json_object mode only supported on gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-3.5-turbo-1106+
-      ...(supportsJsonMode(model) ? { response_format: { type: "json_object" } } : {}),
     }),
   });
 
@@ -252,15 +250,6 @@ Return ONLY valid JSON in this exact format:
   if (!rawContent) throw new Error("No content returned from OpenAI");
 
   return parseJsonResponse(rawContent);
-}
-
-function supportsJsonMode(model: string): boolean {
-  return (
-    model.startsWith("gpt-4o") ||
-    model.startsWith("gpt-4-turbo") ||
-    model === "gpt-3.5-turbo-1106" ||
-    model === "gpt-3.5-turbo-0125"
-  );
 }
 
 function parseJsonResponse(raw: string): { content: string; excerpt: string; meta_description: string } {
