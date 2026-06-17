@@ -1010,8 +1010,22 @@ function parseContent(text: string): ContentBlock[] {
   return blocks;
 }
 
+function extractContent(raw: string): string {
+  const trimmed = raw.trim();
+  // If the DB stored raw JSON (e.g. {"content":"...","excerpt":"..."}), extract content field
+  if (trimmed.startsWith('{')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed.content) return parsed.content;
+    } catch {
+      // not valid JSON, use as-is
+    }
+  }
+  return trimmed;
+}
+
 function ArticleContent({ content }: { content: string }) {
-  const blocks = parseContent(content);
+  const blocks = parseContent(extractContent(content));
 
   return (
     <div className="article-body">
@@ -1193,7 +1207,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
     );
   }
 
-  const readTime = estimateReadTime(post.content || '');
+  const readTime = estimateReadTime(extractContent(post.content || ''));
   const publishDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : null;

@@ -219,6 +219,7 @@ Return ONLY valid JSON in this exact format:
       ],
       temperature: 0.7,
       max_tokens: 4000,
+      response_format: { type: "json_object" },
     }),
   });
 
@@ -238,21 +239,13 @@ Return ONLY valid JSON in this exact format:
   const rawContent = data.choices?.[0]?.message?.content;
   if (!rawContent) throw new Error("No content returned from OpenAI");
 
-  try {
-    const cleaned = rawContent.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-    const parsed = JSON.parse(cleaned);
-    return {
-      content: parsed.content || rawContent,
-      excerpt: parsed.excerpt || rawContent.substring(0, 200),
-      meta_description: parsed.meta_description || "",
-    };
-  } catch {
-    return {
-      content: rawContent,
-      excerpt: rawContent.substring(0, 200),
-      meta_description: "",
-    };
-  }
+  // response_format: json_object guarantees valid JSON — parse directly
+  const parsed = JSON.parse(rawContent);
+  return {
+    content: parsed.content || rawContent,
+    excerpt: parsed.excerpt || rawContent.substring(0, 200),
+    meta_description: parsed.meta_description || "",
+  };
 }
 
 async function generateAndStoreImage(
