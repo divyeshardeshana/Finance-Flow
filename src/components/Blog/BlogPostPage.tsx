@@ -1243,56 +1243,43 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
       />
       <PublicNavbar currentView="blog" onNavigate={navigate} onSignIn={onSignIn || onBack} />
 
-      {/* ── FULL-WIDTH HERO IMAGE ─────────────────────────────────────────── */}
-      <div className="relative w-full h-[62vh] min-h-[420px] max-h-[640px] overflow-hidden">
-        {/* Image */}
-        {post.featured_image_url ? (
-          <img
-            src={post.featured_image_url}
-            alt={post.title}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-[#0B0F1A]" />
-        )}
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      <div className="relative w-full overflow-hidden pt-24 pb-14">
+        {/* Background gradient matching other pages */}
+        <div className="absolute inset-0 bg-white dark:bg-[#0B0F1A]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-gradient-to-b from-blue-100/60 to-transparent dark:from-blue-600/10 dark:to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-10 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-bl from-cyan-100/40 to-transparent dark:from-cyan-500/5 dark:to-transparent blur-2xl pointer-events-none" />
 
-        {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
-
-        {/* Back button - top left */}
-        <div className="absolute top-0 left-0 right-0 pt-20 px-6 max-w-[900px] mx-auto w-full">
+        {/* Content */}
+        <div className="relative px-6 max-w-[900px] mx-auto w-full">
           <motion.button
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
             onClick={onBack}
-            className="inline-flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors group backdrop-blur-sm bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-lg border border-white/10"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group mb-8"
           >
             <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform duration-200" />
             Back to Blog
           </motion.button>
-        </div>
 
-        {/* Title area - bottom of hero */}
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-10 max-w-[900px] mx-auto w-full">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
           >
             {post.blog_categories && (
               <span
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white mb-4 shadow-lg"
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white mb-5 shadow-sm"
                 style={{ backgroundColor: post.blog_categories.color }}
               >
                 {post.blog_categories.name}
               </span>
             )}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-white mb-4 drop-shadow-lg">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-gray-900 dark:text-white mb-5">
               {post.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
               {publishDate && (
                 <div className="flex items-center gap-1.5">
                   <Calendar size={13} />
@@ -1304,7 +1291,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
                 {readTime} min read
               </div>
               {post.tags && post.tags.slice(0, 3).map(tag => (
-                <span key={tag} className="px-2 py-0.5 rounded-md bg-white/10 text-white/60 text-xs border border-white/10">
+                <span key={tag} className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/[0.07] text-gray-500 dark:text-gray-400 text-xs border border-gray-200 dark:border-white/10">
                   #{tag}
                 </span>
               ))}
