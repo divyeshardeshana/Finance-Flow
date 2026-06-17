@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowLeft, Calendar, Clock, Zap, Globe, Lock, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Zap, ArrowRight } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
+import { PublicFooter } from '../Common/PublicFooter';
 import SEOHead from '../SEO/SEOHead';
 import { sanitizeHtml } from '../../lib/sanitize';
 
@@ -1018,8 +1019,9 @@ function ArticleContent({ content }: { content: string }) {
           return (
             <h2
               key={i}
-              className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4 leading-tight tracking-tight"
+              className="flex items-center gap-3 text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-12 mb-5 leading-tight tracking-tight"
             >
+              <span className="flex-shrink-0 w-1 h-8 rounded-full bg-gradient-to-b from-blue-500 to-cyan-400" />
               {block.text}
             </h2>
           );
@@ -1028,7 +1030,7 @@ function ArticleContent({ content }: { content: string }) {
           return (
             <h3
               key={i}
-              className="text-xl font-bold text-gray-900 dark:text-white mt-6 mb-3 leading-snug"
+              className="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3 leading-snug"
             >
               {block.text}
             </h3>
@@ -1038,7 +1040,7 @@ function ArticleContent({ content }: { content: string }) {
           return (
             <blockquote
               key={i}
-              className="my-6 pl-5 border-l-4 border-blue-500 dark:border-blue-400 italic text-gray-600 dark:text-gray-300 text-lg leading-relaxed"
+              className="my-7 pl-5 border-l-4 border-blue-500/60 dark:border-blue-400/60 italic text-gray-600 dark:text-gray-300 text-lg leading-relaxed bg-blue-50/50 dark:bg-blue-500/[0.06] py-4 pr-4 rounded-r-xl"
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
             />
           );
@@ -1047,17 +1049,18 @@ function ArticleContent({ content }: { content: string }) {
           return (
             <div
               key={i}
-              className="my-6 px-5 py-4 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/25 text-blue-800 dark:text-blue-200 text-sm leading-relaxed font-medium"
+              className="my-7 px-5 py-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-500/[0.08] dark:to-cyan-500/[0.06] border border-blue-200/70 dark:border-blue-500/20 text-blue-800 dark:text-blue-200 text-sm leading-relaxed font-medium"
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
             />
           );
         }
         if (block.type === 'ul') {
           return (
-            <ul key={i} className="my-5 space-y-2 pl-6 list-disc marker:text-blue-500">
+            <ul key={i} className="my-5 space-y-2.5 pl-0">
               {block.items.map((item, j) => (
-                <li key={j} className="text-gray-600 dark:text-gray-300 leading-relaxed text-base">
-                  {item}
+                <li key={j} className="flex items-start gap-3 text-gray-600 dark:text-gray-300 leading-relaxed text-[17px]">
+                  <span className="flex-shrink-0 mt-[6px] w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(formatItemInline(item)) }} />
                 </li>
               ))}
             </ul>
@@ -1065,10 +1068,13 @@ function ArticleContent({ content }: { content: string }) {
         }
         if (block.type === 'ol') {
           return (
-            <ol key={i} className="my-5 space-y-2 pl-6 list-decimal marker:text-blue-500 marker:font-semibold">
+            <ol key={i} className="my-5 space-y-2.5 pl-0 counter-reset-list">
               {block.items.map((item, j) => (
-                <li key={j} className="text-gray-600 dark:text-gray-300 leading-relaxed text-base">
-                  {item}
+                <li key={j} className="flex items-start gap-3 text-gray-600 dark:text-gray-300 leading-relaxed text-[17px]">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center justify-center mt-0.5">
+                    {j + 1}
+                  </span>
+                  <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(formatItemInline(item)) }} />
                 </li>
               ))}
             </ol>
@@ -1077,7 +1083,7 @@ function ArticleContent({ content }: { content: string }) {
         return (
           <p
             key={i}
-            className="text-gray-600 dark:text-gray-300 leading-[1.85] text-base mb-3"
+            className="text-[17px] text-gray-600 dark:text-gray-300 leading-[1.85] mb-5"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
           />
         );
@@ -1086,12 +1092,19 @@ function ArticleContent({ content }: { content: string }) {
   );
 }
 
+function formatItemInline(text: string): string {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
 export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, onSignIn }: BlogPostPageProps) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<RelatedPost[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const headerRef = useScrollInView(0.1);
+  const bodyRef = useScrollInView(0.05);
+  const relatedRef = useScrollInView(0.1);
 
   const navigate = (view: PublicView) => {
     if (onNavigate) onNavigate(view);
@@ -1145,20 +1158,13 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-[#0B0F1A]">
+      <div className="min-h-screen bg-white dark:bg-[#0B0F1A]">
         <PublicNavbar currentView="blog" onNavigate={navigate} onSignIn={onSignIn || onBack} />
-        <div className="max-w-[900px] mx-auto px-6 pt-24 pb-12">
-          <div className="animate-pulse space-y-6">
-            <div className="h-5 w-28 bg-gray-100 dark:bg-white/[0.06] rounded-full" />
-            <div className="h-10 bg-gray-100 dark:bg-white/[0.06] rounded-xl w-3/4" />
-            <div className="h-6 bg-gray-100 dark:bg-white/[0.06] rounded-xl w-1/2" />
-            <div className="h-72 bg-gray-100 dark:bg-white/[0.06] rounded-2xl mt-8" />
-            <div className="space-y-3 mt-8">
-              {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="h-4 bg-gray-100 dark:bg-white/[0.06] rounded" style={{ width: `${75 + i * 4}%` }} />
-              ))}
-            </div>
-          </div>
+        <div className="h-[55vh] bg-gray-100 dark:bg-white/[0.04] animate-pulse" />
+        <div className="max-w-[740px] mx-auto px-6 py-12 space-y-4">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="h-4 bg-gray-100 dark:bg-white/[0.05] rounded" style={{ width: `${70 + i * 5}%` }} />
+          ))}
         </div>
       </div>
     );
@@ -1166,9 +1172,9 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
 
   if (!post) {
     return (
-      <div className="bg-white dark:bg-[#0B0F1A]">
+      <div className="min-h-screen bg-white dark:bg-[#0B0F1A]">
         <PublicNavbar currentView="blog" onNavigate={navigate} onSignIn={onSignIn || onBack} />
-        <div className="max-w-[900px] mx-auto px-6 pt-24 pb-12 text-center">
+        <div className="max-w-[740px] mx-auto px-6 pt-32 pb-12 text-center">
           <div className="w-16 h-16 bg-gray-50 dark:bg-white/[0.04] border border-gray-200/80 dark:border-white/[0.08] rounded-2xl flex items-center justify-center mx-auto mb-6">
             <Zap size={22} className="text-gray-400" />
           </div>
@@ -1191,118 +1197,127 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
     ? new Date(post.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : null;
 
-  const blogStructuredData = post ? {
+  const blogStructuredData = {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": post.title,
     "description": post.excerpt,
     "image": post.featured_image_url,
     "datePublished": post.published_at,
-    "author": { "@type": "Organization", "name": "FinanceFlow AI" },
-    "publisher": { "@type": "Organization", "name": "FinanceFlow AI" },
+    "author": { "@type": "Organization", "name": "FinanceFlow" },
+    "publisher": { "@type": "Organization", "name": "FinanceFlow" },
     "keywords": post.tags?.join(', '),
-  } : undefined;
+  };
 
   return (
-    <div className="bg-white dark:bg-[#0B0F1A]">
-      {post && (
-        <SEOHead
-          overrides={{
-            meta_title: `${post.title} | FinanceFlow AI Blog`,
-            meta_description: post.excerpt,
-            meta_keywords: post.tags?.join(', '),
-            og_title: post.title,
-            og_description: post.excerpt,
-            og_image_url: post.featured_image_url,
-            twitter_title: post.title,
-            twitter_description: post.excerpt,
-            twitter_image_url: post.featured_image_url,
-            is_indexable: true,
-            structured_data: blogStructuredData,
-          }}
-        />
-      )}
+    <div className="min-h-screen bg-white dark:bg-[#0B0F1A]">
+      <SEOHead
+        overrides={{
+          meta_title: `${post.title} | FinanceFlow Blog`,
+          meta_description: post.excerpt,
+          meta_keywords: post.tags?.join(', '),
+          og_title: post.title,
+          og_description: post.excerpt,
+          og_image_url: post.featured_image_url,
+          twitter_title: post.title,
+          twitter_description: post.excerpt,
+          twitter_image_url: post.featured_image_url,
+          is_indexable: true,
+          structured_data: blogStructuredData,
+        }}
+      />
       <PublicNavbar currentView="blog" onNavigate={navigate} onSignIn={onSignIn || onBack} />
 
-      {/* ── ARTICLE HEADER (above image) ────────────────────────────────────── */}
-      <div ref={headerRef.ref} className="max-w-[900px] mx-auto px-6 pt-20 pb-0">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate={headerRef.isInView ? 'visible' : 'hidden'}
-        >
-          {post.blog_categories && (
-            <span
-              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white mb-4"
-              style={{ backgroundColor: post.blog_categories.color }}
-            >
-              {post.blog_categories.name}
-            </span>
-          )}
+      {/* ── FULL-WIDTH HERO IMAGE ─────────────────────────────────────────── */}
+      <div className="relative w-full h-[62vh] min-h-[420px] max-h-[640px] overflow-hidden">
+        {/* Image */}
+        {post.featured_image_url ? (
+          <motion.img
+            src={post.featured_image_url}
+            alt={post.title}
+            initial={{ scale: 1.06 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-[#0B0F1A]" />
+        )}
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-gray-900 dark:text-white mb-4">
-            {post.title}
-          </h1>
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
 
-          {post.excerpt && (
-            <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed mb-4 max-w-2xl">
-              {post.excerpt}
-            </p>
-          )}
+        {/* Back button — top left */}
+        <div className="absolute top-0 left-0 right-0 pt-20 px-6 max-w-[900px] mx-auto w-full">
+          <motion.button
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            onClick={onBack}
+            className="inline-flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors group backdrop-blur-sm bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-lg border border-white/10"
+          >
+            <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform duration-200" />
+            Back to Blog
+          </motion.button>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 dark:text-gray-500 pb-5">
-            {publishDate && (
-              <div className="flex items-center gap-1.5">
-                <Calendar size={13} />
-                {publishDate}
-              </div>
+        {/* Title area — bottom of hero */}
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-10 max-w-[900px] mx-auto w-full">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            {post.blog_categories && (
+              <span
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white mb-4 shadow-lg"
+                style={{ backgroundColor: post.blog_categories.color }}
+              >
+                {post.blog_categories.name}
+              </span>
             )}
-            <div className="flex items-center gap-1.5">
-              <Clock size={13} />
-              {readTime} min read
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-white mb-4 drop-shadow-lg">
+              {post.title}
+            </h1>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
+              {publishDate && (
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={13} />
+                  {publishDate}
+                </div>
+              )}
+              <div className="flex items-center gap-1.5">
+                <Clock size={13} />
+                {readTime} min read
+              </div>
+              {post.tags && post.tags.slice(0, 3).map(tag => (
+                <span key={tag} className="px-2 py-0.5 rounded-md bg-white/10 text-white/60 text-xs border border-white/10">
+                  #{tag}
+                </span>
+              ))}
             </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* ── HERO IMAGE ─────────────────────────────────────────────────────── */}
-      {post.featured_image_url && (
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-          className="max-w-[900px] mx-auto px-6"
-        >
-          <div className="rounded-2xl overflow-hidden shadow-xl shadow-black/10 dark:shadow-black/30 border border-gray-100 dark:border-white/[0.07]">
-            <img
-              src={post.featured_image_url}
-              alt={post.title}
-              className="w-full h-auto max-h-[460px] object-cover"
-            />
-          </div>
-        </motion.div>
-      )}
-
-      {/* ── BACK LINK (below image) ─────────────────────────────────────────── */}
-      <div className="max-w-[900px] mx-auto px-6 mt-5">
-        <motion.button
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
-        >
-          <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform duration-200" />
-          Back to Blog
-        </motion.button>
+          </motion.div>
+        </div>
       </div>
 
       {/* ── ARTICLE BODY ───────────────────────────────────────────────────── */}
-      <div className="max-w-[900px] mx-auto px-6 mt-8 pb-8 border-t border-gray-100 dark:border-white/[0.07] pt-8">
+      <div ref={bodyRef.ref} className="max-w-[740px] mx-auto px-6 py-12">
+        {post.excerpt && (
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={bodyRef.isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            transition={{ duration: 0.5 }}
+            className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-10 pb-10 border-b border-gray-100 dark:border-white/[0.07] font-medium"
+          >
+            {post.excerpt}
+          </motion.p>
+        )}
+
         <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, y: 20 }}
+          animate={bodyRef.isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
         >
           {post.content ? (
             <ArticleContent content={post.content} />
@@ -1310,151 +1325,110 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
             <p className="text-gray-400 dark:text-gray-500 italic text-base">No content available.</p>
           )}
         </motion.div>
+
+        {/* Tags footer */}
+        {post.tags && post.tags.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={bodyRef.isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-12 pt-8 border-t border-gray-100 dark:border-white/[0.07] flex flex-wrap gap-2"
+          >
+            {post.tags.map(tag => (
+              <span
+                key={tag}
+                className="px-3 py-1 rounded-full text-xs font-medium bg-gray-50 dark:bg-white/[0.05] border border-gray-200/80 dark:border-white/[0.08] text-gray-500 dark:text-gray-400"
+              >
+                #{tag}
+              </span>
+            ))}
+          </motion.div>
+        )}
       </div>
 
       {/* ── RELATED ARTICLES ───────────────────────────────────────────────── */}
       {relatedPosts.length > 0 && (
-        <section className="max-w-[900px] mx-auto px-6 mt-8 mb-10">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="text-center mb-7"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 text-sm font-medium mb-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              Continue Reading
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight leading-[1.1] text-gray-900 dark:text-white">
-              Related{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400">
-                articles
-              </span>
-            </h2>
-          </motion.div>
+        <section ref={relatedRef.ref} className="bg-gray-50/50 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/[0.06] py-16 px-6">
+          <div className="max-w-[900px] mx-auto">
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate={relatedRef.isInView ? 'visible' : 'hidden'}
+              className="text-center mb-10"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                Continue Reading
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Related{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400">
+                  articles
+                </span>
+              </h2>
+            </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {relatedPosts.map((related, i) => (
-              <motion.article
-                key={related.id}
-                variants={fadeUp}
-                custom={i * 0.5}
-                onClick={() => handlePostClick(related.slug)}
-                className="group bg-gray-50 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.08] rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-500/40 hover:bg-white dark:hover:bg-white/[0.05] hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
-              >
-                {related.featured_image_url && (
-                  <div className="h-48 overflow-hidden bg-gray-100 dark:bg-white/[0.05]">
-                    <img
-                      src={related.featured_image_url}
-                      alt={related.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                )}
-                <div className="p-6">
-                  {related.blog_categories && (
-                    <span
-                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-white mb-4"
-                      style={{ backgroundColor: related.blog_categories.color }}
-                    >
-                      {related.blog_categories.name}
-                    </span>
-                  )}
-                  <h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-3">
-                    {related.title}
-                  </h3>
-                  {related.published_at && (
-                    <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-4">
-                      <Calendar size={12} />
-                      {new Date(related.published_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: '2-digit',
-                      })}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              animate={relatedRef.isInView ? 'visible' : 'hidden'}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {relatedPosts.map((related, i) => (
+                <motion.article
+                  key={related.id}
+                  variants={fadeUp}
+                  custom={i * 0.5}
+                  onClick={() => handlePostClick(related.slug)}
+                  className="group bg-white dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.08] rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                >
+                  {related.featured_image_url && (
+                    <div className="h-44 overflow-hidden bg-gray-100 dark:bg-white/[0.05]">
+                      <img
+                        src={related.featured_image_url}
+                        alt={related.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                     </div>
                   )}
-                  {related.excerpt && (
-                    <p className="text-sm text-gray-500 dark:text-gray-500 leading-relaxed line-clamp-3 mb-5">
-                      {related.excerpt}
-                    </p>
-                  )}
-                  <div className="flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:gap-2 transition-all duration-200">
-                    Read more
-                    <ArrowRight size={14} />
+                  <div className="p-5">
+                    {related.blog_categories && (
+                      <span
+                        className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-white mb-3"
+                        style={{ backgroundColor: related.blog_categories.color }}
+                      >
+                        {related.blog_categories.name}
+                      </span>
+                    )}
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2">
+                      {related.title}
+                    </h3>
+                    {related.published_at && (
+                      <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-3">
+                        <Calendar size={11} />
+                        {new Date(related.published_at).toLocaleDateString('en-US', {
+                          year: 'numeric', month: 'short', day: '2-digit',
+                        })}
+                      </div>
+                    )}
+                    {related.excerpt && (
+                      <p className="text-xs text-gray-500 dark:text-gray-500 leading-relaxed line-clamp-2 mb-4">
+                        {related.excerpt}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 group-hover:gap-2 transition-all duration-200">
+                      Read more
+                      <ArrowRight size={12} />
+                    </div>
                   </div>
-                </div>
-              </motion.article>
-            ))}
-          </motion.div>
+                </motion.article>
+              ))}
+            </motion.div>
+          </div>
         </section>
       )}
 
-      {/* ── FOOTER ─────────────────────────────────────────────────────────── */}
-      <footer className="mt-0 bg-gray-950 text-gray-400 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-400">
-                  <Zap size={16} className="text-white" />
-                </div>
-                <span className="text-white font-bold text-lg tracking-tight">
-                  FinanceFlow{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">AI</span>
-                </span>
-              </div>
-              <p className="text-sm leading-relaxed mb-6 text-gray-500">
-                Smart financial management for everyone. Take control of your money and achieve your goals.
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center hover:bg-white/[0.08] transition-colors cursor-pointer">
-                  <Globe size={14} className="text-gray-400" />
-                </div>
-                <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center hover:bg-white/[0.08] transition-colors cursor-pointer">
-                  <Lock size={14} className="text-gray-400" />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Product</h3>
-              <ul className="space-y-3 text-sm">
-                <li><button onClick={() => navigate('features')} className="hover:text-white transition-colors">Features</button></li>
-                <li><button onClick={() => navigate('pricing')} className="hover:text-white transition-colors">Pricing</button></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Company</h3>
-              <ul className="space-y-3 text-sm">
-                <li><button onClick={() => navigate('about')} className="hover:text-white transition-colors">About</button></li>
-                <li><button onClick={onBack} className="hover:text-white transition-colors">Blog</button></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Support</h3>
-              <ul className="space-y-3 text-sm">
-                <li><button onClick={() => navigate('contact')} className="hover:text-white transition-colors">Contact</button></li>
-                <li><button onClick={() => navigate('privacy')} className="hover:text-white transition-colors">Privacy Policy</button></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-white/[0.06] pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-gray-600">&copy; {new Date().getFullYear()} FinanceFlow AI. All rights reserved.</p>
-            <div className="flex items-center gap-1.5 text-xs text-gray-600">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              All systems operational
-            </div>
-          </div>
-        </div>
-      </footer>
+      <PublicFooter onNavigate={navigate} />
     </div>
   );
 }
