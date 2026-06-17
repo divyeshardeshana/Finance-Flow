@@ -68,22 +68,33 @@ Deno.serve(async (req: Request) => {
       }
 
       let publishedCount = 0;
+      const apiKey = await getOpenAIKey(adminClient);
+      const model = await getOpenAIModel(adminClient);
+
       for (const post of duePosts) {
         try {
-          const apiKey = await getOpenAIKey(adminClient);
-          const model = await getOpenAIModel(adminClient);
+          // Generate content first
           const result = await generateContent(post, apiKey, model);
-          const imageUrl = await generateAndStoreImage(adminClient, post, apiKey, supabaseUrl);
+
+          // Publish immediately — don't wait for image
           await adminClient.from("blog_posts").update({
             content: result.content,
             excerpt: result.excerpt,
             meta_description: result.meta_description || post.meta_description,
-            featured_image_url: imageUrl || post.featured_image_url || '',
             status: "published",
             published_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           }).eq("id", post.id);
           publishedCount++;
+
+          // Generate image in background — non-blocking, updates featured_image_url after
+          generateAndStoreImage(adminClient, post, apiKey, supabaseUrl).then(imageUrl => {
+            if (imageUrl) {
+              adminClient.from("blog_posts")
+                .update({ featured_image_url: imageUrl, updated_at: new Date().toISOString() })
+                .eq("id", post.id);
+            }
+          });
         } catch (err) {
           console.error(`Failed to publish post ${post.id}:`, err);
         }

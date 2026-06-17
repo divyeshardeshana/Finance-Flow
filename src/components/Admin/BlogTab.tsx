@@ -148,7 +148,10 @@ export default function BlogTab() {
       }
     };
     checkScheduled();
-  }, []);
+    // Re-check every 5 minutes while admin has BlogTab open
+    const interval = setInterval(checkScheduled, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [loadData]);
 
   const filteredPosts = posts.filter(p =>
     !searchTerm || p.title.toLowerCase().includes(searchTerm.toLowerCase())
