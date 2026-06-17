@@ -1103,7 +1103,6 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
   const [relatedPosts, setRelatedPosts] = useState<RelatedPost[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const bodyRef = useScrollInView(0.05);
   const relatedRef = useScrollInView(0.1);
 
   const navigate = (view: PublicView) => {
@@ -1302,12 +1301,12 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
       </div>
 
       {/* ── ARTICLE BODY ───────────────────────────────────────────────────── */}
-      <div ref={bodyRef.ref} className="max-w-[740px] mx-auto px-6 py-12">
+      <div className="max-w-[740px] mx-auto px-6 py-12">
         {post.excerpt && (
           <motion.p
             initial={{ opacity: 0, y: 16 }}
-            animate={bodyRef.isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            transition={{ duration: 0.5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-10 pb-10 border-b border-gray-100 dark:border-white/[0.07] font-medium"
           >
             {post.excerpt}
@@ -1316,8 +1315,8 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={bodyRef.isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
           {post.content ? (
             <ArticleContent content={post.content} />
@@ -1330,8 +1329,8 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
         {post.tags && post.tags.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={bodyRef.isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
             className="mt-12 pt-8 border-t border-gray-100 dark:border-white/[0.07] flex flex-wrap gap-2"
           >
             {post.tags.map(tag => (
