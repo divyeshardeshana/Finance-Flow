@@ -54,7 +54,7 @@ const values = [
   {
     icon: Target,
     title: 'Outcomes Over Features',
-    description: 'We do not build features for the sake of it. Every tool in FinanceFlow exists because real users faced a real financial problem — and we built the solution.',
+    description: 'We do not build features for the sake of it. Every tool in FinanceFlow exists because real users faced a real financial problem - and we built the solution.',
     gradient: 'from-emerald-500 to-teal-400',
   },
   {
@@ -66,7 +66,7 @@ const values = [
   {
     icon: Globe,
     title: 'Global By Design',
-    description: 'Built from day one to work across 150+ currencies and 50+ countries — for individuals, families, freelancers, and businesses wherever they are.',
+    description: 'Built from day one to work across 150+ currencies and 50+ countries - for individuals, families, freelancers, and businesses wherever they are.',
     gradient: 'from-amber-500 to-orange-400',
   },
 ];
@@ -87,26 +87,26 @@ const team = [
   {
     name: 'Priya Sharma',
     role: 'Head of Design',
-    bio: 'UX designer with a background in behavioural economics. Priya ensures complex financial data is presented so clearly that anyone can act on it — not just finance professionals.',
+    bio: 'UX designer with a background in behavioural economics. Priya ensures complex financial data is presented so clearly that anyone can act on it - not just finance professionals.',
     image: 'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&dpr=2',
   },
   {
     name: 'David Chen',
     role: 'Head of Data Science',
-    bio: 'PhD in Applied Mathematics. David built the AI models behind expense predictions, stock analysis, and personalised recommendations — the features that set FinanceFlow apart.',
+    bio: 'PhD in Applied Mathematics. David built the AI models behind expense predictions, stock analysis, and personalised recommendations - the features that set FinanceFlow apart.',
     image: 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&dpr=2',
   },
 ];
 
 const impactStats = [
   { icon: Users, value: '10,000+', label: 'Active Users Worldwide', detail: 'From solo freelancers to multi-person households', gradient: 'from-blue-500 to-cyan-400' },
-  { icon: Globe, value: '50+', label: 'Countries Supported', detail: 'Used on every continent — 150+ currencies', gradient: 'from-emerald-500 to-teal-400' },
+  { icon: Globe, value: '50+', label: 'Countries Supported', detail: 'Used on every continent - 150+ currencies', gradient: 'from-emerald-500 to-teal-400' },
   { icon: DollarSign, value: '$50M', label: 'Money Tracked', detail: 'Financial clarity created across all user accounts', gradient: 'from-amber-500 to-orange-400' },
   { icon: Clock, value: '2 min', label: 'Average Setup Time', detail: 'From sign-up to your first financial insight', gradient: 'from-rose-500 to-pink-400' },
 ];
 
 const problemPoints = [
-  'Most people earn enough — they just cannot see where their money goes.',
+  'Most people earn enough - they just cannot see where their money goes.',
   'The average person has multiple forgotten subscriptions.',
   'Impulse purchases quietly destroy savings goals.',
   'Financial advisors are expensive and inaccessible.',
@@ -163,7 +163,7 @@ export default function AboutUsPage({ onNavigate, onSignIn }: AboutUsPageProps) 
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto"
           >
-            FinanceFlow was founded with a simple belief: most people are not bad with money — they just lack the right tools and visibility. We are here to change that.
+            FinanceFlow was founded with a simple belief: most people are not bad with money - they just lack the right tools and visibility. We are here to change that.
           </motion.p>
 
           <motion.div
@@ -268,7 +268,7 @@ export default function AboutUsPage({ onNavigate, onSignIn }: AboutUsPageProps) 
                 FinanceFlow by the numbers
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                The impact we have had so far — and we are just getting started.
+                The impact we have had so far - and we are just getting started.
               </p>
             </motion.div>
           </div>

@@ -36,7 +36,7 @@ export const gtm = {
   // Lead capture
   emailCaptured: (source: string) => push('email_captured', { capture_source: source }),
 
-  // Page views (SPA — call on each view change)
+  // Page views (SPA - call on each view change)
   pageView: (path: string, title: string) =>
     push('page_view', { page_path: path, page_title: title }),
 };

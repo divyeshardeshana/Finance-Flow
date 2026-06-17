@@ -507,7 +507,7 @@ function TemplateModal({ template, onClose, onSaved }: TemplateModalProps) {
                 <div className="p-3 bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06] rounded-xl">
                   <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 flex items-center gap-1.5">
                     <Zap size={11} />
-                    Dynamic Variables — click to insert into body
+                    Dynamic Variables - click to insert into body
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {alertMeta.variables.map(v => (
@@ -852,7 +852,7 @@ function ConfigurationTab() {
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Configure default email content, subject templates, and footer text</p>
         </div>
         <div className="p-6 space-y-5">
-          {renderField('email_subject_template', 'Default Subject Template', 'Your [EVENT_TYPE] — [EVENT_DATE]')}
+          {renderField('email_subject_template', 'Default Subject Template', 'Your [EVENT_TYPE] - [EVENT_DATE]')}
           {renderField('email_footer_text', 'Default Footer Text', 'FinanceFlow AI | Unsubscribe')}
           {renderField('email_help_text', 'Default Help Text', 'Need help? Contact support@financeflow.ai')}
           {renderField('admin_email', 'Admin Email (BCC)', 'admin@yourdomain.com')}

@@ -84,7 +84,7 @@ const CATEGORY_ORDER: Record<string, number> = {
 };
 
 function fmt(date: string | null): string {
-  if (!date) return '—';
+  if (!date) return '-';
   return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
@@ -291,7 +291,7 @@ export default function SubscriptionDetailsPage() {
             Subscription Details
           </h1>
           <p className="text-[13px] text-gray-500 dark:text-gray-500 mt-0.5">
-            Your current plan and usage — synced live from the admin panel
+            Your current plan and usage - synced live from the admin panel
           </p>
         </div>
         <div className="flex items-center gap-2 text-[11px] text-gray-400 dark:text-gray-600 flex-shrink-0">
@@ -356,11 +356,11 @@ export default function SubscriptionDetailsPage() {
             value={subscription?.cancelled_at ? fmt(subscription.cancelled_at) : fmt(subscription?.next_billing_date || null)}
             highlight={!subscription?.cancelled_at && !!subscription?.next_billing_date}
           />
-          <ui.metricTile icon={RefreshCw} label="Billing Cycle" value={billingCycle ? (billingCycle === 'annual' ? 'Annual' : 'Monthly') : '—'} />
+          <ui.metricTile icon={RefreshCw} label="Billing Cycle" value={billingCycle ? (billingCycle === 'annual' ? 'Annual' : 'Monthly') : '-'} />
           <ui.metricTile
             icon={subscription?.auto_renew ? CheckCircle : XCircle}
             label="Auto-Renew"
-            value={isFree ? '—' : subscription?.auto_renew ? 'On' : 'Off'}
+            value={isFree ? '-' : subscription?.auto_renew ? 'On' : 'Off'}
             valueColor={isFree ? undefined : subscription?.auto_renew ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}
           />
         </div>
@@ -448,7 +448,7 @@ export default function SubscriptionDetailsPage() {
             <div>
               <p className="text-[14px] text-gray-700 dark:text-gray-300 font-medium">No payment method</p>
               <p className="text-[12px] text-gray-400 dark:text-gray-500">
-                {isFree ? 'Free plan — no billing required.' : 'Payment details managed via Stripe.'}
+                {isFree ? 'Free plan - no billing required.' : 'Payment details managed via Stripe.'}
               </p>
             </div>
           </div>
@@ -456,7 +456,7 @@ export default function SubscriptionDetailsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <ui.paymentTile icon={CreditCard} label="Payment via" value="Stripe" />
             <ui.paymentTile icon={Activity} label="Billing Cycle" value={billingCycle === 'annual' ? 'Annual' : 'Monthly'} />
-            <ui.paymentTile icon={Layers} label="Customer ID" value={subscription.stripe_customer_id ? `${subscription.stripe_customer_id.slice(0, 14)}…` : '—'} mono />
+            <ui.paymentTile icon={Layers} label="Customer ID" value={subscription.stripe_customer_id ? `${subscription.stripe_customer_id.slice(0, 14)}…` : '-'} mono />
           </div>
         )}
         {!isFree && subscription?.stripe_subscription_id && (

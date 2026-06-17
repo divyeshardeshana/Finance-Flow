@@ -62,7 +62,7 @@ function EditDrawer({ page, onClose, onSaved }: EditDrawerProps) {
         parsedStructured = JSON.parse(structuredDataText);
         setJsonError('');
       } catch {
-        setJsonError('Invalid JSON — please fix before saving.');
+        setJsonError('Invalid JSON - please fix before saving.');
         return;
       }
     }
@@ -161,7 +161,7 @@ function EditDrawer({ page, onClose, onSaved }: EditDrawerProps) {
                 <input
                   value={form.meta_title}
                   onChange={e => set('meta_title', e.target.value)}
-                  placeholder="e.g. FinanceFlow AI — Smart Personal Finance App"
+                  placeholder="e.g. FinanceFlow AI - Smart Personal Finance App"
                   className="w-full px-3.5 py-2.5 text-sm border border-gray-200 dark:border-white/[0.08] rounded-lg bg-white dark:bg-white/[0.04] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                 />
                 <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">Recommended: 50–60 characters. Appears in browser tabs and search results.</p>
@@ -340,12 +340,12 @@ function EditDrawer({ page, onClose, onSaved }: EditDrawerProps) {
               {form.is_indexable ? (
                 <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25">
                   <Eye className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">Visible to search engines — <code className="font-mono">index, follow</code></span>
+                  <span className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">Visible to search engines - <code className="font-mono">index, follow</code></span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/25">
                   <EyeOff className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                  <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">Hidden from search engines — <code className="font-mono">noindex, nofollow</code></span>
+                  <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">Hidden from search engines - <code className="font-mono">noindex, nofollow</code></span>
                 </div>
               )}
 
@@ -411,7 +411,7 @@ function EditDrawer({ page, onClose, onSaved }: EditDrawerProps) {
           {saveStatus === 'error' && (
             <div className="flex items-center gap-1.5 text-xs text-red-500 font-medium">
               <AlertCircle className="w-3.5 h-3.5" />
-              Save failed — please try again
+              Save failed - please try again
             </div>
           )}
           {saveStatus === 'idle' && <div />}
@@ -648,7 +648,7 @@ export default function SEOManagement() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-base font-bold text-gray-900 dark:text-white">Pages SEO Configuration</h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{filtered.length} pages — click Edit to configure each page</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{filtered.length} pages - click Edit to configure each page</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <div className="relative w-full sm:w-56">

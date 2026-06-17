@@ -60,8 +60,8 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
       <SEOHead
-        title="FinanceFlow AI vs Mint vs YNAB — Personal Finance App Comparison"
-        description="Compare FinanceFlow AI vs Mint, YNAB, and spreadsheets. FinanceFlow offers AI assistant, multi-currency, global availability, and GDPR compliance — available free."
+        title="FinanceFlow AI vs Mint vs YNAB - Personal Finance App Comparison"
+        description="Compare FinanceFlow AI vs Mint, YNAB, and spreadsheets. FinanceFlow offers AI assistant, multi-currency, global availability, and GDPR compliance - available free."
         keywords="FinanceFlow vs Mint, FinanceFlow vs YNAB, best personal finance app, budgeting app comparison, Mint alternative, YNAB alternative"
         canonical="https://financeflow.ai/comparison"
         breadcrumbs={[
@@ -170,9 +170,9 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
           <h2 className="text-3xl font-bold text-center mb-12">Why FinanceFlow wins for most people</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { title: 'No bank connection needed', desc: 'Mint and most alternatives require linking your bank account. FinanceFlow works with manual entry — keeping your banking credentials completely separate.', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10' },
-              { title: 'AI that knows your data', desc: 'No other personal finance tool offers an AI assistant that reads your actual transaction history and answers questions based on your real numbers — not generic advice.', color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10' },
-              { title: 'Truly global', desc: 'Mint is US-only. YNAB has limited international support. FinanceFlow supports 150+ currencies and works for anyone, anywhere — with GDPR compliance built in.', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
+              { title: 'No bank connection needed', desc: 'Mint and most alternatives require linking your bank account. FinanceFlow works with manual entry - keeping your banking credentials completely separate.', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10' },
+              { title: 'AI that knows your data', desc: 'No other personal finance tool offers an AI assistant that reads your actual transaction history and answers questions based on your real numbers - not generic advice.', color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10' },
+              { title: 'Truly global', desc: 'Mint is US-only. YNAB has limited international support. FinanceFlow supports 150+ currencies and works for anyone, anywhere - with GDPR compliance built in.', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -233,7 +233,7 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
               { quote: 'Switched from Mint after it shut down. FinanceFlow has everything Mint had, plus AI insights I never knew I needed. Migration took one afternoon.', name: 'Sarah K.', from: 'Former Mint user' },
               { quote: 'YNAB is great but $180/year is steep when you are just starting. FinanceFlow free plan covers everything I actually use and the Pro upgrade is half the price.', name: 'James T.', from: 'Former YNAB user' },
               { quote: 'I maintained a 400-row Google Sheet for 3 years. FinanceFlow auto-categorises everything and the charts actually update in real time. I wish I switched sooner.', name: 'Meera P.', from: 'Former spreadsheet user' },
-              { quote: 'The AI assistant alone made switching worth it. I asked it to analyse my subscriptions and it found two I forgot about — paid for itself in the first week.', name: 'Khalid A.', from: 'Former Mint user' },
+              { quote: 'The AI assistant alone made switching worth it. I asked it to analyse my subscriptions and it found two I forgot about - paid for itself in the first week.', name: 'Khalid A.', from: 'Former Mint user' },
             ].map((q, i) => (
               <motion.div
                 key={i}

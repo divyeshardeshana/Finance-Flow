@@ -586,7 +586,7 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
 
   const memberSince = profileData.created_at
     ? new Date(profileData.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-    : '—';
+    : '-';
 
   const pwScore = passwordStrength(passwordData.newPassword);
   const pwMeta = strengthMeta(pwScore);
@@ -1012,7 +1012,7 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
                     >
                       {allCurrencies.map((currency) => (
                         <option key={currency.code} value={currency.code}>
-                          {currency.code} — {currency.name} ({currency.symbol})
+                          {currency.code} - {currency.name} ({currency.symbol})
                         </option>
                       ))}
                     </select>

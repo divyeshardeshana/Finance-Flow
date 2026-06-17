@@ -19,14 +19,14 @@ const fadeUp = {
 };
 
 const CURRENCIES = [
-  { code: 'USD', symbol: '$', label: 'USD — US Dollar' },
-  { code: 'EUR', symbol: '€', label: 'EUR — Euro' },
-  { code: 'GBP', symbol: '£', label: 'GBP — British Pound' },
-  { code: 'AED', symbol: 'د.إ', label: 'AED — UAE Dirham' },
-  { code: 'INR', symbol: '₹', label: 'INR — Indian Rupee' },
-  { code: 'SAR', symbol: '﷼', label: 'SAR — Saudi Riyal' },
-  { code: 'SGD', symbol: 'S$', label: 'SGD — Singapore Dollar' },
-  { code: 'AUD', symbol: 'A$', label: 'AUD — Australian Dollar' },
+  { code: 'USD', symbol: '$', label: 'USD - US Dollar' },
+  { code: 'EUR', symbol: '€', label: 'EUR - Euro' },
+  { code: 'GBP', symbol: '£', label: 'GBP - British Pound' },
+  { code: 'AED', symbol: 'د.إ', label: 'AED - UAE Dirham' },
+  { code: 'INR', symbol: '₹', label: 'INR - Indian Rupee' },
+  { code: 'SAR', symbol: '﷼', label: 'SAR - Saudi Riyal' },
+  { code: 'SGD', symbol: 'S$', label: 'SGD - Singapore Dollar' },
+  { code: 'AUD', symbol: 'A$', label: 'AUD - Australian Dollar' },
 ];
 
 function fmt(n: number, symbol: string) {
@@ -66,7 +66,7 @@ export default function ROICalculatorPage({ onNavigate, onSignIn }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
       <SEOHead
-        title="ROI Calculator — How Much Could You Save with FinanceFlow AI?"
+        title="ROI Calculator - How Much Could You Save with FinanceFlow AI?"
         description="Calculate your potential savings with FinanceFlow AI. Enter your income and spending habits to see how much extra you could save per month and per year."
         keywords="personal finance ROI calculator, how much can I save, budgeting app savings calculator, finance app return on investment"
         canonical="https://financeflow.ai/roi-calculator"
@@ -258,7 +258,7 @@ export default function ROICalculatorPage({ onNavigate, onSignIn }: Props) {
               onClick={onSignIn}
               className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-[1.02] text-base"
             >
-              Start saving — it's free <ArrowRight size={16} className="inline ml-2" />
+              Start saving - it's free <ArrowRight size={16} className="inline ml-2" />
             </button>
           </motion.div>
         </div>
@@ -339,7 +339,7 @@ export default function ROICalculatorPage({ onNavigate, onSignIn }: Props) {
           <div className="space-y-4">
             {[
               { q: 'Is this calculator accurate?', a: 'It provides directional estimates based on averages from FinanceFlow users. The actual savings depend on your consistency, spending categories, and how actively you use the app.' },
-              { q: 'What does "overspend" mean in the calculator?', a: 'Overspend is money spent beyond what you planned or budgeted — often on impulse purchases, dining, or forgotten subscriptions. Most people underestimate this by 10–20% of their income.' },
+              { q: 'What does "overspend" mean in the calculator?', a: 'Overspend is money spent beyond what you planned or budgeted - often on impulse purchases, dining, or forgotten subscriptions. Most people underestimate this by 10–20% of their income.' },
               { q: 'Do I need the Pro plan to see these savings?', a: 'No. Core budget tracking and savings goals are available on the free plan. The Pro plan adds the AI assistant and investment tracking, which can accelerate results further.' },
               { q: 'How quickly do users see results?', a: 'Most users notice their first insight within the first week of tracking. Meaningful savings changes typically appear within 30–60 days of consistent use.' },
             ].map((item, i) => (

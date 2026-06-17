@@ -47,7 +47,7 @@ Personalization: To personalize your experience, including displaying content an
 
 Analytics & Improvement: To understand how users interact with the Service, identify bugs and performance issues, and continually improve our features and user experience.
 
-Communications: To send you important account-related notices, security alerts, product updates, and — where you have opted in — marketing communications. You may opt out of marketing emails at any time.
+Communications: To send you important account-related notices, security alerts, product updates, and - where you have opted in - marketing communications. You may opt out of marketing emails at any time.
 
 Payment Processing: To process subscription payments through our payment provider, Stripe, and manage your billing history.
 
@@ -165,8 +165,8 @@ export default function PrivacyPolicyPage({ onNavigate, onSignIn }: PrivacyPolic
     <div className="min-h-screen bg-white dark:bg-gray-800">
       <SEOHead
         pageKey="privacy"
-        title="Privacy Policy — FinanceFlow AI | GDPR Compliant"
-        description="FinanceFlow AI privacy policy — how we collect, use, and protect your personal and financial data. GDPR Article 17 & 20 compliant. You own your data."
+        title="Privacy Policy - FinanceFlow AI | GDPR Compliant"
+        description="FinanceFlow AI privacy policy - how we collect, use, and protect your personal and financial data. GDPR Article 17 & 20 compliant. You own your data."
         keywords="FinanceFlow privacy policy, GDPR finance app, data protection personal finance, financial data privacy"
         canonical="https://financeflow.ai/privacy"
         breadcrumbs={[

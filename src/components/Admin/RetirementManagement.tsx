@@ -408,7 +408,7 @@ export default function RetirementManagement() {
                             {name ? (
                               <span className="text-[12px] font-medium text-gray-700 dark:text-gray-300 line-clamp-1">{name}</span>
                             ) : (
-                              <span className="text-[12px] text-gray-300 dark:text-gray-700">—</span>
+                              <span className="text-[12px] text-gray-300 dark:text-gray-700">-</span>
                             )}
                           </td>
                         );

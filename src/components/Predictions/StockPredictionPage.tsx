@@ -619,7 +619,7 @@ export function StockPredictionPage() {
                 <div className="flex items-center justify-between px-4 py-3 bg-gray-50/80 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/[0.06] rounded-xl">
                   <span className="text-[12px] text-gray-500 dark:text-gray-400 font-medium">52-Week Range</span>
                   <span className="text-[13px] font-bold text-gray-900 dark:text-white">
-                    {formatPrice(stockData.week52Low, stockData.exchange)} — {formatPrice(stockData.week52High, stockData.exchange)}
+                    {formatPrice(stockData.week52Low, stockData.exchange)} - {formatPrice(stockData.week52High, stockData.exchange)}
                   </span>
                 </div>
               </div>

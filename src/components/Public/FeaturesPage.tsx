@@ -69,7 +69,7 @@ const featureGroups: {
   {
     category: 'Track & Manage',
     label: 'Full Visibility',
-    description: 'Know exactly where every dollar goes — from your first transaction to your complete financial picture.',
+    description: 'Know exactly where every dollar goes - from your first transaction to your complete financial picture.',
     bgClass: 'bg-white dark:bg-[#0B0F1A]',
     features: [
       {
@@ -93,7 +93,7 @@ const featureGroups: {
       {
         icon: RefreshCw,
         title: 'Recurring Transactions',
-        description: 'Subscriptions, rent, salaries — automatically tracked so you are never blindsided by a charge you forgot about.',
+        description: 'Subscriptions, rent, salaries - automatically tracked so you are never blindsided by a charge you forgot about.',
         gradient: 'from-emerald-500 to-teal-400',
         benefit: 'No more forgotten subscription charges',
         plan: 'free',
@@ -128,7 +128,7 @@ const featureGroups: {
       {
         icon: Briefcase,
         title: 'Retirement Planning',
-        description: 'Model exactly how much you need to retire comfortably. See projected shortfalls early and fix them — while you still have time.',
+        description: 'Model exactly how much you need to retire comfortably. See projected shortfalls early and fix them - while you still have time.',
         gradient: 'from-rose-500 to-pink-400',
         benefit: 'Retire on your terms, not by accident',
         plan: 'premium',
@@ -157,7 +157,7 @@ const featureGroups: {
   {
     category: 'AI & Insights',
     label: 'Intelligent Analysis',
-    description: 'Let AI analyse your finances and guide every decision — from daily spending to long-term wealth.',
+    description: 'Let AI analyse your finances and guide every decision - from daily spending to long-term wealth.',
     bgClass: 'bg-white dark:bg-[#0B0F1A]',
     features: [
       {
@@ -172,7 +172,7 @@ const featureGroups: {
       {
         icon: BarChart3,
         title: 'Expense Predictions',
-        description: 'Machine learning forecasts upcoming large expenses from your history — so you prepare cash in advance instead of scrambling at the last minute.',
+        description: 'Machine learning forecasts upcoming large expenses from your history - so you prepare cash in advance instead of scrambling at the last minute.',
         gradient: 'from-amber-500 to-orange-400',
         benefit: 'Never be caught off guard by big bills',
         plan: 'pro',
@@ -181,7 +181,7 @@ const featureGroups: {
       {
         icon: Bot,
         title: 'Financial Assistant',
-        description: '24/7 conversational AI that answers your money questions with context from your actual accounts — not generic advice you could find anywhere.',
+        description: '24/7 conversational AI that answers your money questions with context from your actual accounts - not generic advice you could find anywhere.',
         gradient: 'from-emerald-500 to-cyan-400',
         benefit: 'A personal finance advisor, always available',
         plan: 'pro',
@@ -190,7 +190,7 @@ const featureGroups: {
       {
         icon: Lightbulb,
         title: 'AI Recommendations',
-        description: 'Personalised suggestions for debt reduction, savings opportunities, and investment moves — built from your unique spending profile, not a template.',
+        description: 'Personalised suggestions for debt reduction, savings opportunities, and investment moves - built from your unique spending profile, not a template.',
         gradient: 'from-orange-500 to-amber-400',
         benefit: 'Advice that actually fits your life',
         plan: 'pro',
@@ -225,7 +225,7 @@ const featureGroups: {
       {
         icon: SplitSquareHorizontal,
         title: 'Split Transactions',
-        description: 'Easily split shared expenses between friends, family, or roommates and track who owes what — no more awkward money conversations.',
+        description: 'Easily split shared expenses between friends, family, or roommates and track who owes what - no more awkward money conversations.',
         gradient: 'from-sky-500 to-blue-500',
         benefit: 'Split bills without the awkwardness',
         plan: 'pro',
@@ -251,7 +251,7 @@ const featureGroups: {
       {
         icon: GraduationCap,
         title: 'Financial Literacy Challenges',
-        description: 'Gamified quizzes and daily challenges that teach real financial skills — compound interest, investing basics, tax planning, and more.',
+        description: 'Gamified quizzes and daily challenges that teach real financial skills - compound interest, investing basics, tax planning, and more.',
         gradient: 'from-emerald-500 to-teal-400',
         benefit: 'Learn while you earn points',
         plan: 'free',
@@ -260,7 +260,7 @@ const featureGroups: {
       {
         icon: BookOpen,
         title: 'Knowledge Base & Help Center',
-        description: 'Comprehensive guides, FAQs, and articles covering budgeting, investing, retirement, and estate planning — written by financial experts.',
+        description: 'Comprehensive guides, FAQs, and articles covering budgeting, investing, retirement, and estate planning - written by financial experts.',
         gradient: 'from-blue-500 to-cyan-400',
         benefit: 'Expert guidance at your fingertips',
         plan: 'free',
@@ -458,7 +458,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
       <SEOHead
         pageKey="features"
-        title="Features — FinanceFlow AI | AI Budgeting, Investments & More"
+        title="Features - FinanceFlow AI | AI Budgeting, Investments & More"
         description="Explore all FinanceFlow AI features: AI financial assistant, budget tracking, expense categorisation, investment tracking, savings goals, bill reminders, net worth tracker, and retirement planning."
         keywords="personal finance features, AI budgeting app, expense tracker, investment tracker, savings goals app, bill reminders, net worth calculator, retirement planner"
         canonical="https://financeflow.ai/features"
@@ -473,10 +473,10 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
           description: 'A step-by-step guide to setting up budgets, tracking expenses, and reaching financial goals using FinanceFlow AI.',
           totalTime: 'PT5M',
           step: [
-            { '@type': 'HowToStep', position: 1, name: 'Create a free account', text: 'Sign up with your email — no credit card required. Takes under 60 seconds.' },
+            { '@type': 'HowToStep', position: 1, name: 'Create a free account', text: 'Sign up with your email - no credit card required. Takes under 60 seconds.' },
             { '@type': 'HowToStep', position: 2, name: 'Set your income and currency', text: 'Enter your monthly income and select your preferred currency from 150+ options.' },
             { '@type': 'HowToStep', position: 3, name: 'Add transactions', text: 'Log your income and expenses manually or import via CSV. Categorise automatically or by hand.' },
-            { '@type': 'HowToStep', position: 4, name: 'Create budgets', text: 'Set monthly spending limits per category — food, transport, entertainment, and more.' },
+            { '@type': 'HowToStep', position: 4, name: 'Create budgets', text: 'Set monthly spending limits per category - food, transport, entertainment, and more.' },
             { '@type': 'HowToStep', position: 5, name: 'Set savings goals', text: 'Add a target amount and date. FinanceFlow calculates how much you need to save each month.' },
             { '@type': 'HowToStep', position: 6, name: 'Ask the AI assistant', text: 'On Pro or Premium, ask the AI questions about your finances and get personalised answers based on your data.' },
           ],
@@ -537,7 +537,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
               onClick={onSignIn}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold text-white rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 text-base"
             >
-              Start for free — no card needed
+              Start for free - no card needed
               <ArrowRight size={18} />
             </button>
             <button
@@ -729,7 +729,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
                 Which plan is right for you?
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-                Every feature mapped to the plan that unlocks it — no fine print.
+                Every feature mapped to the plan that unlocks it - no fine print.
               </p>
             </motion.div>
           </div>
@@ -739,7 +739,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
             custom={1}
             className="bg-white dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.08] rounded-2xl overflow-hidden shadow-lg"
           >
-            {/* Table header — dynamic */}
+            {/* Table header - dynamic */}
             <div className="grid grid-cols-4 border-b border-gray-100 dark:border-white/[0.06]">
               <div className="px-5 py-5 col-span-1">
                 <span className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">Feature</span>
@@ -773,7 +773,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
               </div>
             ))}
 
-            {/* CTA row — dynamic button labels */}
+            {/* CTA row - dynamic button labels */}
             <div className="grid grid-cols-4 bg-gray-50/80 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/[0.06]">
               <div className="px-5 py-5" />
               {tableColumns.map((col, idx) => (
@@ -799,7 +799,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
         </motion.div>
       </section>
 
-      {/* PRICING CARDS — dynamic from admin */}
+      {/* PRICING CARDS - dynamic from admin */}
       <section className="py-24 px-4 bg-white dark:bg-[#0B0F1A]">
         <motion.div
           ref={pricingCardsSection.ref}
@@ -992,7 +992,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
               Everything you need to master your finances.
             </h2>
             <p className="text-lg text-blue-100 mb-10 max-w-xl mx-auto leading-relaxed">
-              FinanceFlow replaces budgeting apps, financial advisors, and tracking tools in one intelligent platform — starting at $0.
+              FinanceFlow replaces budgeting apps, financial advisors, and tracking tools in one intelligent platform - starting at $0.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

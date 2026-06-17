@@ -51,7 +51,7 @@ const USE_CASES: UseCase[] = [
     title: 'Take control of your salary',
     subtitle: 'For individuals & salaried employees',
     description:
-      'You earn a steady income but money disappears before month-end. FinanceFlow shows exactly where every dirham, dollar, or rupee goes — so you can save more without earning more.',
+      'You earn a steady income but money disappears before month-end. FinanceFlow shows exactly where every dirham, dollar, or rupee goes - so you can save more without earning more.',
     pain: 'Tired of wondering where your salary went?',
     features: [
       { icon: PieChart, text: 'Automatic expense categorisation by pay cycle' },
@@ -74,7 +74,7 @@ const USE_CASES: UseCase[] = [
     title: 'Manage unpredictable income',
     subtitle: 'For freelancers & self-employed professionals',
     description:
-      'Irregular income makes budgeting feel impossible. FinanceFlow adapts to your variable cash flow — helping you separate business from personal, set income targets, and prepare for tax season.',
+      'Irregular income makes budgeting feel impossible. FinanceFlow adapts to your variable cash flow - helping you separate business from personal, set income targets, and prepare for tax season.',
     pain: 'Irregular income making budgeting feel impossible?',
     features: [
       { icon: Calendar, text: 'Variable income tracking month by month' },
@@ -97,7 +97,7 @@ const USE_CASES: UseCase[] = [
     title: 'Budget together, stress less',
     subtitle: 'For families & couples managing shared finances',
     description:
-      'Joint finances without visibility cause arguments. FinanceFlow gives your household a single view of income, expenses, and goals — so both partners stay aligned and children learn money habits early.',
+      'Joint finances without visibility cause arguments. FinanceFlow gives your household a single view of income, expenses, and goals - so both partners stay aligned and children learn money habits early.',
     pain: 'Joint finances creating friction at home?',
     features: [
       { icon: Users, text: 'Household expense overview in one dashboard' },
@@ -120,7 +120,7 @@ const USE_CASES: UseCase[] = [
     title: 'Build good money habits early',
     subtitle: 'For students & first-time budgeters',
     description:
-      'Limited income, big aspirations. FinanceFlow helps students stretch every dollar further with simple budgeting, financial literacy quizzes, and AI-powered advice — without the complexity of traditional finance apps.',
+      'Limited income, big aspirations. FinanceFlow helps students stretch every dollar further with simple budgeting, financial literacy quizzes, and AI-powered advice - without the complexity of traditional finance apps.',
     pain: 'Running out of money before month-end?',
     features: [
       { icon: Wallet, text: 'Simple income vs expense tracker' },
@@ -201,7 +201,7 @@ function UseCaseCard({ uc, index, onSignIn }: { uc: UseCase; index: number; onSi
         {/* Quote */}
         <motion.blockquote variants={fadeUp} custom={0.5} className="border-l-2 border-blue-400 pl-5 mb-8">
           <p className="text-gray-700 dark:text-gray-300 italic text-sm mb-1">"{uc.quote}"</p>
-          <cite className="text-xs text-gray-400 dark:text-gray-500 not-italic">— {uc.quoteAuthor}</cite>
+          <cite className="text-xs text-gray-400 dark:text-gray-500 not-italic">- {uc.quoteAuthor}</cite>
         </motion.blockquote>
 
         <motion.button
@@ -224,7 +224,7 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
   return (
     <>
       <SEOHead
-        title="Use Cases — FinanceFlow AI | For Individuals, Freelancers, Families & Students"
+        title="Use Cases - FinanceFlow AI | For Individuals, Freelancers, Families & Students"
         description="See how FinanceFlow AI helps salaried professionals, freelancers, families, and students budget smarter, save more, and reach financial goals faster."
         keywords="personal finance app use cases, budgeting for freelancers, family budget tracker, student money management, salary budgeting app"
         canonical="https://financeflow.ai/use-cases"
@@ -258,7 +258,7 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
               </span>
             </motion.h1>
             <motion.p variants={fadeUp} custom={0.2} className="text-xl text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto">
-              Whether you're a professional managing a salary, a freelancer juggling variable income, a family budgeting together, or a student starting out — FinanceFlow adapts to you.
+              Whether you're a professional managing a salary, a freelancer juggling variable income, a family budgeting together, or a student starting out - FinanceFlow adapts to you.
             </motion.p>
             <motion.div variants={fadeUp} custom={0.3} className="flex flex-wrap justify-center gap-3">
               {USE_CASES.map(uc => (

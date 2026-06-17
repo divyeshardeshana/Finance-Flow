@@ -56,7 +56,7 @@ export function PublicFooter({ onNavigate }: PublicFooterProps) {
             </button>
 
             <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs">
-              AI-powered financial management for individuals, families, and businesses — built for the modern world.
+              AI-powered financial management for individuals, families, and businesses - built for the modern world.
             </p>
 
             {/* Trust badges */}

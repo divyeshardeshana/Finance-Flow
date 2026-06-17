@@ -80,7 +80,7 @@ function HeroDashboard() {
           </div>
           <div className="flex-1 flex justify-center">
             <div className="px-3 py-1 rounded bg-gray-200/60 dark:bg-white/10 text-xs text-gray-500 dark:text-gray-400 font-mono">
-              app.financeflow.ai — Dashboard
+              app.financeflow.ai - Dashboard
             </div>
           </div>
         </div>
@@ -219,17 +219,17 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
 
   const features = [
     { icon: TrendingUp, title: 'Smart Financial Insights', description: 'AI-powered analysis of your spending patterns and personalized recommendations to save more every month', gradient: 'from-blue-500 to-cyan-400' },
-    { icon: Target, title: 'Goal Tracking', description: 'Set savings targets with milestone checkpoints — visualize exactly how close you are to your next big goal', gradient: 'from-emerald-500 to-teal-400' },
+    { icon: Target, title: 'Goal Tracking', description: 'Set savings targets with milestone checkpoints - visualize exactly how close you are to your next big goal', gradient: 'from-emerald-500 to-teal-400' },
     { icon: Bell, title: 'Bill Reminders', description: 'Never pay a late fee again. Smart reminders alert you before every due date across all your bills', gradient: 'from-rose-500 to-pink-400' },
     { icon: PieChart, title: 'Budget Manager', description: 'Build category-based budgets that adapt to your life. Get alerted the moment you approach your limit', gradient: 'from-sky-500 to-blue-400' },
-    { icon: BarChart3, title: 'Expense Predictions', description: 'Our AI forecasts upcoming costs from your history so you can prepare — not react — to large expenses', gradient: 'from-amber-500 to-orange-400' },
+    { icon: BarChart3, title: 'Expense Predictions', description: 'Our AI forecasts upcoming costs from your history so you can prepare - not react - to large expenses', gradient: 'from-amber-500 to-orange-400' },
     { icon: Wallet, title: 'Net Worth Tracking', description: 'See every asset and liability in one dashboard. Watch your net worth climb month over month', gradient: 'from-teal-500 to-emerald-400' },
     { icon: TrendingDown, title: 'Investment Portfolio', description: 'Track all investments in one place with real-time performance analytics and allocation breakdowns', gradient: 'from-cyan-500 to-sky-400' },
     { icon: Briefcase, title: 'Retirement Planning', description: 'Model your retirement with contribution calculators and gap analysis so you retire on your own terms', gradient: 'from-rose-500 to-red-400' },
     { icon: LineChart, title: 'Stock Predictions', description: 'AI-powered market analysis with risk-adjusted recommendations matched to your investment profile', gradient: 'from-violet-500 to-blue-400' },
     { icon: Bot, title: 'Financial Assistant', description: '24/7 AI answers your money questions and gives contextual guidance based on your actual data', gradient: 'from-emerald-500 to-cyan-400' },
-    { icon: Lightbulb, title: 'AI Recommendations', description: 'Personalised suggestions for cutting waste, reducing debt, and growing wealth — uniquely yours', gradient: 'from-amber-500 to-yellow-400' },
-    { icon: Globe, title: '150+ Currencies', description: 'Whether you earn in USD, EUR, AED, or GBP — every transaction is tracked and converted automatically', gradient: 'from-blue-500 to-sky-400' },
+    { icon: Lightbulb, title: 'AI Recommendations', description: 'Personalised suggestions for cutting waste, reducing debt, and growing wealth - uniquely yours', gradient: 'from-amber-500 to-yellow-400' },
+    { icon: Globe, title: '150+ Currencies', description: 'Whether you earn in USD, EUR, AED, or GBP - every transaction is tracked and converted automatically', gradient: 'from-blue-500 to-sky-400' },
   ];
 
   const benefits = [
@@ -315,7 +315,7 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-lg text-gray-600 dark:text-gray-400 mb-9 max-w-lg leading-relaxed"
               >
-                AI-powered financial intelligence for individuals, families, and businesses. Track, predict, and grow your wealth — in any currency, anywhere.
+                AI-powered financial intelligence for individuals, families, and businesses. Track, predict, and grow your wealth - in any currency, anywhere.
               </motion.p>
 
               <motion.div
@@ -407,7 +407,7 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-400"> use FinanceFlow AI</span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Measurable, research-backed outcomes — not just feature lists.
+              Measurable, research-backed outcomes - not just feature lists.
             </p>
           </motion.div>
 
@@ -540,7 +540,7 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-400">AI CFO</span>
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 mb-10 leading-relaxed">
-                The same financial intelligence available to Fortune 500 companies — now in your pocket. Our AI works 24/7, learning your patterns and proactively steering your financial future.
+                The same financial intelligence available to Fortune 500 companies - now in your pocket. Our AI works 24/7, learning your patterns and proactively steering your financial future.
               </p>
 
               <div className="space-y-5">
@@ -751,7 +751,7 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
                 Your financial data
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">stays yours — always</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">stays yours - always</span>
               </h2>
               <p className="text-lg text-gray-400 mb-10 leading-relaxed">
                 We never sell your financial data. Bank-grade security protects every transaction, goal, and plan you store inside FinanceFlow AI.
@@ -764,7 +764,7 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
                   'GDPR compliant',
                   'ISO 27001 certified',
                   'Regular security audits',
-                  'Zero data selling — ever',
+                  'Zero data selling - ever',
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-2.5 text-gray-300">
                     <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />

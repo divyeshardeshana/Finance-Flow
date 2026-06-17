@@ -137,8 +137,8 @@ export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
   return (
     <>
       <SEOHead
-        title="FAQ — FinanceFlow AI | Common Questions Answered"
-        description="Find answers to common questions about FinanceFlow AI — budgeting, account management, billing, AI assistant, investment tracking, and troubleshooting."
+        title="FAQ - FinanceFlow AI | Common Questions Answered"
+        description="Find answers to common questions about FinanceFlow AI - budgeting, account management, billing, AI assistant, investment tracking, and troubleshooting."
         keywords="FinanceFlow FAQ, personal finance app help, budgeting app questions, FinanceFlow AI assistant help, subscription billing FAQ"
         canonical="https://financeflow.ai/faq"
         breadcrumbs={[
@@ -185,7 +185,7 @@ export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
                 type="text"
                 value={search}
                 onChange={e => { setSearch(e.target.value); setActiveCategory('all'); }}
-                placeholder="Search questions — e.g. 'how to reset password'…"
+                placeholder="Search questions - e.g. 'how to reset password'…"
                 className="w-full pl-11 pr-10 py-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all shadow-sm"
               />
               {search && (
@@ -201,7 +201,7 @@ export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
         <section className="pb-24 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
 
-            {/* Sidebar — category list */}
+            {/* Sidebar - category list */}
             <aside className="lg:w-64 flex-shrink-0">
               <div className="lg:sticky lg:top-24 space-y-1">
                 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3 px-3">Topics</p>
@@ -249,7 +249,7 @@ export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
                   );
                 })}
 
-                {/* Mobile horizontal pills — hidden on lg */}
+                {/* Mobile horizontal pills - hidden on lg */}
                 <div className="lg:hidden pt-4">
                   <div className="flex flex-wrap gap-2">
                     {/* already rendered above as sidebar on mobile too */}

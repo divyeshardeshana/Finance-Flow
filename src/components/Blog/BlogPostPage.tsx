@@ -91,13 +91,13 @@ const STATIC_POSTS_MAP: Record<string, BlogPost> = {
 
 Personal finance is the foundation upon which every financial goal rests. Whether you want to retire early, buy a home, travel the world, or simply stop living paycheck to paycheck, the path begins with understanding how money flows in and out of your life.
 
-The good news? **You don't need a high income to build wealth.** Wealth is built through habits, consistency, and smart decision-making — not through earning a windfall. Many people with average salaries have accumulated significant net worth simply by following a set of proven principles.
+The good news? **You don't need a high income to build wealth.** Wealth is built through habits, consistency, and smart decision-making - not through earning a windfall. Many people with average salaries have accumulated significant net worth simply by following a set of proven principles.
 
 This guide breaks down those principles in plain, actionable language so you can start making meaningful progress today.
 
 ## Understanding Personal Finance
 
-Personal finance refers to the management of your own financial resources — including income, spending, saving, investing, and planning for the future. It encompasses every financial decision you make, from the coffee you buy each morning to the retirement account you contribute to each month.
+Personal finance refers to the management of your own financial resources - including income, spending, saving, investing, and planning for the future. It encompasses every financial decision you make, from the coffee you buy each morning to the retirement account you contribute to each month.
 
 At its core, personal finance answers three fundamental questions:
 
@@ -109,13 +109,13 @@ Most people never formally answer these questions, which is why so many struggle
 
 ## Money Management Skills
 
-Strong money management doesn't happen overnight — it's a collection of skills developed over time. Below are the four most critical areas to master.
+Strong money management doesn't happen overnight - it's a collection of skills developed over time. Below are the four most critical areas to master.
 
 ### Budgeting
 
 A budget is your financial blueprint. It tells your money where to go instead of wondering where it went. The most effective budgets are realistic, flexible, and reviewed regularly.
 
-Start by listing all sources of income after tax. Then categorize your expenses into fixed costs (rent, car payment, insurance) and variable costs (groceries, dining, entertainment). The goal is to ensure your income exceeds your expenses — and that the surplus is directed intentionally.
+Start by listing all sources of income after tax. Then categorize your expenses into fixed costs (rent, car payment, insurance) and variable costs (groceries, dining, entertainment). The goal is to ensure your income exceeds your expenses - and that the surplus is directed intentionally.
 
 **Popular budgeting methods include:**
 
@@ -127,7 +127,7 @@ Start by listing all sources of income after tax. Then categorize your expenses 
 
 Saving money is about building your capacity to handle both opportunity and emergency. Financial experts recommend maintaining at least three to six months of living expenses in an accessible savings account.
 
-Beyond the emergency fund, saving should be automated. Set up an automatic transfer to your savings account on the day you receive your paycheck. Remove the temptation to spend first and save what's left — instead, save first and spend what remains.
+Beyond the emergency fund, saving should be automated. Set up an automatic transfer to your savings account on the day you receive your paycheck. Remove the temptation to spend first and save what's left - instead, save first and spend what remains.
 
 **Key saving principles:**
 
@@ -138,17 +138,17 @@ Beyond the emergency fund, saving should be automated. Set up an automatic trans
 
 ### Investing
 
-Saving keeps your money safe. Investing makes your money grow. Over long time horizons, investing is the most powerful tool available for building wealth — primarily due to the compounding of returns.
+Saving keeps your money safe. Investing makes your money grow. Over long time horizons, investing is the most powerful tool available for building wealth - primarily due to the compounding of returns.
 
 Even small amounts invested consistently can grow into substantial sums over decades. A $200 monthly investment earning an average 8% annual return grows to over $700,000 in 40 years.
 
 **Core investing principles for beginners:**
 
-- Start as early as possible — time is your greatest asset
-- Take advantage of employer 401(k) matching — it's free money
+- Start as early as possible - time is your greatest asset
+- Take advantage of employer 401(k) matching - it's free money
 - Diversify through low-cost index funds and ETFs
 - Invest consistently regardless of market conditions (dollar-cost averaging)
-- Keep fees low — even a 1% difference in fees can cost tens of thousands over time
+- Keep fees low - even a 1% difference in fees can cost tens of thousands over time
 
 ### Reducing Expenses
 
@@ -175,20 +175,20 @@ The order matters. Trying to invest aggressively while carrying high-interest de
 
 ## Conclusion
 
-Building wealth on any income is a realistic goal — but it requires intention, patience, and the willingness to delay gratification in the short term for long-term gain.
+Building wealth on any income is a realistic goal - but it requires intention, patience, and the willingness to delay gratification in the short term for long-term gain.
 
 The principles outlined in this guide are not secrets. They are the same fundamentals practiced by virtually every financially successful person: spend less than you earn, save consistently, invest early, and plan deliberately.
 
 **The best time to start was ten years ago. The second best time is today.**
 
-Open a budgeting app. Review your last month of spending. Set one financial goal. The first step is always the hardest — but it sets everything else in motion.`,
+Open a budgeting app. Review your last month of spending. Set one financial goal. The first step is always the hardest - but it sets everything else in motion.`,
   },
 
   'debt-management-plan': {
     id: '2',
     title: 'Debt Management Made Easy: Step-by-Step Plan to Become Debt Free',
     slug: 'debt-management-plan',
-    excerpt: 'A clear, actionable roadmap for tackling every kind of debt — from credit cards to student loans — using proven payoff strategies like the avalanche and snowball methods.',
+    excerpt: 'A clear, actionable roadmap for tackling every kind of debt - from credit cards to student loans - using proven payoff strategies like the avalanche and snowball methods.',
     featured_image_url: 'https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg?auto=compress&cs=tinysrgb&w=1200',
     published_at: '2026-03-07T09:00:00Z',
     tags: ['debt', 'freedom', 'payoff', 'credit cards'],
@@ -196,7 +196,7 @@ Open a budgeting app. Review your last month of spending. Set one financial goal
     blog_categories: { id: 'debt-management', name: 'Debt Management', slug: 'debt-management', color: '#EF4444' },
     content: `## Introduction
 
-Debt is one of the most significant obstacles standing between most people and financial freedom. Whether it's credit card balances, student loans, medical bills, or a car payment, carrying debt costs you money every single month — money that could otherwise be building your future.
+Debt is one of the most significant obstacles standing between most people and financial freedom. Whether it's credit card balances, student loans, medical bills, or a car payment, carrying debt costs you money every single month - money that could otherwise be building your future.
 
 The good news is that getting out of debt is entirely achievable. It requires a clear plan, consistent execution, and the psychological fortitude to stay the course. This guide gives you exactly that.
 
@@ -212,7 +212,7 @@ Create a complete inventory of every debt you owe:
 4. Minimum monthly payment
 5. Payoff timeline at minimum payments
 
-This exercise is often a wake-up call. Seeing the total interest you'll pay over time — often two to three times the original balance on credit cards — is a powerful motivator to accelerate repayment.
+This exercise is often a wake-up call. Seeing the total interest you'll pay over time - often two to three times the original balance on credit cards - is a powerful motivator to accelerate repayment.
 
 ## The Two Core Payoff Strategies
 
@@ -228,7 +228,7 @@ The avalanche method prioritizes debts by interest rate, paying off the highest-
 
 ### The Debt Snowball Method
 
-The snowball method, popularized by financial author Dave Ramsey, prioritizes debts by balance size — smallest to largest — regardless of interest rate. You put all extra money toward the smallest debt first, then roll that payment into the next smallest once it's paid off.
+The snowball method, popularized by financial author Dave Ramsey, prioritizes debts by balance size - smallest to largest - regardless of interest rate. You put all extra money toward the smallest debt first, then roll that payment into the next smallest once it's paid off.
 
 **Why it works:** Paying off a debt completely, even a small one, creates a tangible psychological win. This momentum keeps many people motivated through the longer journey.
 
@@ -239,16 +239,16 @@ The snowball method, popularized by financial author Dave Ramsey, prioritizes de
 Choosing a strategy is only step one. Here is the complete execution plan:
 
 1. List all debts in your chosen order (avalanche or snowball)
-2. Find extra money in your budget — cut discretionary spending ruthlessly
+2. Find extra money in your budget - cut discretionary spending ruthlessly
 3. Apply all extra money to your target debt every month without exception
 4. Do not accumulate new debt during the payoff period
-5. Celebrate each payoff milestone — it matters for motivation
+5. Celebrate each payoff milestone - it matters for motivation
 6. Roll the freed-up payment into the next debt immediately
 7. Keep going until every debt is eliminated
 
 ## Negotiating With Creditors
 
-Many people don't realize that creditors are often willing to negotiate — especially if you're behind on payments or at risk of default.
+Many people don't realize that creditors are often willing to negotiate - especially if you're behind on payments or at risk of default.
 
 **What you can negotiate:**
 
@@ -279,7 +279,7 @@ Becoming debt free is one of the most transformative financial achievements poss
     id: '3',
     title: '10 Practical Budgeting Tips to Take Control of Your Money',
     slug: 'practical-budgeting-tips',
-    excerpt: 'Ten proven tactics that help you cut unnecessary spending, automate your savings, and make your budget work for you — not the other way around.',
+    excerpt: 'Ten proven tactics that help you cut unnecessary spending, automate your savings, and make your budget work for you - not the other way around.',
     featured_image_url: 'https://images.pexels.com/photos/4386370/pexels-photo-4386370.jpeg?auto=compress&cs=tinysrgb&w=1200',
     published_at: '2026-03-04T09:00:00Z',
     tags: ['budgeting', 'savings', 'money management'],
@@ -287,13 +287,13 @@ Becoming debt free is one of the most transformative financial achievements poss
     blog_categories: { id: 'saving-money', name: 'Saving Money', slug: 'saving-money', color: '#10B981' },
     content: `## Introduction
 
-A budget is not a restriction — it's permission. Permission to spend on the things that matter most, with the confidence that your essential needs and future goals are already covered. The problem is that most people find budgeting tedious, complicated, or simply ineffective.
+A budget is not a restriction - it's permission. Permission to spend on the things that matter most, with the confidence that your essential needs and future goals are already covered. The problem is that most people find budgeting tedious, complicated, or simply ineffective.
 
 These ten tips cut through the noise and give you practical, field-tested tactics that actually work.
 
 ## 1. Track Every Dollar for One Month Before Budgeting
 
-Before you can build a realistic budget, you need data. Spend one full month tracking every single purchase — coffee, groceries, subscriptions, impulse buys — without changing your behavior. This baseline reveals exactly where your money is going and exposes spending patterns you never knew existed.
+Before you can build a realistic budget, you need data. Spend one full month tracking every single purchase - coffee, groceries, subscriptions, impulse buys - without changing your behavior. This baseline reveals exactly where your money is going and exposes spending patterns you never knew existed.
 
 Most people are genuinely surprised. Common discoveries include hundreds of dollars in forgotten subscriptions, food and dining costs two to three times higher than estimated, and convenience spending that adds up to significant monthly totals.
 
@@ -305,7 +305,7 @@ This isn't a rigid formula, but it gives you a starting structure. Adjust the pe
 
 ## 3. Automate Your Savings Before You Spend
 
-The single most effective budgeting habit is paying yourself first. Set up an automatic transfer to your savings account on payday — before you have a chance to spend the money. Start with whatever amount feels manageable, even $25 or $50.
+The single most effective budgeting habit is paying yourself first. Set up an automatic transfer to your savings account on payday - before you have a chance to spend the money. Start with whatever amount feels manageable, even $25 or $50.
 
 :: Automating savings removes the decision entirely. You never see the money, so you never miss it.
 
@@ -317,7 +317,7 @@ Many online banks offer free multiple savings accounts with no minimums. Giving 
 
 ## 5. Review Subscriptions Every Three Months
 
-The average household pays for 4 to 5 streaming services, software subscriptions, gym memberships, and app fees — many of which go largely unused. Set a quarterly calendar reminder to audit every recurring charge on your bank and credit card statements.
+The average household pays for 4 to 5 streaming services, software subscriptions, gym memberships, and app fees - many of which go largely unused. Set a quarterly calendar reminder to audit every recurring charge on your bank and credit card statements.
 
 Cancel anything you haven't used in the past 30 days. Negotiate or switch providers on services you want to keep. This exercise routinely saves $50 to $150 per month for most households.
 
@@ -329,23 +329,23 @@ Most impulse desires fade entirely within 48 hours. If you still want the item a
 
 ## 7. Budget by Paycheck, Not by Month
 
-If you're paid bi-weekly, a monthly budget can feel disconnected from reality. Try zero-based budgeting by paycheck instead — assign every dollar of each paycheck to a specific category before you spend a cent. This keeps you tightly connected to your finances throughout the month rather than discovering problems at month-end.
+If you're paid bi-weekly, a monthly budget can feel disconnected from reality. Try zero-based budgeting by paycheck instead - assign every dollar of each paycheck to a specific category before you spend a cent. This keeps you tightly connected to your finances throughout the month rather than discovering problems at month-end.
 
 ## 8. Build a Buffer Category Into Your Budget
 
-Every budget needs a "miscellaneous" or "buffer" category — typically $50 to $150 per month — to absorb small unexpected expenses without derailing the entire plan. Car registration, a dental co-pay, a birthday gift: these aren't true emergencies, but they're also not predictable line items.
+Every budget needs a "miscellaneous" or "buffer" category - typically $50 to $150 per month - to absorb small unexpected expenses without derailing the entire plan. Car registration, a dental co-pay, a birthday gift: these aren't true emergencies, but they're also not predictable line items.
 
 Without a buffer, every minor surprise requires raiding another budget category, which leads to frustration and budget abandonment.
 
 ## 9. Make Dining Out a Conscious Choice
 
-Dining and food delivery is consistently the top area of overspending in most budgets. Rather than eliminating restaurants entirely, make it a deliberate, planned category. Set a monthly limit, track it actively, and treat dining out as a leisure activity you're choosing to prioritize — not a default habit.
+Dining and food delivery is consistently the top area of overspending in most budgets. Rather than eliminating restaurants entirely, make it a deliberate, planned category. Set a monthly limit, track it actively, and treat dining out as a leisure activity you're choosing to prioritize - not a default habit.
 
 Meal planning for four to five weeknights per week while allowing one or two intentional restaurant meals is a sustainable balance most people can maintain long-term.
 
 ## 10. Review Your Budget at the Same Time Every Month
 
-A budget only works if you actually look at it. Set a recurring monthly date — the first Sunday of each month is a popular choice — to review the previous month's spending, identify where you went over or under, and adjust the following month's budget accordingly.
+A budget only works if you actually look at it. Set a recurring monthly date - the first Sunday of each month is a popular choice - to review the previous month's spending, identify where you went over or under, and adjust the following month's budget accordingly.
 
 This review session doesn't need to take more than 15 to 20 minutes. Over time, it becomes a powerful ritual that keeps your financial life on track.
 
@@ -368,7 +368,7 @@ Budgeting is not about perfection. It's about progress and awareness. Each of th
     blog_categories: { id: 'investing', name: 'Investing', slug: 'investing', color: '#8B5CF6' },
     content: `## Introduction
 
-One of the most persistent myths about investing is that you need a large sum of money to get started. In reality, the most powerful force in investing — compound interest — works just as well with $100 as it does with $100,000. The key variable isn't how much you start with. It's how early you start and how consistently you continue.
+One of the most persistent myths about investing is that you need a large sum of money to get started. In reality, the most powerful force in investing - compound interest - works just as well with $100 as it does with $100,000. The key variable isn't how much you start with. It's how early you start and how consistently you continue.
 
 This guide shows you exactly how to begin investing with $100 per month, what to invest in, and how to build a strategy that grows significantly over time.
 
@@ -376,7 +376,7 @@ This guide shows you exactly how to begin investing with $100 per month, what to
 
 Let's look at the math. If you invest $100 per month starting at age 25, earning an average annual return of 8%, you will have approximately $349,000 by age 65. That's from $48,000 in total contributions.
 
-Start the same investment at age 35 instead, and you end up with roughly $150,000 — less than half, despite only a 10-year difference in start time. **Time is the most valuable input in the investing equation.**
+Start the same investment at age 35 instead, and you end up with roughly $150,000 - less than half, despite only a 10-year difference in start time. **Time is the most valuable input in the investing equation.**
 
 The earlier you start, the less money you actually need to contribute to reach the same outcome.
 
@@ -386,13 +386,13 @@ Before choosing what to invest in, choose where to invest. Account type matters 
 
 ### Tax-Advantaged Accounts (Start Here)
 
-- **401(k) or 403(b):** If your employer offers a retirement plan with matching contributions, this is your first priority. Employer matching is an immediate 50–100% return on your contribution — nothing else comes close.
+- **401(k) or 403(b):** If your employer offers a retirement plan with matching contributions, this is your first priority. Employer matching is an immediate 50–100% return on your contribution - nothing else comes close.
 - **Roth IRA:** Contributions are made with after-tax dollars, but all future growth and withdrawals are completely tax-free. Ideal for anyone who expects to be in a higher tax bracket in retirement. Contribution limit is $7,000 per year (2024).
 - **Traditional IRA:** Contributions may be tax-deductible, and growth is tax-deferred until withdrawal. Useful if you expect a lower tax bracket in retirement.
 
 ### Taxable Brokerage Account
 
-Once you've maximized tax-advantaged accounts, a standard brokerage account offers complete flexibility — no contribution limits, no withdrawal restrictions, no penalties. Growth is subject to capital gains tax, but this is manageable with the right investment choices.
+Once you've maximized tax-advantaged accounts, a standard brokerage account offers complete flexibility - no contribution limits, no withdrawal restrictions, no penalties. Growth is subject to capital gains tax, but this is manageable with the right investment choices.
 
 ## Step 2: Choose Your Investments
 
@@ -410,13 +410,13 @@ These funds track the 500 largest US companies. They're slightly less diversifie
 
 ### International Index Funds
 
-Adding exposure to international markets — Europe, Asia, emerging markets — provides additional diversification. A simple allocation is 80% US total market, 20% international total market.
+Adding exposure to international markets - Europe, Asia, emerging markets - provides additional diversification. A simple allocation is 80% US total market, 20% international total market.
 
 ## Step 3: Use Dollar-Cost Averaging
 
 Dollar-cost averaging means investing the same fixed amount on the same schedule, regardless of what the market is doing. When markets are up, your $100 buys fewer shares. When markets are down, it buys more.
 
-Over time, this approach results in an average cost per share that is lower than the average price per share — a mathematically provable advantage over trying to time the market.
+Over time, this approach results in an average cost per share that is lower than the average price per share - a mathematically provable advantage over trying to time the market.
 
 **Practical setup:** Automate a $100 transfer to your investment account on the same day each month. Most brokerages allow automatic recurring investments into specific funds.
 
@@ -428,9 +428,9 @@ Always check the expense ratio before investing in any fund. Anything above 0.20
 
 ## Step 5: Never Stop During Market Downturns
 
-The single biggest mistake new investors make is stopping contributions — or selling — when markets decline. Market downturns are not disasters for long-term investors. They are sales.
+The single biggest mistake new investors make is stopping contributions - or selling - when markets decline. Market downturns are not disasters for long-term investors. They are sales.
 
-When the market drops 20%, your $100 monthly investment buys 25% more shares than it did at the previous price. Those extra shares compound for decades. Investors who stayed the course during every major downturn — 2008, 2020, and others — experienced dramatically better outcomes than those who sold.
+When the market drops 20%, your $100 monthly investment buys 25% more shares than it did at the previous price. Those extra shares compound for decades. Investors who stayed the course during every major downturn - 2008, 2020, and others - experienced dramatically better outcomes than those who sold.
 
 ## Conclusion
 
@@ -438,7 +438,7 @@ Investing $100 per month is not a compromise or a placeholder until you can "rea
 
 **Open an account this week. Set up one automatic investment. Then leave it alone and let time do the heavy lifting.**
 
-The best investment portfolio is one you can maintain — simple, low-cost, and consistent for decades.`,
+The best investment portfolio is one you can maintain - simple, low-cost, and consistent for decades.`,
   },
 
   '50-30-20-rule-guide': {
@@ -453,7 +453,7 @@ The best investment portfolio is one you can maintain — simple, low-cost, and 
     blog_categories: { id: 'financial-planning', name: 'Financial Planning', slug: 'financial-planning', color: '#F59E0B' },
     content: `## Introduction
 
-Financial planning doesn't need to be complicated. While there are dozens of budgeting methods, most people do best with a simple, memorable framework they can actually apply. The 50/30/20 rule — popularized by U.S. Senator and bankruptcy expert Elizabeth Warren in her book *All Your Worth* — is exactly that: a clean, intuitive system for allocating your income that works across a wide range of financial situations.
+Financial planning doesn't need to be complicated. While there are dozens of budgeting methods, most people do best with a simple, memorable framework they can actually apply. The 50/30/20 rule - popularized by U.S. Senator and bankruptcy expert Elizabeth Warren in her book *All Your Worth* - is exactly that: a clean, intuitive system for allocating your income that works across a wide range of financial situations.
 
 ## What the Rule Says
 
@@ -465,7 +465,7 @@ The 50/30/20 rule divides your after-tax income into three categories:
 
 That's it. Three numbers that, applied consistently, create a financially healthy life.
 
-## The 50% — Needs
+## The 50% - Needs
 
 Needs are expenses that are truly non-negotiable. If you didn't pay them, serious consequences would follow. This category includes:
 
@@ -476,11 +476,11 @@ Needs are expenses that are truly non-negotiable. If you didn't pay them, seriou
 - Minimum debt payments (credit cards, student loans, personal loans)
 - Health insurance and essential medical care
 
-**The 50% ceiling is a discipline check.** If your needs consume more than half your income, you have a structural problem — likely housing or transportation costs — that needs to be addressed before other financial goals are achievable.
+**The 50% ceiling is a discipline check.** If your needs consume more than half your income, you have a structural problem - likely housing or transportation costs - that needs to be addressed before other financial goals are achievable.
 
 Common adjustments include moving to a less expensive area, getting a roommate, downsizing a car, or pursuing income growth.
 
-## The 30% — Wants
+## The 30% - Wants
 
 Wants are the choices that add enjoyment and meaning to your life but could be reduced without genuine hardship. This is the most subjective category:
 
@@ -491,13 +491,13 @@ Wants are the choices that add enjoyment and meaning to your life but could be r
 - Gym memberships and hobbies
 - Upgrades (a nicer car than necessary, a larger apartment)
 
-The 30% allocation for wants is notably generous. It recognizes that a financially healthy life should still be an enjoyable one. **The goal is not deprivation — it's intentionality.**
+The 30% allocation for wants is notably generous. It recognizes that a financially healthy life should still be an enjoyable one. **The goal is not deprivation - it's intentionality.**
 
 If you're spending significantly more than 30% on wants, you're likely trading future security for present comfort. If you're spending significantly less, you have additional room to accelerate your savings and debt payoff.
 
-## The 20% — Savings and Debt Repayment
+## The 20% - Savings and Debt Repayment
 
-This is the most powerful category — the one that actually builds your future. The 20% is split across:
+This is the most powerful category - the one that actually builds your future. The 20% is split across:
 
 ### Emergency Fund
 
@@ -509,7 +509,7 @@ Contribute at minimum enough to capture any employer 401(k) match. Beyond that, 
 
 ### Debt Repayment Above Minimums
 
-Minimum payments on debt belong in the Needs category. Any extra payment — the actual debt-elimination effort — comes from the 20%.
+Minimum payments on debt belong in the Needs category. Any extra payment - the actual debt-elimination effort - comes from the 20%.
 
 ### Additional Goals
 
@@ -549,7 +549,7 @@ The 50/30/20 rule works because it's simple enough to remember and flexible enou
     blog_categories: { id: 'saving-money', name: 'Saving Money', slug: 'saving-money', color: '#10B981' },
     content: `## Introduction
 
-An emergency fund is the single most important financial safety net you can build. It stands between you and a financial crisis when life does what it inevitably does: surprise you. A job loss, a medical bill, a car breakdown, a roof repair — without an emergency fund, each of these events forces you into debt. With one, they become manageable inconveniences.
+An emergency fund is the single most important financial safety net you can build. It stands between you and a financial crisis when life does what it inevitably does: surprise you. A job loss, a medical bill, a car breakdown, a roof repair - without an emergency fund, each of these events forces you into debt. With one, they become manageable inconveniences.
 
 Despite its importance, surveys consistently show that a significant portion of adults cannot cover an unexpected $400 expense without borrowing. Building an emergency fund is the first, most foundational step in any serious financial plan.
 
@@ -576,7 +576,7 @@ The standard recommendation is three to six months of essential living expenses.
 
 ### Calculating Your Number
 
-Add up only your essential monthly expenses — housing, utilities, groceries, insurance, transportation, and minimum debt payments. Do not include wants. Multiply by 3 or 6 depending on the factors above.
+Add up only your essential monthly expenses - housing, utilities, groceries, insurance, transportation, and minimum debt payments. Do not include wants. Multiply by 3 or 6 depending on the factors above.
 
 If your essential expenses are $2,500 per month, your target emergency fund is $7,500 to $15,000.
 
@@ -589,7 +589,7 @@ Your emergency fund has two requirements: it must be **accessible** (available w
 - FDIC insurance up to $250,000
 - Easy transfers to your checking account within 1–2 business days
 - Interest rates significantly higher than traditional savings accounts
-- No market risk — your balance doesn't fluctuate
+- No market risk - your balance doesn't fluctuate
 
 Do not invest your emergency fund in stocks, bonds, or any market-linked account. The entire point is stability and guaranteed availability. The marginal return you might earn in the market is not worth the risk of needing the funds during a market downturn when your balance might be 20% lower.
 
@@ -597,7 +597,7 @@ Do not invest your emergency fund in stocks, bonds, or any market-linked account
 
 ### Make It Automatic
 
-Set up a recurring transfer from your checking account to your emergency savings account on payday — even $50 or $100 per month. Automation removes willpower from the equation entirely.
+Set up a recurring transfer from your checking account to your emergency savings account on payday - even $50 or $100 per month. Automation removes willpower from the equation entirely.
 
 ### Direct Windfalls Here First
 
@@ -633,7 +633,7 @@ If you draw from your emergency fund, replenishing it becomes your top financial
 
 ## Conclusion
 
-An emergency fund transforms your relationship with financial risk. Instead of dreading unexpected expenses, you face them from a position of strength. That peace of mind — the ability to handle life's surprises without panic — is genuinely priceless.
+An emergency fund transforms your relationship with financial risk. Instead of dreading unexpected expenses, you face them from a position of strength. That peace of mind - the ability to handle life's surprises without panic - is genuinely priceless.
 
 **Calculate your target number today. Open a high-yield savings account if you don't have one. Set up your first automatic transfer.** Three to six months from now, you'll have one of the most important financial foundations in place.`,
   },
@@ -658,25 +658,25 @@ Understanding your credit score and the levers that control it gives you the pow
 
 The most widely used credit scoring model is FICO, which scores on a scale from 300 to 850. Scores break down into five ranges:
 
-- **800–850: Exceptional** — Qualifies for the best rates on any loan
-- **740–799: Very Good** — Qualifies for near-best rates
-- **670–739: Good** — Qualifies for most loans at standard rates
-- **580–669: Fair** — May face higher rates or require larger down payments
-- **Below 580: Poor** — Limited access to credit; high rates when approved
+- **800–850: Exceptional** - Qualifies for the best rates on any loan
+- **740–799: Very Good** - Qualifies for near-best rates
+- **670–739: Good** - Qualifies for most loans at standard rates
+- **580–669: Fair** - May face higher rates or require larger down payments
+- **Below 580: Poor** - Limited access to credit; high rates when approved
 
 Your FICO score is calculated from five factors, each weighted differently:
 
-1. **Payment history (35%)** — Whether you pay on time, every time
-2. **Credit utilization (30%)** — How much of your available credit you're using
-3. **Length of credit history (15%)** — How long your accounts have been open
-4. **Credit mix (10%)** — Variety of account types (credit cards, loans, mortgage)
-5. **New credit (10%)** — Recent applications for new credit
+1. **Payment history (35%)** - Whether you pay on time, every time
+2. **Credit utilization (30%)** - How much of your available credit you're using
+3. **Length of credit history (15%)** - How long your accounts have been open
+4. **Credit mix (10%)** - Variety of account types (credit cards, loans, mortgage)
+5. **New credit (10%)** - Recent applications for new credit
 
 ## The Fastest Ways to Improve Your Score
 
 ### 1. Pay Every Bill On Time (Payment History: 35%)
 
-A single missed payment can drop a good credit score by 50 to 100 points. Set up automatic minimum payments on every account to ensure you're never late — even if you pay the full balance manually afterward.
+A single missed payment can drop a good credit score by 50 to 100 points. Set up automatic minimum payments on every account to ensure you're never late - even if you pay the full balance manually afterward.
 
 If you have past late payments, the impact diminishes over time. Recent payment history carries more weight than older history. Consistent on-time payments for 12 to 24 months significantly offset previous missed payments.
 
@@ -700,9 +700,9 @@ Keep old accounts open, even if you rarely use them. If a card has an annual fee
 
 ### 4. Limit Hard Inquiries
 
-When you apply for new credit — a credit card, car loan, mortgage — the lender pulls a hard inquiry that temporarily reduces your score by 5 to 10 points. Multiple inquiries in a short period amplify the effect.
+When you apply for new credit - a credit card, car loan, mortgage - the lender pulls a hard inquiry that temporarily reduces your score by 5 to 10 points. Multiple inquiries in a short period amplify the effect.
 
-Avoid applying for new credit in the 3 to 6 months before you need a major loan (mortgage, car loan). When shopping for auto or mortgage rates, do all applications within a 14-day window — credit bureaus count multiple mortgage or auto inquiries in a short period as a single inquiry.
+Avoid applying for new credit in the 3 to 6 months before you need a major loan (mortgage, car loan). When shopping for auto or mortgage rates, do all applications within a 14-day window - credit bureaus count multiple mortgage or auto inquiries in a short period as a single inquiry.
 
 ### 5. Dispute Errors on Your Credit Report
 
@@ -723,7 +723,7 @@ Get your free credit reports from all three bureaus (Equifax, Experian, TransUni
 
 ## Conclusion
 
-Your credit score is not fixed. It is a dynamic number that responds — sometimes quickly — to deliberate actions. The two highest-impact moves are always the same: **pay every bill on time** and **keep your credit utilization below 30%.**
+Your credit score is not fixed. It is a dynamic number that responds - sometimes quickly - to deliberate actions. The two highest-impact moves are always the same: **pay every bill on time** and **keep your credit utilization below 30%.**
 
 Start there. Check your credit report for errors. Keep old accounts open. Over 6 to 12 months of consistent financial behavior, most people can meaningfully improve their score and gain access to significantly better rates and terms.`,
   },
@@ -740,7 +740,7 @@ Start there. Check your credit report for errors. Keep old accounts open. Over 6
     blog_categories: { id: 'financial-planning', name: 'Financial Planning', slug: 'financial-planning', color: '#F59E0B' },
     content: `## Introduction
 
-Your 30s are the decade where retirement planning transforms from a distant concept into a concrete priority. You likely have meaningful income for the first time, perhaps a stable career trajectory, and — critically — 30 or more years of compound growth ahead of you.
+Your 30s are the decade where retirement planning transforms from a distant concept into a concrete priority. You likely have meaningful income for the first time, perhaps a stable career trajectory, and - critically - 30 or more years of compound growth ahead of you.
 
 The decisions you make in your 30s about retirement savings will matter more than almost anything you do in your 40s and 50s. This guide shows you exactly what to do, in what order, and why the math is so compelling.
 
@@ -757,11 +757,11 @@ At an 8% average annual return:
 - Alex ends with approximately **$1.03 million** from $210,000 in contributions
 - Jordan ends with approximately **$950,000** from $300,000 in contributions
 
-Alex invested less money and ended up with more — purely because of the extra 10 years of compound growth. **Time is the most valuable input in retirement planning, and you still have it.**
+Alex invested less money and ended up with more - purely because of the extra 10 years of compound growth. **Time is the most valuable input in retirement planning, and you still have it.**
 
 ## Step 1: Capture Every Dollar of Employer Matching
 
-If your employer offers a 401(k) match, contributing enough to capture the full match is the single highest-return investment available to you — anywhere. A 100% match on the first 3% of salary is literally a 100% instant return on those dollars before any market gains.
+If your employer offers a 401(k) match, contributing enough to capture the full match is the single highest-return investment available to you - anywhere. A 100% match on the first 3% of salary is literally a 100% instant return on those dollars before any market gains.
 
 This is your first priority before any other investment or savings goal except your emergency fund.
 
@@ -772,7 +772,7 @@ After capturing your full employer match, the next priority for most people in t
 **Why Roth over Traditional in your 30s:**
 
 - Contributions are made with after-tax dollars, but all growth and withdrawals in retirement are completely tax-free
-- Your 30s are typically your lower-earning years compared to peak career income — paying taxes now at lower rates to avoid taxes later at higher rates is mathematically favorable
+- Your 30s are typically your lower-earning years compared to peak career income - paying taxes now at lower rates to avoid taxes later at higher rates is mathematically favorable
 - Roth IRAs have no required minimum distributions (RMDs), giving you complete control over withdrawals in retirement
 - Contributions (not earnings) can be withdrawn at any time without penalty, providing a secondary emergency backstop
 
@@ -782,13 +782,13 @@ The 2024 contribution limit is $7,000 per year ($583/month). If you can't max it
 
 Once you're capturing the full employer match and contributing to a Roth IRA, the next step is maximizing your 401(k) contributions. The 2024 contribution limit is $23,000.
 
-Maxing both a Roth IRA ($7,000) and a 401(k) ($23,000) requires $30,000 per year in retirement contributions — $2,500 per month. This isn't achievable for everyone in their 30s, but it represents the ideal target to work toward.
+Maxing both a Roth IRA ($7,000) and a 401(k) ($23,000) requires $30,000 per year in retirement contributions - $2,500 per month. This isn't achievable for everyone in their 30s, but it represents the ideal target to work toward.
 
 **Work toward it incrementally:** increase your 401(k) contribution percentage by 1% each year, or every time you receive a raise. You won't miss money you never had in your paycheck.
 
 ## Investment Strategy Inside Your Retirement Accounts
 
-With 30+ years until retirement, you can afford — and should embrace — an aggressive equity-heavy allocation:
+With 30+ years until retirement, you can afford - and should embrace - an aggressive equity-heavy allocation:
 
 - **Ages 30–40:** 90–100% stocks (index funds), 0–10% bonds
 - **Ages 40–50:** 80–90% stocks, 10–20% bonds
@@ -799,7 +799,7 @@ With 30+ years until retirement, you can afford — and should embrace — an ag
 - 30% international total market index fund
 - 10% US bond index fund
 
-Adjust toward bonds as you age to reduce volatility as retirement approaches. Most target-date retirement funds do this automatically — they're a completely acceptable hands-off option.
+Adjust toward bonds as you age to reduce volatility as retirement approaches. Most target-date retirement funds do this automatically - they're a completely acceptable hands-off option.
 
 ## How Much Should You Have Saved?
 
@@ -811,7 +811,7 @@ A common benchmark, popularized by Fidelity Investments:
 - By age 45: 4x your annual salary
 - By age 50: 6x your annual salary
 
-If you're behind these benchmarks, don't despair — increase your savings rate aggressively, reduce lifestyle inflation, and let time continue working for you.
+If you're behind these benchmarks, don't despair - increase your savings rate aggressively, reduce lifestyle inflation, and let time continue working for you.
 
 ## The 4% Rule: How Much Is "Enough"?
 
@@ -823,7 +823,7 @@ If you want $60,000/year in retirement income: $60,000 × 25 = **$1,500,000 targ
 
 ## Conclusion
 
-Retirement planning in your 30s is not about sacrifice — it's about capturing the extraordinary power of time and compound interest before it slips away. The habits you build now, the accounts you open, the automatic contributions you set up, create a foundation that grows for three decades before you need it.
+Retirement planning in your 30s is not about sacrifice - it's about capturing the extraordinary power of time and compound interest before it slips away. The habits you build now, the accounts you open, the automatic contributions you set up, create a foundation that grows for three decades before you need it.
 
 **If you do nothing else this week, increase your 401(k) contribution by 1% and open a Roth IRA if you don't already have one.** Your future self will thank you in ways that are genuinely difficult to overstate.`,
   },
@@ -832,7 +832,7 @@ Retirement planning in your 30s is not about sacrifice — it's about capturing 
     id: '9',
     title: 'Index Funds vs. ETFs: Which One Should You Choose?',
     slug: 'index-funds-vs-etfs',
-    excerpt: 'Both offer low-cost, diversified exposure to the market — but subtle differences in structure, tax efficiency, and trading flexibility matter. Here is what to know before you invest.',
+    excerpt: 'Both offer low-cost, diversified exposure to the market - but subtle differences in structure, tax efficiency, and trading flexibility matter. Here is what to know before you invest.',
     featured_image_url: 'https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&w=1200',
     published_at: '2026-01-30T09:00:00Z',
     tags: ['investing', 'ETF', 'index funds', 'portfolio'],
@@ -840,7 +840,7 @@ Retirement planning in your 30s is not about sacrifice — it's about capturing 
     blog_categories: { id: 'investing', name: 'Investing', slug: 'investing', color: '#8B5CF6' },
     content: `## Introduction
 
-If you've started exploring low-cost investing, you've almost certainly encountered both index funds and ETFs (Exchange-Traded Funds). Both are championed by financial experts, both track market indexes, and both offer dramatically lower fees than actively managed funds. So what's actually different between them — and which one should you choose?
+If you've started exploring low-cost investing, you've almost certainly encountered both index funds and ETFs (Exchange-Traded Funds). Both are championed by financial experts, both track market indexes, and both offer dramatically lower fees than actively managed funds. So what's actually different between them - and which one should you choose?
 
 The answer, like most things in personal finance, depends on your specific situation. This guide breaks down everything you need to know to make an informed decision.
 
@@ -863,7 +863,7 @@ This is the most fundamental structural difference:
 
 **ETFs** trade throughout the day on stock exchanges, just like individual stocks. You can buy or sell an ETF at 10:17 AM or 3:42 PM at whatever price it's trading at that moment.
 
-**Index mutual funds** only trade once per day, at the closing price (NAV — Net Asset Value) after markets close. If you submit a buy order at 10:17 AM, it executes at 4:00 PM at that day's closing price.
+**Index mutual funds** only trade once per day, at the closing price (NAV - Net Asset Value) after markets close. If you submit a buy order at 10:17 AM, it executes at 4:00 PM at that day's closing price.
 
 For long-term investors, this distinction rarely matters. Intraday trading flexibility is primarily relevant for traders, not buy-and-hold investors.
 
@@ -877,7 +877,7 @@ For long-term investors, this distinction rarely matters. Intraday trading flexi
 
 **ETFs** have a structural advantage in taxable brokerage accounts due to the "in-kind creation and redemption" mechanism. This process allows large institutional investors to exchange ETF shares for the underlying stocks without triggering a taxable event. As a result, ETFs rarely distribute capital gains to shareholders.
 
-**Index mutual funds** can distribute capital gains to all shareholders when the fund manager must sell securities to meet redemptions — even if you personally didn't sell anything. In tax-advantaged accounts (401k, IRA), this distinction is irrelevant. In a taxable brokerage account, ETFs generally have a meaningful tax efficiency advantage.
+**Index mutual funds** can distribute capital gains to all shareholders when the fund manager must sell securities to meet redemptions - even if you personally didn't sell anything. In tax-advantaged accounts (401k, IRA), this distinction is irrelevant. In a taxable brokerage account, ETFs generally have a meaningful tax efficiency advantage.
 
 ### Automatic Investment and Dividend Reinvestment
 
@@ -910,20 +910,20 @@ For taxable brokerage accounts, ETFs have a genuine tax efficiency edge worth co
 ## Recommended Options to Consider
 
 **For broad US market exposure:**
-- Vanguard Total Stock Market ETF (VTI) — expense ratio 0.03%
-- Fidelity ZERO Total Market Index Fund (FZROX) — expense ratio 0.00%
-- Schwab Total Stock Market Index Fund (SWTSX) — expense ratio 0.03%
+- Vanguard Total Stock Market ETF (VTI) - expense ratio 0.03%
+- Fidelity ZERO Total Market Index Fund (FZROX) - expense ratio 0.00%
+- Schwab Total Stock Market Index Fund (SWTSX) - expense ratio 0.03%
 
 **For S&P 500 exposure:**
-- SPDR S&P 500 ETF Trust (SPY) — expense ratio 0.0945%
-- iShares Core S&P 500 ETF (IVV) — expense ratio 0.03%
-- Vanguard 500 Index Fund Admiral Shares (VFIAX) — expense ratio 0.04%
+- SPDR S&P 500 ETF Trust (SPY) - expense ratio 0.0945%
+- iShares Core S&P 500 ETF (IVV) - expense ratio 0.03%
+- Vanguard 500 Index Fund Admiral Shares (VFIAX) - expense ratio 0.04%
 
 ## Conclusion
 
-The index fund versus ETF debate is ultimately less important than the decision to index-invest in the first place. Both vehicles, chosen from low-cost providers, will deliver market returns at minimal cost — and that combination beats the majority of professional fund managers over any 10+ year period.
+The index fund versus ETF debate is ultimately less important than the decision to index-invest in the first place. Both vehicles, chosen from low-cost providers, will deliver market returns at minimal cost - and that combination beats the majority of professional fund managers over any 10+ year period.
 
-**Pick the option that makes automatic, consistent investing easiest for you — then ignore the day-to-day fluctuations and let time compound your returns.**`,
+**Pick the option that makes automatic, consistent investing easiest for you - then ignore the day-to-day fluctuations and let time compound your returns.**`,
   },
 };
 
@@ -1246,7 +1246,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
 
-        {/* Back button — top left */}
+        {/* Back button - top left */}
         <div className="absolute top-0 left-0 right-0 pt-20 px-6 max-w-[900px] mx-auto w-full">
           <motion.button
             initial={{ opacity: 0, x: -12 }}
@@ -1260,7 +1260,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
           </motion.button>
         </div>
 
-        {/* Title area — bottom of hero */}
+        {/* Title area - bottom of hero */}
         <div className="absolute bottom-0 left-0 right-0 px-6 pb-10 max-w-[900px] mx-auto w-full">
           <motion.div
             initial={{ opacity: 0, y: 24 }}

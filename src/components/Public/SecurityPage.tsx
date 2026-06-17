@@ -28,7 +28,7 @@ const PILLARS = [
     shadow: 'shadow-blue-500/25',
     title: 'End-to-end encryption',
     description:
-      'All data is encrypted at rest using 256-bit AES encryption and in transit using TLS 1.3. Your financial data is unreadable to anyone without your credentials — including us.',
+      'All data is encrypted at rest using 256-bit AES encryption and in transit using TLS 1.3. Your financial data is unreadable to anyone without your credentials - including us.',
     points: [
       '256-bit AES encryption at rest',
       'TLS 1.3 for all data in transit',
@@ -42,7 +42,7 @@ const PILLARS = [
     shadow: 'shadow-violet-500/25',
     title: 'Row-level security',
     description:
-      'Every database query is restricted at the row level — you can only ever read and write your own data. Even if two users shared a database table, neither could see the other\'s records.',
+      'Every database query is restricted at the row level - you can only ever read and write your own data. Even if two users shared a database table, neither could see the other\'s records.',
     points: [
       'RLS policies on every table',
       'No shared data between users',
@@ -56,7 +56,7 @@ const PILLARS = [
     shadow: 'shadow-emerald-500/25',
     title: 'Secure authentication',
     description:
-      'Powered by Supabase Auth — JWT-based session tokens with automatic rotation. Sessions expire and require re-authentication. Passwords are hashed with bcrypt and never stored in plain text.',
+      'Powered by Supabase Auth - JWT-based session tokens with automatic rotation. Sessions expire and require re-authentication. Passwords are hashed with bcrypt and never stored in plain text.',
     points: [
       'JWT tokens with automatic rotation',
       'bcrypt password hashing',
@@ -70,7 +70,7 @@ const PILLARS = [
     shadow: 'shadow-amber-500/25',
     title: 'Infrastructure security',
     description:
-      'Hosted on Supabase infrastructure with SOC 2 Type II compliance. API keys and secrets are stored in environment vaults — never in frontend code or version control.',
+      'Hosted on Supabase infrastructure with SOC 2 Type II compliance. API keys and secrets are stored in environment vaults - never in frontend code or version control.',
     points: [
       'SOC 2 Type II compliant infrastructure',
       'Secrets stored in server-side vaults only',
@@ -86,8 +86,8 @@ const PILLARS = [
     description:
       'You own your data. Export a full copy anytime or delete your account and all associated data permanently. We never sell or share your data with third parties.',
     points: [
-      'GDPR Article 17 — right to erasure',
-      'GDPR Article 20 — data portability',
+      'GDPR Article 17 - right to erasure',
+      'GDPR Article 20 - data portability',
       'Cookie consent with granular controls',
       'Privacy Policy written in plain English',
     ],
@@ -122,7 +122,7 @@ export default function SecurityPage({ onNavigate, onSignIn }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
       <SEOHead
-        title="Security & Trust — FinanceFlow AI | Bank-Grade Data Protection"
+        title="Security & Trust - FinanceFlow AI | Bank-Grade Data Protection"
         description="FinanceFlow AI uses 256-bit AES encryption, row-level security, JWT auth, and SOC 2 compliant infrastructure. GDPR compliant. Your financial data is protected."
         keywords="FinanceFlow security, personal finance data protection, encrypted finance app, GDPR finance, bank-grade security, financial data privacy"
         canonical="https://financeflow.ai/security"

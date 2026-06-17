@@ -419,7 +419,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
         <div className="flex items-center gap-3 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-600/40 rounded-xl">
           <Info size={16} className="text-amber-600 flex-shrink-0" />
           <div className="text-sm text-amber-800 dark:text-amber-300">
-            <span className="font-semibold">Test Mode Active</span> — Use test card{' '}
+            <span className="font-semibold">Test Mode Active</span> - Use test card{' '}
             <code className="font-mono bg-amber-100 dark:bg-amber-900/40 px-1.5 py-0.5 rounded text-xs">4242 4242 4242 4242</code>{' '}
             with any future expiry and any 3-digit CVC.
           </div>
@@ -745,7 +745,7 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                     const isUpgrading = upgradingPlanId === plan.id;
                     const hasPriceId = billingCycle === 'annual' ? !!plan.stripe_price_id_annual : !!plan.stripe_price_id_monthly;
                     const actionType = getActionType(plan.tier_name);
-                    // coming_soon is now a first-class DB flag — not inferred from Stripe config
+                    // coming_soon is now a first-class DB flag - not inferred from Stripe config
                     const isComingSoon = !!plan.coming_soon;
                     const price = billingCycle === 'annual' ? plan.annual_price : plan.monthly_price;
 
@@ -851,11 +851,11 @@ export function SubscriptionManagementPage({ defaultSection = 'overview' }: Subs
                                 Upgrade to {plan.display_name}
                               </button>
                               <p className="text-center text-[11px] text-amber-600 dark:text-amber-500 font-medium">
-                                This plan is launching soon — stay tuned!
+                                This plan is launching soon - stay tuned!
                               </p>
                             </div>
                           ) : (
-                            // Plan is available — attempt checkout (handleUpgrade surfaces any Stripe config issues)
+                            // Plan is available - attempt checkout (handleUpgrade surfaces any Stripe config issues)
                             <button
                               onClick={() => { setUpgradeError(null); handleUpgrade(plan); }}
                               disabled={isUpgrading}

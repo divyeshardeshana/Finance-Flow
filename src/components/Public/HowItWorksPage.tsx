@@ -31,11 +31,11 @@ const STEPS = [
     gradient: 'from-blue-500 to-cyan-400',
     shadow: 'shadow-blue-500/30',
     title: 'Create your free account',
-    subtitle: 'Takes 60 seconds — no credit card needed',
+    subtitle: 'Takes 60 seconds - no credit card needed',
     description:
       'Sign up with your email. Set your monthly income, preferred currency, and timezone. FinanceFlow works with 150+ currencies and is available worldwide.',
     details: [
-      'Email signup — no Google required',
+      'Email signup - no Google required',
       'Set income & currency in onboarding',
       'Free plan includes core features forever',
       'Upgrade anytime for AI & investments',
@@ -49,7 +49,7 @@ const STEPS = [
     title: 'Add your transactions & budgets',
     subtitle: 'Manual entry or bulk import via CSV',
     description:
-      'Log income and expenses in seconds. Create budgets for each spending category — food, rent, transport, entertainment. FinanceFlow tracks in real time and alerts you before you overspend.',
+      'Log income and expenses in seconds. Create budgets for each spending category - food, rent, transport, entertainment. FinanceFlow tracks in real time and alerts you before you overspend.',
     details: [
       'Add transactions in under 5 seconds',
       'Categorise automatically or manually',
@@ -109,7 +109,7 @@ export default function HowItWorksPage({ onNavigate, onSignIn }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
       <SEOHead
-        title="How It Works — FinanceFlow AI | 4 Simple Steps to Financial Clarity"
+        title="How It Works - FinanceFlow AI | 4 Simple Steps to Financial Clarity"
         description="Learn how FinanceFlow AI works in 4 steps: create an account, track transactions, set goals, and get AI-powered financial insights. Setup takes under 60 seconds."
         keywords="how FinanceFlow works, personal finance app setup, budgeting app guide, AI financial assistant how to use"
         canonical="https://financeflow.ai/how-it-works"

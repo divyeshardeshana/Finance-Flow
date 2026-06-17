@@ -60,7 +60,7 @@ const TESTIMONIALS = [
     gradient: 'from-amber-500 to-orange-400',
     rating: 5,
     headline: 'Student budget actually works now',
-    body: 'Living on a stipend meant every mistake hurt. FinanceFlow\'s free plan has everything I need — budget tracking, savings goal for my laptop, and spending charts that make sense. I wish I had this in undergrad.',
+    body: 'Living on a stipend meant every mistake hurt. FinanceFlow\'s free plan has everything I need - budget tracking, savings goal for my laptop, and spending charts that make sense. I wish I had this in undergrad.',
     metric: 'Laptop fund hit target in 4 months',
   },
   {
@@ -71,7 +71,7 @@ const TESTIMONIALS = [
     gradient: 'from-rose-500 to-pink-400',
     rating: 5,
     headline: 'The AI assistant is genuinely useful',
-    body: 'I asked "Should I upgrade my car?" and it pulled my cash flow, existing loan, and savings rate to give me a real answer with numbers. Not generic advice — actual analysis of MY situation. That\'s what separates FinanceFlow.',
+    body: 'I asked "Should I upgrade my car?" and it pulled my cash flow, existing loan, and savings rate to give me a real answer with numbers. Not generic advice - actual analysis of MY situation. That\'s what separates FinanceFlow.',
     metric: 'SGD 15K emergency fund built',
   },
   {
@@ -82,7 +82,7 @@ const TESTIMONIALS = [
     gradient: 'from-cyan-500 to-blue-400',
     rating: 5,
     headline: 'Switched from three different apps to one',
-    body: 'I had a budgeting app, an investment tracker, and a notes app for goals. FinanceFlow replaced all three. The net worth tracker alone is worth it — seeing everything in one number is incredibly motivating.',
+    body: 'I had a budgeting app, an investment tracker, and a notes app for goals. FinanceFlow replaced all three. The net worth tracker alone is worth it - seeing everything in one number is incredibly motivating.',
     metric: 'Net worth up 23% in 12 months',
   },
 ];
@@ -113,8 +113,8 @@ export default function TestimonialsPage({ onNavigate, onSignIn }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] text-gray-900 dark:text-white">
       <SEOHead
-        title="Testimonials — FinanceFlow AI | Real User Stories"
-        description="Read real stories from FinanceFlow AI users worldwide — individuals, freelancers, families, and students who transformed their finances. 10,000+ active users."
+        title="Testimonials - FinanceFlow AI | Real User Stories"
+        description="Read real stories from FinanceFlow AI users worldwide - individuals, freelancers, families, and students who transformed their finances. 10,000+ active users."
         keywords="FinanceFlow reviews, personal finance app testimonials, budgeting app success stories, FinanceFlow AI user reviews"
         canonical="https://financeflow.ai/testimonials"
         breadcrumbs={[
@@ -141,7 +141,7 @@ export default function TestimonialsPage({ onNavigate, onSignIn }: Props) {
             <span className="block bg-gradient-to-r from-amber-500 to-orange-400 bg-clip-text text-transparent">transformed their finances</span>
           </motion.h1>
           <motion.p variants={fadeUp} custom={2} className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-            From students to families to freelancers — FinanceFlow AI works for everyone, everywhere.
+            From students to families to freelancers - FinanceFlow AI works for everyone, everywhere.
           </motion.p>
         </motion.div>
       </section>

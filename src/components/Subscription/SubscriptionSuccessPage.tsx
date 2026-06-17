@@ -39,7 +39,7 @@ export default function SubscriptionSuccessPage({
           }
         );
       } catch {
-        // Fire-and-forget — polling will pick up DB change
+        // Fire-and-forget - polling will pick up DB change
       }
     };
 

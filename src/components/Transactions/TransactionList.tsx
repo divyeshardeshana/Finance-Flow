@@ -127,7 +127,7 @@ export function TransactionList({ transactions, loading, onEdit, onDelete, onAdd
                       {transaction.category}
                     </span>
                   ) : (
-                    <span className="text-[13px] text-gray-400 dark:text-gray-600">—</span>
+                    <span className="text-[13px] text-gray-400 dark:text-gray-600">-</span>
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

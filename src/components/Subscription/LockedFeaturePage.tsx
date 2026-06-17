@@ -159,7 +159,7 @@ function AssistantPreview() {
   const messages = [
     { role: 'ai', text: 'Based on your spending in January, you could save an extra $320/month by reducing dining and subscription costs.' },
     { role: 'user', text: 'How can I improve my savings rate?' },
-    { role: 'ai', text: 'Try automating a transfer of $500 to savings on payday. You\'re currently saving 18% — the target is 20%.' },
+    { role: 'ai', text: 'Try automating a transfer of $500 to savings on payday. You\'re currently saving 18% - the target is 20%.' },
     { role: 'user', text: 'Which subscriptions should I cancel?' },
     { role: 'ai', text: 'I found 4 subscriptions you haven\'t used in 60+ days totalling $47/month. Cancelling them could save $564 per year.' },
   ];
@@ -191,14 +191,14 @@ function ExpensePredictionPreview() {
   const predictions = [
     { month: 'March', category: 'Food & Dining', predicted: '$620', actual: '$598', confidence: '94%' },
     { month: 'March', category: 'Transportation', predicted: '$180', actual: '$172', confidence: '91%' },
-    { month: 'April', category: 'Utilities', predicted: '$95', actual: '—', confidence: '88%' },
-    { month: 'April', category: 'Entertainment', predicted: '$210', actual: '—', confidence: '82%' },
-    { month: 'May', category: 'Groceries', predicted: '$480', actual: '—', confidence: '79%' },
+    { month: 'April', category: 'Utilities', predicted: '$95', actual: '-', confidence: '88%' },
+    { month: 'April', category: 'Entertainment', predicted: '$210', actual: '-', confidence: '82%' },
+    { month: 'May', category: 'Groceries', predicted: '$480', actual: '-', confidence: '79%' },
   ];
   return (
     <div className="space-y-4">
       <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
-        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Expense Forecast — Next 4 Months</div>
+        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Expense Forecast - Next 4 Months</div>
         <div className="flex items-end gap-2 h-32">
           {[55, 70, 60, 85, 65, 90, 75, 80, 70, 95, 65, 88].map((h, i) => (
             <div key={i} className={`flex-1 rounded-t ${i >= 8 ? 'bg-blue-200 border-t-2 border-blue-400 border-dashed' : 'bg-blue-100'}`} style={{ height: `${h}%` }} />
@@ -236,7 +236,7 @@ function StockPredictionPreview() {
   return (
     <div className="space-y-4">
       <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
-        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">AAPL — Price Forecast</div>
+        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">AAPL - Price Forecast</div>
         <div className="relative h-32">
           <svg className="w-full h-full" viewBox="0 0 300 100" preserveAspectRatio="none">
             <polyline points="0,80 30,70 60,75 90,55 120,60 150,40 180,45 210,30 240,35 270,20 300,25" fill="none" stroke="#bfdbfe" strokeWidth="2" />

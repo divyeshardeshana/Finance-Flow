@@ -326,7 +326,7 @@ export function ExpensePredictionPage() {
     } else {
       items.push({
         type: 'warning',
-        text: `Average monthly deficit: ${formatCurrencyHelper(Math.abs(avgMonthlyNet))} — budget review recommended`,
+        text: `Average monthly deficit: ${formatCurrencyHelper(Math.abs(avgMonthlyNet))} - budget review recommended`,
       });
     }
 
@@ -344,7 +344,7 @@ export function ExpensePredictionPage() {
     if (pattern.avgExpense > pattern.avgIncome * 0.8) {
       items.push({
         type: 'warning',
-        text: `High expense ratio: ${((pattern.avgExpense / pattern.avgIncome) * 100).toFixed(1)}% of income — target 70% for sustainable growth`,
+        text: `High expense ratio: ${((pattern.avgExpense / pattern.avgIncome) * 100).toFixed(1)}% of income - target 70% for sustainable growth`,
       });
     }
 

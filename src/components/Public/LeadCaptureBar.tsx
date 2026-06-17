@@ -14,7 +14,7 @@ interface LeadCaptureBarProps {
 
 export default function LeadCaptureBar({
   source = 'unknown',
-  heading = 'Get free personal finance tips — weekly.',
+  heading = 'Get free personal finance tips - weekly.',
   subheading = 'No spam. Unsubscribe any time.',
   placeholder = 'Enter your email',
   ctaText = 'Send me tips',

@@ -109,14 +109,14 @@ export function CookieConsentBanner({ gaMeasurementId }: { gaMeasurementId?: str
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-900 dark:text-white">Essential cookies</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Authentication session — always required</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Authentication session - always required</p>
                   </div>
                   <CheckCircle size={18} className="text-emerald-500 flex-shrink-0" />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-900 dark:text-white">Analytics cookies</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Google Analytics — helps us improve the app</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Google Analytics - helps us improve the app</p>
                   </div>
                   <button
                     onClick={() => setAnalyticsChecked(v => !v)}

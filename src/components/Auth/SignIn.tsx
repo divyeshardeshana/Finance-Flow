@@ -139,7 +139,7 @@ export function SignIn({ onToggle, onBackToHome, onNavigate, onForgotPassword, s
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-8"
           >
-            Smart budgeting, real-time insights, and AI-powered recommendations — all in one place.
+            Smart budgeting, real-time insights, and AI-powered recommendations - all in one place.
           </motion.p>
 
           {/* Feature highlights */}

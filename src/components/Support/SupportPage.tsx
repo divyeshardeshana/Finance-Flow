@@ -507,7 +507,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
     return (
       <div className="space-y-6">
 
-        {/* Hero Banner — matches DashboardHome exact pattern */}
+        {/* Hero Banner - matches DashboardHome exact pattern */}
         <div className="relative overflow-hidden bg-gradient-to-br from-[#0f1f3d] via-[#0a1628] to-[#061020] dark:from-[#0a1628] dark:via-[#080e1e] dark:to-[#050a14] rounded-2xl border border-blue-900/40 dark:border-blue-800/30 px-6 sm:px-10 py-10 sm:py-12">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_60%)] pointer-events-none" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(34,211,238,0.08),transparent_60%)] pointer-events-none" />
@@ -558,7 +558,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
           </div>
         </div>
 
-        {/* Action Cards — full width 3-column */}
+        {/* Action Cards - full width 3-column */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <button
             onClick={() => onNavigate ? onNavigate('knowledge-base') : setView('faq')}
@@ -624,7 +624,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
           </button>
         </div>
 
-        {/* Popular Articles — full width 4-column grid */}
+        {/* Popular Articles - full width 4-column grid */}
         <div>
           <div className="flex items-center justify-between mb-4">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">
@@ -677,7 +677,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
                 Can't find what you're looking for?
               </p>
               <p className="text-[12px] text-gray-500 dark:text-gray-400">
-                Our support team is here to help — we typically respond within 24 hours.
+                Our support team is here to help - we typically respond within 24 hours.
               </p>
             </div>
           </div>
@@ -1112,7 +1112,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
-            {/* Main form — 2/3 width */}
+            {/* Main form - 2/3 width */}
             <form onSubmit={handleCreateTicket} className="lg:col-span-2 space-y-5">
 
               {/* Section 1: About Your Issue */}
@@ -1316,7 +1316,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
                 <div>
                   <label className="block text-[13px] font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                     Steps Already Tried
-                    <span className="ml-1.5 text-[11px] font-normal text-gray-400 dark:text-gray-600">(optional — helps us skip what you've already done)</span>
+                    <span className="ml-1.5 text-[11px] font-normal text-gray-400 dark:text-gray-600">(optional - helps us skip what you've already done)</span>
                   </label>
                   <textarea
                     rows={3}
@@ -1432,7 +1432,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
               </div>
             </form>
 
-            {/* Sticky sidebar — 1/3 width */}
+            {/* Sticky sidebar - 1/3 width */}
             <div className="space-y-4 lg:sticky lg:top-6">
               {/* Form Completion progress */}
               <div className={`${cardClass} p-5`}>
@@ -1515,7 +1515,7 @@ export function SupportPage({ onNavigatePublic: _onNavigatePublic, onNavigate }:
                   <HelpCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 </div>
                 <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Need help faster?</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 leading-relaxed">Check our knowledge base — many issues have immediate answers.</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 leading-relaxed">Check our knowledge base - many issues have immediate answers.</p>
                 <button
                   type="button"
                   onClick={() => onNavigate ? onNavigate('knowledge-base') : setView('faq')}

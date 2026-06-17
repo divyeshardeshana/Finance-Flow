@@ -713,7 +713,7 @@ export function InvestmentPage() {
             id: 'gcc-sukuk',
             type: 'bonds',
             title: 'UAE & GCC Sukuk (Islamic Bonds)',
-            description: 'Government and corporate sukuk listed on Nasdaq Dubai and DFM — Shariah-compliant fixed-income instruments from top-rated issuers.',
+            description: 'Government and corporate sukuk listed on Nasdaq Dubai and DFM - Shariah-compliant fixed-income instruments from top-rated issuers.',
             riskLevel: 'low',
             expectedReturn: '4–6% annually',
             timeHorizon: 'Medium-term (2–5 years)',
@@ -910,7 +910,7 @@ export function InvestmentPage() {
             id: 'latam-govt-bonds',
             type: 'bonds',
             title: 'Government Treasury Securities',
-            description: 'Local government treasury instruments — Brazil\'s Tesouro Direto, Mexico\'s CETES, or similar sovereign bonds offering inflation-beating returns.',
+            description: 'Local government treasury instruments - Brazil\'s Tesouro Direto, Mexico\'s CETES, or similar sovereign bonds offering inflation-beating returns.',
             riskLevel: 'low',
             expectedReturn: '5–12% annually (nominal)',
             timeHorizon: 'Short to Medium-term (1–3 years)',
@@ -940,7 +940,7 @@ export function InvestmentPage() {
             id: 'africa-govt-bonds',
             type: 'bonds',
             title: 'Government Treasury Bonds & Bills',
-            description: 'South Africa RSA Retail Bonds, Kenya T-bills, Nigerian FGN Bonds — high-yielding sovereign instruments.',
+            description: 'South Africa RSA Retail Bonds, Kenya T-bills, Nigerian FGN Bonds - high-yielding sovereign instruments.',
             riskLevel: 'low',
             expectedReturn: '8–15% annually (nominal)',
             timeHorizon: 'Short to Medium-term (1–3 years)',
@@ -1106,7 +1106,7 @@ export function InvestmentPage() {
           id: 'gcc-blue-chips',
           type: 'stocks',
           title: 'UAE & GCC Blue-Chip Dividend Stocks',
-          description: 'Dividend-paying stocks on ADX and DFM — ADNOC Distribution, Emirates NBD, Etisalat (e&), and du — for regular, tax-free income.',
+          description: 'Dividend-paying stocks on ADX and DFM - ADNOC Distribution, Emirates NBD, Etisalat (e&), and du - for regular, tax-free income.',
           riskLevel: 'low',
           expectedReturn: '5–9% annually',
           timeHorizon: 'Long-term (5+ years)',
@@ -1121,7 +1121,7 @@ export function InvestmentPage() {
           id: 'au-dividend-stocks',
           type: 'stocks',
           title: 'ASX Dividend Stocks with Franking Credits',
-          description: 'Fully-franked dividend stocks from CBA, BHP, ANZ, and Wesfarmers — benefit from franking credits that offset tax liability.',
+          description: 'Fully-franked dividend stocks from CBA, BHP, ANZ, and Wesfarmers - benefit from franking credits that offset tax liability.',
           riskLevel: 'low',
           expectedReturn: '6–9% annually',
           timeHorizon: 'Long-term (5+ years)',
@@ -1239,7 +1239,7 @@ export function InvestmentPage() {
             id: 'au-index-etf',
             type: 'etf',
             title: 'ASX & Global Index ETFs (Super/SMSF)',
-            description: 'Vanguard Australian Shares (VAS), BetaShares ASX 200 (A200), or VGS for global exposure — held inside superannuation for tax efficiency.',
+            description: 'Vanguard Australian Shares (VAS), BetaShares ASX 200 (A200), or VGS for global exposure - held inside superannuation for tax efficiency.',
             tickers: ['VAS', 'A200', 'VGS'],
             riskLevel: 'medium',
             expectedReturn: '8–11% annually',
@@ -1256,7 +1256,7 @@ export function InvestmentPage() {
             id: 'eu-index-etf',
             type: 'etf',
             title: 'MSCI World & Euro STOXX Index ETFs',
-            description: 'UCITS-compliant ETFs from Vanguard, iShares, or Amundi available on Euronext — ideal for ISA/PEA tax wrappers.',
+            description: 'UCITS-compliant ETFs from Vanguard, iShares, or Amundi available on Euronext - ideal for ISA/PEA tax wrappers.',
             tickers: ['IWDA', 'VWCE', 'CSP1'],
             riskLevel: 'medium',
             expectedReturn: '7–10% annually',
@@ -1324,7 +1324,7 @@ export function InvestmentPage() {
             id: 'cn-index-etf',
             type: 'etf',
             title: 'CSI 300 & A-Share Index Funds',
-            description: 'Index funds tracking CSI 300 from Huaxia, E Fund, or Tianhong — available via Alipay or WeChat Pay investment sections.',
+            description: 'Index funds tracking CSI 300 from Huaxia, E Fund, or Tianhong - available via Alipay or WeChat Pay investment sections.',
             tickers: ['510300', '510500', '159919'],
             riskLevel: 'medium',
             expectedReturn: '8–12% annually',
@@ -1391,7 +1391,7 @@ export function InvestmentPage() {
             id: 'il-index-etf',
             type: 'etf',
             title: 'TA-35 & Global Index Funds (Keren Hishtalmut)',
-            description: 'Tel Aviv 35 index trackers from Meitav or More, plus global index exposure — hold in Keren Hishtalmut for preferential tax treatment.',
+            description: 'Tel Aviv 35 index trackers from Meitav or More, plus global index exposure - hold in Keren Hishtalmut for preferential tax treatment.',
             tickers: ['1159242', 'TASE:KSM', 'IWDA'],
             riskLevel: 'medium',
             expectedReturn: '8–12% annually',
@@ -1463,7 +1463,7 @@ export function InvestmentPage() {
           id: 'gcc-growth-etf',
           type: 'etf',
           title: 'Global Growth ETFs & MENA Equity Funds',
-          description: 'QQQ, ARKK, and MENA-focused ETFs accessible via Saxo Bank UAE or Interactive Brokers — maximum growth potential with zero capital gains tax in UAE.',
+          description: 'QQQ, ARKK, and MENA-focused ETFs accessible via Saxo Bank UAE or Interactive Brokers - maximum growth potential with zero capital gains tax in UAE.',
           tickers: ['QQQ', 'VGT', 'MENA-ETF'],
           riskLevel: 'high',
           expectedReturn: '15–25% annually',
@@ -1521,7 +1521,7 @@ export function InvestmentPage() {
         advice.push({
           id: 'india-individual-stocks',
           type: 'stocks',
-          title: 'Direct Equity — Growth Stocks (NSE/BSE)',
+          title: 'Direct Equity - Growth Stocks (NSE/BSE)',
           description: 'High-conviction stock picks in India\'s IT, pharma, and consumer sectors. Use platforms like Zerodha, Groww, or Upstox.',
           riskLevel: 'high',
           expectedReturn: '15–25% annually',
@@ -1536,7 +1536,7 @@ export function InvestmentPage() {
           id: 'india-realestate',
           type: 'realestate',
           title: 'REITs & Real Estate Funds',
-          description: 'Embassy REIT, Mindspace REIT, and Brookfield India REIT listed on NSE — professional real estate exposure with regular distributions.',
+          description: 'Embassy REIT, Mindspace REIT, and Brookfield India REIT listed on NSE - professional real estate exposure with regular distributions.',
           tickers: ['EMBASSY', 'MINDSPACE', 'BIRET'],
           riskLevel: 'high',
           expectedReturn: '8–12% annually',
@@ -1736,7 +1736,7 @@ export function InvestmentPage() {
             </span>
             {planEntries.length > 0 && (
               <span className="text-[11px] text-teal-500/70 dark:text-teal-400/60">
-                — {planEntries.length} local plans
+                - {planEntries.length} local plans
               </span>
             )}
           </div>
@@ -1906,7 +1906,7 @@ export function InvestmentPage() {
                 </span>
               </div>
               <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-0.5">
-                Regulated investment vehicles for {countryName} residents — allocations weighted for your <span className="capitalize font-medium">{riskTolerance}</span> risk profile
+                Regulated investment vehicles for {countryName} residents - allocations weighted for your <span className="capitalize font-medium">{riskTolerance}</span> risk profile
               </p>
             </div>
           </div>

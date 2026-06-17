@@ -118,7 +118,7 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
       <SEOHead
         pageKey="contact"
-        title="Contact Us — FinanceFlow | Support & Help"
+        title="Contact Us - FinanceFlow | Support & Help"
         description="Contact FinanceFlow support. Get help with your account, billing, or technical issues. We reply within 24 hours."
         keywords="FinanceFlow contact, finance app support, help desk, customer service personal finance"
         canonical="https://financeflow.ai/contact"

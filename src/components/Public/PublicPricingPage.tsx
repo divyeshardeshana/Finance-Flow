@@ -56,7 +56,7 @@ const roiPoints = [
     icon: TrendingUp,
     gradient: 'from-blue-500 to-cyan-400',
     headline: 'Stop overpaying for forgotten subscriptions',
-    detail: 'Recurring transaction tracking surfaces forgotten subscriptions — most users find $30–$60/month in charges they were ready to cancel.',
+    detail: 'Recurring transaction tracking surfaces forgotten subscriptions - most users find $30–$60/month in charges they were ready to cancel.',
   },
   {
     icon: Shield,
@@ -68,12 +68,12 @@ const roiPoints = [
 
 const faqs = [
   {
-    q: 'Is there really a free plan — no tricks?',
+    q: 'Is there really a free plan - no tricks?',
     a: 'Yes. The Free plan is free forever and includes core budgeting, transaction tracking, bill reminders, and goal setting. No credit card is required to sign up and there are no hidden charges.',
   },
   {
     q: 'What do I actually get by upgrading?',
-    a: 'Upgrading unlocks AI-powered features that save you the most money: AI Recommendations, Split Transactions, Advanced Goals, Advanced Reports, and Priority Support on Pro — plus Net Worth Tracking, Retirement Planning, Financial Assistant, Expense Predictions, and Stock Predictions on Premium.',
+    a: 'Upgrading unlocks AI-powered features that save you the most money: AI Recommendations, Split Transactions, Advanced Goals, Advanced Reports, and Priority Support on Pro - plus Net Worth Tracking, Retirement Planning, Financial Assistant, Expense Predictions, and Stock Predictions on Premium.',
   },
   {
     q: 'Can I change or cancel my plan at any time?',
@@ -89,7 +89,7 @@ const faqs = [
   },
   {
     q: 'Does it work in my country and currency?',
-    a: 'Yes. FinanceFlow supports 150+ currencies with automatic conversion and is used by people in 50+ countries. It works for any income type — salary, freelance, business revenue, or mixed.',
+    a: 'Yes. FinanceFlow supports 150+ currencies with automatic conversion and is used by people in 50+ countries. It works for any income type - salary, freelance, business revenue, or mixed.',
   },
 ];
 
@@ -159,7 +159,7 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
       <SEOHead
         pageKey="pricing"
-        title="Pricing — FinanceFlow AI | Free, Pro & Premium Plans"
+        title="Pricing - FinanceFlow AI | Free, Pro & Premium Plans"
         description="FinanceFlow AI pricing: Free plan with core budgeting, Pro at $9.99/month with AI assistant and investments, Premium with full features. No credit card for free plan."
         keywords="FinanceFlow pricing, personal finance app pricing, budgeting app cost, free finance app, Pro plan, Premium plan"
         canonical="https://financeflow.ai/pricing"
@@ -189,7 +189,7 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
             </span>
-            Transparent Pricing — No Surprises
+            Transparent Pricing - No Surprises
           </motion.div>
 
           <motion.h1
@@ -434,7 +434,7 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
               <span className="text-cyan-200">The app already paid for itself.</span>
             </h2>
             <p className="text-lg text-blue-100 mb-10 max-w-xl mx-auto leading-relaxed">
-              Avoid a late fee, or cut one week of impulse spending — and FinanceFlow has already paid for the year. Most users break even in week one.
+              Avoid a late fee, or cut one week of impulse spending - and FinanceFlow has already paid for the year. Most users break even in week one.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
@@ -514,7 +514,7 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
       <div className="bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-800">
         <LeadCaptureBar
           source="pricing_page"
-          heading="Get weekly money-saving tips — free."
+          heading="Get weekly money-saving tips - free."
           subheading="Join 50,000+ readers. No spam. Unsubscribe any time."
         />
       </div>

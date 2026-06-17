@@ -312,7 +312,7 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
               {formatCurrency(stats.netWorth, preferences.currency)}
             </h2>
             <p className="text-[13px] text-blue-200/60">
-              Net worth — assets minus liabilities
+              Net worth - assets minus liabilities
             </p>
           </div>
 

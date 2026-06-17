@@ -42,7 +42,7 @@ export function useCheckout(): UseCheckoutReturn {
       setLoading(false);
     }
     // Note: we intentionally do NOT setLoading(false) on success because
-    // the page is being redirected away — resetting the state would cause a flash.
+    // the page is being redirected away - resetting the state would cause a flash.
   }, []);
 
   const clearError = useCallback(() => setError(null), []);
