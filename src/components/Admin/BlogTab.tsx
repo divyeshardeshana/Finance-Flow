@@ -50,6 +50,18 @@ const EMPTY_FORM: BlogFormData = {
   auto_publish: false,
 };
 
+// UTC ISO string from DB → local datetime string for <input type="datetime-local">
+function toLocalDatetimeInput(utcIso: string): string {
+  const d = new Date(utcIso);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// datetime-local string (local time, no TZ) → UTC ISO string for DB
+function localDatetimeInputToUTC(local: string): string {
+  return new Date(local).toISOString();
+}
+
 function getStatusBadge(status: string) {
   const styles: Record<string, string> = {
     draft: 'bg-amber-100 text-amber-700',
@@ -155,7 +167,7 @@ export default function BlogTab() {
       featured_image_url: post.featured_image_url,
       meta_description: post.meta_description,
       scheduled_publish_at: post.scheduled_publish_at
-        ? new Date(post.scheduled_publish_at).toISOString().slice(0, 16)
+        ? toLocalDatetimeInput(post.scheduled_publish_at)
         : '',
       auto_publish: post.auto_publish,
     });
@@ -182,7 +194,7 @@ export default function BlogTab() {
         meta_description: formData.meta_description.trim(),
         auto_publish: formData.auto_publish,
         scheduled_publish_at: formData.scheduled_publish_at
-          ? new Date(formData.scheduled_publish_at).toISOString()
+          ? localDatetimeInputToUTC(formData.scheduled_publish_at)
           : null,
       };
 
