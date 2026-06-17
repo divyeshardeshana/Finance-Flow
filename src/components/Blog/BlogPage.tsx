@@ -5,6 +5,7 @@ import { Search, Calendar, BookOpen, ArrowRight, ChevronDown, Zap, Lock, Globe }
 import { supabase } from '../../lib/supabase';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import LeadCaptureBar from '../Public/LeadCaptureBar';
 
 interface BlogCategory {
   id: string;
@@ -445,6 +446,10 @@ export default function BlogPage({ onBack, onPostClick, onNavigate, onSignIn }: 
             )}
           </motion.div>
         )}
+      </div>
+
+      <div className="bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-800">
+        <LeadCaptureBar source="blog_page" />
       </div>
 
       <PublicFooter onNavigate={navigate} />

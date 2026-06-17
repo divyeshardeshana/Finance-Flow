@@ -16,6 +16,7 @@ import {
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
 import { gtm } from '../../lib/gtm';
+import LeadCaptureBar from './LeadCaptureBar';
 import { calculateAnnualDiscount, type PricingPlan } from '../../lib/pricingHelpers';
 import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
 
@@ -508,6 +509,15 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
           </motion.div>
         </div>
       </section>
+
+      {/* ── LEAD CAPTURE ──────────────────────────────────────────────────── */}
+      <div className="bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-800">
+        <LeadCaptureBar
+          source="pricing_page"
+          heading="Get weekly money-saving tips — free."
+          subheading="Join 50,000+ readers. No spam. Unsubscribe any time."
+        />
+      </div>
 
       {/* ── FOOTER ────────────────────────────────────────────────────────── */}
       <PublicFooter onNavigate={onNavigate} />
