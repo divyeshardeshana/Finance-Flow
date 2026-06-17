@@ -26,4 +26,36 @@ Disallow: /subscription
 Disallow: /reset-password
 Disallow: /forgot-password
 
-Sitemap: https://app.financeflow.ai/sitemap.xml
+# AI crawlers — allow public content, block private app
+User-agent: GPTBot
+Allow: /blog
+Allow: /faq
+Allow: /features
+Allow: /pricing
+Allow: /how-it-works
+Allow: /use-cases
+Allow: /security
+Allow: /comparison
+Allow: /testimonials
+Allow: /roi-calculator
+Allow: /llms.txt
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /profile
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+User-agent: Googlebot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+Sitemap: https://financeflow.ai/sitemap.xml

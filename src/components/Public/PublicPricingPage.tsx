@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import SEOHead from '../SEO/SEOHead';
 import {
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import { gtm } from '../../lib/gtm';
 import { calculateAnnualDiscount, type PricingPlan } from '../../lib/pricingHelpers';
 import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
 
@@ -131,6 +132,8 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricingPageProps) {
   const [isAnnual, setIsAnnual] = useState(false);
   const { plans: pricingPlans, loading } = useSubscriptionPlans({ activeOnly: true });
+
+  useEffect(() => { gtm.pricingPageView(); }, []);
 
   const pricingSection = useScrollInView();
   const roiSection = useScrollInView();
@@ -317,7 +320,10 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
                     </div>
 
                     <button
-                      onClick={onSignIn}
+                      onClick={() => {
+                        gtm.planSelected(plan.displayName, isAnnual ? plan.annualPrice : plan.monthlyPrice);
+                        onSignIn();
+                      }}
                       className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 mb-7 ${
                         plan.highlighted
                           ? 'bg-white text-blue-700 hover:bg-blue-50 shadow-lg'

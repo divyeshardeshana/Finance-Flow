@@ -1,132 +1,197 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
+  <!-- Core pages -->
   <url>
-    <loc>https://app.financeflow.ai/</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://financeflow.ai/</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/features</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://financeflow.ai/features</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://financeflow.ai/use-cases</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/pricing</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://financeflow.ai/how-it-works</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://financeflow.ai/pricing</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog</loc>
-    <lastmod>2026-03-15</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://app.financeflow.ai/signup</loc>
-    <lastmod>2026-03-15</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://financeflow.ai/faq</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/about</loc>
-    <lastmod>2026-03-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://financeflow.ai/blog</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/currency-converter</loc>
-    <lastmod>2026-03-15</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://financeflow.ai/testimonials</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/contact</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://financeflow.ai/security</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/privacy</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://financeflow.ai/comparison</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://financeflow.ai/roi-calculator</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://financeflow.ai/contact</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://financeflow.ai/privacy</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
-  <!-- Blog Posts -->
+  <!-- Blog posts -->
   <url>
-    <loc>https://app.financeflow.ai/blog/personal-finance-101</loc>
+    <loc>https://financeflow.ai/blog/personal-finance-101</loc>
     <lastmod>2026-03-10</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg</image:loc>
+      <image:title>Personal Finance 101: Build Wealth Even on a Small Income</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/debt-management-plan</loc>
+    <loc>https://financeflow.ai/blog/debt-management-plan</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg</image:loc>
+      <image:title>Debt Management Made Easy: Step-by-Step Plan to Become Debt Free</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/practical-budgeting-tips</loc>
+    <loc>https://financeflow.ai/blog/practical-budgeting-tips</loc>
     <lastmod>2026-03-04</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4386370/pexels-photo-4386370.jpeg</image:loc>
+      <image:title>10 Practical Budgeting Tips to Take Control of Your Money</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/start-investing-100-month</loc>
+    <loc>https://financeflow.ai/blog/start-investing-100-month</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg</image:loc>
+      <image:title>How to Start Investing with Just $100 a Month</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/50-30-20-rule-guide</loc>
+    <loc>https://financeflow.ai/blog/50-30-20-rule-guide</loc>
     <lastmod>2026-02-22</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/7567529/pexels-photo-7567529.jpeg</image:loc>
+      <image:title>The 50/30/20 Rule: A Simple Framework for Financial Planning</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/emergency-fund-guide</loc>
+    <loc>https://financeflow.ai/blog/emergency-fund-guide</loc>
     <lastmod>2026-02-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4386467/pexels-photo-4386467.jpeg</image:loc>
+      <image:title>Emergency Fund Essentials: How Much Is Enough?</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/credit-score-improvement</loc>
+    <loc>https://financeflow.ai/blog/credit-score-improvement</loc>
     <lastmod>2026-02-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6693661/pexels-photo-6693661.jpeg</image:loc>
+      <image:title>Understanding Your Credit Score and How to Improve It Fast</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/retirement-planning-30s</loc>
+    <loc>https://financeflow.ai/blog/retirement-planning-30s</loc>
     <lastmod>2026-02-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/8297031/pexels-photo-8297031.jpeg</image:loc>
+      <image:title>Retirement Planning in Your 30s: Start Early, Retire Rich</image:title>
+    </image:image>
   </url>
 
   <url>
-    <loc>https://app.financeflow.ai/blog/index-funds-vs-etfs</loc>
+    <loc>https://financeflow.ai/blog/index-funds-vs-etfs</loc>
     <lastmod>2026-01-30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg</image:loc>
+      <image:title>Index Funds vs. ETFs: Which One Should You Choose?</image:title>
+    </image:image>
   </url>
 
 </urlset>

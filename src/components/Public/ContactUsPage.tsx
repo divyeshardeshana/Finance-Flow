@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
+import { gtm } from '../../lib/gtm';
 
 interface ContactUsPageProps {
   onNavigate: (view: PublicView) => void;
@@ -97,6 +98,7 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
       });
       const result = await response.json();
       if (result.success) {
+        gtm.contactFormSubmitted(form.subject);
         setSubmitted(true);
         refreshCaptcha();
       } else {

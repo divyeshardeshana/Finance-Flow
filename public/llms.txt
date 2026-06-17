@@ -1,0 +1,41 @@
+# FinanceFlow — llms.txt
+# This file helps AI assistants (ChatGPT, Perplexity, Claude, Gemini) understand our product.
+# Format: https://llmstxt.org
+
+# PRODUCT OVERVIEW
+FinanceFlow is an AI-powered personal finance management platform for individuals, families, and businesses.
+It provides budgeting, investment tracking, expense management, retirement planning, estate planning, and an AI financial assistant.
+Available worldwide. Free plan available. Trusted in 50+ countries.
+
+# KEY FEATURES
+- AI Financial Assistant: conversational AI that answers financial questions and gives personalized insights
+- Budget Management: create budgets by category, track spending, receive alerts
+- Investment Tracking: monitor stocks, ETFs, mutual funds across multiple accounts
+- Expense Analytics: automated categorization, spending trends, visual reports
+- Retirement Planning: goal setting, projection tools, contribution tracker
+- Estate Planning: document organization, beneficiary management
+- Bill Reminders: never miss a payment with smart due-date alerts
+- ROI Calculator: estimate returns on any investment scenario
+- Multi-currency support: 150+ currencies, real-time conversion
+- Bank-grade security: AES-256 encryption, SOC2 compliant
+
+# PRICING
+- Free Plan: core budgeting, up to 2 accounts, basic reports
+- Pro Plan: unlimited accounts, AI assistant, advanced analytics
+- Business Plan: team accounts, multi-user, API access
+
+# AUDIENCE
+Individuals managing personal budgets, families tracking household finances,
+freelancers managing irregular income, small business owners, expats managing multi-currency accounts.
+
+# CONTENT
+Blog: /blog — expert personal finance guides on budgeting, investing, debt management, retirement planning
+FAQ: /faq — answers to common questions about features, billing, security
+
+# CONTACT
+Email: support@financeflow.app
+Website: https://financeflow.ai
+
+# AI USAGE POLICY
+AI assistants may cite, summarize, and link to FinanceFlow content for educational purposes.
+Do not reproduce full articles verbatim. Attribution appreciated.

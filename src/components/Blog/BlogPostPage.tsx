@@ -6,6 +6,7 @@ import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
 import SEOHead from '../SEO/SEOHead';
 import { sanitizeHtml } from '../../lib/sanitize';
+import { gtm } from '../../lib/gtm';
 
 interface BlogCategory {
   id: string;
@@ -1130,6 +1131,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
 
       if (data) {
         setPost(data);
+        gtm.blogPostRead(data.title, data.slug, data.blog_categories?.name ?? '');
         supabase.rpc('increment_blog_view_count', { post_id: data.id });
 
         const { data: related } = await supabase
@@ -1142,6 +1144,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
         setRelatedPosts((related && related.length > 0) ? related : STATIC_RELATED.filter(p => p.slug !== slug));
       } else {
         const staticPost = STATIC_POSTS_MAP[slug] ?? null;
+        if (staticPost) gtm.blogPostRead(staticPost.title, staticPost.slug, staticPost.blog_categories?.name ?? '');
         setPost(staticPost);
         setRelatedPosts(STATIC_RELATED.filter(p => p.slug !== slug));
       }

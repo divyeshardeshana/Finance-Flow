@@ -18,8 +18,75 @@
     <meta name="twitter:description" content="Take control of your money with FinanceFlow AI. AI-powered budgeting, investment tracking, and financial insights." />
     <meta name="twitter:image" content="https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=1200" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <!-- Organization + WebSite structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://financeflow.ai/#organization",
+          "name": "FinanceFlow",
+          "url": "https://financeflow.ai",
+          "logo": "https://financeflow.ai/logo.png",
+          "description": "AI-powered personal finance management platform for individuals, families, and businesses.",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "support@financeflow.app",
+            "contactType": "customer support",
+            "availableLanguage": "English"
+          },
+          "sameAs": [
+            "https://twitter.com/financeflowai",
+            "https://linkedin.com/company/financeflow"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://financeflow.ai/#website",
+          "url": "https://financeflow.ai",
+          "name": "FinanceFlow",
+          "publisher": { "@id": "https://financeflow.ai/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://financeflow.ai/blog?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://financeflow.ai/#app",
+          "name": "FinanceFlow",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "Web, iOS, Android",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "Free plan available"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "1200"
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Google Tag Manager — replace GTM-XXXXXXX with your container ID from tagmanager.google.com -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
   </head>
   <body>
+    <!-- GTM noscript fallback -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
