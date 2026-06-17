@@ -50,16 +50,20 @@ const EMPTY_FORM: BlogFormData = {
   auto_publish: false,
 };
 
-// UTC ISO string from DB → local datetime string for <input type="datetime-local">
+const UAE_OFFSET_MS = 4 * 60 * 60 * 1000; // GMT+4
+
+// UTC ISO string from DB → GMT+4 datetime string for <input type="datetime-local">
 function toLocalDatetimeInput(utcIso: string): string {
-  const d = new Date(utcIso);
+  const utcMs = new Date(utcIso).getTime();
+  const uae = new Date(utcMs + UAE_OFFSET_MS);
   const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  return `${uae.getUTCFullYear()}-${pad(uae.getUTCMonth() + 1)}-${pad(uae.getUTCDate())}T${pad(uae.getUTCHours())}:${pad(uae.getUTCMinutes())}`;
 }
 
-// datetime-local string (local time, no TZ) → UTC ISO string for DB
+// GMT+4 datetime-local string → UTC ISO string for DB
 function localDatetimeInputToUTC(local: string): string {
-  return new Date(local).toISOString();
+  const localMs = new Date(local + 'Z').getTime(); // treat as UTC first
+  return new Date(localMs - UAE_OFFSET_MS).toISOString(); // subtract GMT+4 offset
 }
 
 function getStatusBadge(status: string) {
