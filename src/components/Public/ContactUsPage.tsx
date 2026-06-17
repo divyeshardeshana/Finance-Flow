@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import SEOHead from '../SEO/SEOHead';
 import {
@@ -10,6 +10,7 @@ import {
   Zap,
   Shield,
   Clock,
+  RefreshCw,
 } from 'lucide-react';
 import { PublicNavbar, type PublicView } from '../Common/PublicNavbar';
 import { PublicFooter } from '../Common/PublicFooter';
@@ -41,12 +42,27 @@ function countCharsNoSpaces(text: string): number {
   return text.replace(/\s/g, '').length;
 }
 
+function generateMathCaptcha(): { a: number; b: number; answer: number } {
+  const a = Math.floor(Math.random() * 9) + 1;
+  const b = Math.floor(Math.random() * 9) + 1;
+  return { a, b, answer: a + b };
+}
+
 export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPageProps) {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
+  const [captcha, setCaptcha] = useState(generateMathCaptcha);
+  const [captchaInput, setCaptchaInput] = useState('');
+  const [captchaError, setCaptchaError] = useState(false);
+
+  const refreshCaptcha = useCallback(() => {
+    setCaptcha(generateMathCaptcha());
+    setCaptchaInput('');
+    setCaptchaError(false);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +74,14 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
       return;
     }
     setMessageError(null);
+
+    if (parseInt(captchaInput, 10) !== captcha.answer) {
+      setCaptchaError(true);
+      refreshCaptcha();
+      return;
+    }
+    setCaptchaError(false);
+
     setSubmitting(true);
     setError(null);
     try {
@@ -74,6 +98,7 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
       const result = await response.json();
       if (result.success) {
         setSubmitted(true);
+        refreshCaptcha();
       } else {
         setError(result.message || 'Failed to send message. Please try again.');
       }
@@ -362,6 +387,41 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
                           className={`h-full rounded-full transition-all duration-300 ${charMet ? 'bg-emerald-500' : 'bg-blue-500'}`}
                           style={{ width: `${Math.min(100, (charCount / MIN_CHARS) * 100)}%` }}
                         />
+                      </div>
+                    </div>
+
+                    {/* ── CAPTCHA ── */}
+                    <div className={`flex items-center gap-3 p-4 rounded-xl border ${captchaError ? 'border-red-300 dark:border-red-500/40 bg-red-50 dark:bg-red-500/5' : 'border-gray-200 dark:border-white/[0.10] bg-gray-50 dark:bg-white/[0.04]'}`}>
+                      <div className="flex-1">
+                        <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                          Security check
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <span className="px-4 py-2 rounded-lg bg-white dark:bg-white/[0.08] border border-gray-200 dark:border-white/[0.10] text-gray-900 dark:text-white font-mono font-bold text-lg tracking-widest select-none">
+                            {captcha.a} + {captcha.b} = ?
+                          </span>
+                          <input
+                            type="number"
+                            value={captchaInput}
+                            onChange={e => { setCaptchaInput(e.target.value); setCaptchaError(false); }}
+                            placeholder="Answer"
+                            className="w-24 px-3 py-2 border border-gray-200 dark:border-white/[0.10] rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 outline-none bg-white dark:bg-white/[0.05] text-center font-semibold"
+                          />
+                          <button
+                            type="button"
+                            onClick={refreshCaptcha}
+                            title="New question"
+                            className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                          >
+                            <RefreshCw size={15} />
+                          </button>
+                        </div>
+                        {captchaError && (
+                          <p className="text-xs text-red-600 dark:text-red-400 mt-2 flex items-center gap-1">
+                            <AlertCircle size={12} />
+                            Incorrect answer. A new question has been generated.
+                          </p>
+                        )}
                       </div>
                     </div>
 
