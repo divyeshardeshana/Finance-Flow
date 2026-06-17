@@ -230,7 +230,8 @@ Return ONLY valid JSON in this exact format:
       ],
       temperature: 0.7,
       max_tokens: 4000,
-      response_format: { type: "json_object" },
+      // json_object mode only supported on gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-3.5-turbo-1106+
+      ...(supportsJsonMode(model) ? { response_format: { type: "json_object" } } : {}),
     }),
   });
 
@@ -250,13 +251,46 @@ Return ONLY valid JSON in this exact format:
   const rawContent = data.choices?.[0]?.message?.content;
   if (!rawContent) throw new Error("No content returned from OpenAI");
 
-  // response_format: json_object guarantees valid JSON — parse directly
-  const parsed = JSON.parse(rawContent);
-  return {
-    content: parsed.content || rawContent,
-    excerpt: parsed.excerpt || rawContent.substring(0, 200),
-    meta_description: parsed.meta_description || "",
-  };
+  return parseJsonResponse(rawContent);
+}
+
+function supportsJsonMode(model: string): boolean {
+  return (
+    model.startsWith("gpt-4o") ||
+    model.startsWith("gpt-4-turbo") ||
+    model === "gpt-3.5-turbo-1106" ||
+    model === "gpt-3.5-turbo-0125"
+  );
+}
+
+function parseJsonResponse(raw: string): { content: string; excerpt: string; meta_description: string } {
+  // Strip markdown code fences and any leading/trailing whitespace
+  const cleaned = raw
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/```\s*$/i, "")
+    .trim();
+
+  // Find the outermost JSON object even if there's extra text around it
+  const start = cleaned.indexOf('{');
+  const end = cleaned.lastIndexOf('}');
+  if (start !== -1 && end !== -1 && end > start) {
+    try {
+      const parsed = JSON.parse(cleaned.slice(start, end + 1));
+      if (parsed.content) {
+        return {
+          content: parsed.content,
+          excerpt: parsed.excerpt || parsed.content.substring(0, 200),
+          meta_description: parsed.meta_description || "",
+        };
+      }
+    } catch {
+      // fall through
+    }
+  }
+
+  // Fallback: return raw as content (should not happen in practice)
+  return { content: cleaned, excerpt: cleaned.substring(0, 200), meta_description: "" };
 }
 
 async function generateAndStoreImage(
