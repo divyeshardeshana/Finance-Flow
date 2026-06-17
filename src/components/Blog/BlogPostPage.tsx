@@ -1103,7 +1103,6 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
   const [relatedPosts, setRelatedPosts] = useState<RelatedPost[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const relatedRef = useScrollInView(0.1);
 
   const navigate = (view: PublicView) => {
     if (onNavigate) onNavigate(view);
@@ -1231,12 +1230,9 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
       <div className="relative w-full h-[62vh] min-h-[420px] max-h-[640px] overflow-hidden">
         {/* Image */}
         {post.featured_image_url ? (
-          <motion.img
+          <img
             src={post.featured_image_url}
             alt={post.title}
-            initial={{ scale: 1.06 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
             className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
@@ -1347,12 +1343,12 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
 
       {/* ── RELATED ARTICLES ───────────────────────────────────────────────── */}
       {relatedPosts.length > 0 && (
-        <section ref={relatedRef.ref} className="bg-gray-50/50 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/[0.06] py-16 px-6">
+        <section className="bg-gray-50/50 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/[0.06] py-16 px-6">
           <div className="max-w-[900px] mx-auto">
             <motion.div
               variants={fadeUp}
               initial="hidden"
-              animate={relatedRef.isInView ? 'visible' : 'hidden'}
+              animate="visible"
               className="text-center mb-10"
             >
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4">
@@ -1370,7 +1366,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
             <motion.div
               variants={staggerContainer}
               initial="hidden"
-              animate={relatedRef.isInView ? 'visible' : 'hidden'}
+              animate="visible"
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {relatedPosts.map((related, i) => (
