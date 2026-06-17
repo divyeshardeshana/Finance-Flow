@@ -1240,8 +1240,8 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
         )}
 
         {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
 
         {/* Back button — top left */}
         <div className="absolute top-0 left-0 right-0 pt-20 px-6 max-w-[900px] mx-auto w-full">
