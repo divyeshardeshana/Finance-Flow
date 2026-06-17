@@ -104,11 +104,6 @@ export default function ContactUsPage({ onNavigate, onSignIn }: ContactUsPagePro
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative pt-28 pb-16 px-4 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full bg-gradient-to-b from-blue-100/70 to-transparent dark:from-blue-600/12 dark:to-transparent blur-3xl" />
-          <div className="absolute top-20 right-0 w-80 h-80 rounded-full bg-cyan-100/50 dark:bg-cyan-500/6 blur-3xl" />
-          <div className="absolute top-40 left-0 w-72 h-72 rounded-full bg-blue-100/50 dark:bg-blue-500/6 blur-3xl" />
-        </div>
         <div className="relative max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
