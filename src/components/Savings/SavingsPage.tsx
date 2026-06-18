@@ -3,6 +3,7 @@ import { Plus, Target, TrendingUp, PiggyBank, CreditCard as Edit2, Trash2, X, Cl
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+import { formatCurrency } from '../../lib/currency';
 
 interface SavingsGoal {
   id: string;
@@ -79,7 +80,7 @@ const PRIORITY_CONFIG: Record<number, { label: string; pill: string }> = {
 
 export function SavingsPage() {
   const { user } = useAuth();
-  const { formatAmount } = useAppPreferences();
+  const { formatAmount, preferences } = useAppPreferences();
   const [goals, setGoals] = useState<SavingsGoal[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -284,7 +285,7 @@ export function SavingsPage() {
               Total Target
             </p>
             <p className="text-[22px] font-bold tracking-tight text-gray-900 dark:text-white">
-              {formatAmount(totalTarget)}
+              {formatCurrency(totalTarget, preferences.currency)}
             </p>
           </div>
 
@@ -296,7 +297,7 @@ export function SavingsPage() {
               Current Savings
             </p>
             <p className="text-[22px] font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
-              {formatAmount(totalCurrent)}
+              {formatCurrency(totalCurrent, preferences.currency)}
             </p>
           </div>
 
@@ -308,7 +309,7 @@ export function SavingsPage() {
               Remaining
             </p>
             <p className="text-[22px] font-bold tracking-tight text-amber-600 dark:text-amber-400">
-              {formatAmount(totalRemaining)}
+              {formatCurrency(totalRemaining, preferences.currency)}
             </p>
           </div>
         </div>
@@ -377,7 +378,7 @@ export function SavingsPage() {
                         )}
                       </div>
                       <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-0.5">
-                        Target: {formatAmount(Number(goal.target_amount))}
+                        Target: {formatCurrency(Number(goal.target_amount), preferences.currency)}
                       </p>
                     </div>
                   </div>
@@ -405,7 +406,7 @@ export function SavingsPage() {
                     </span>
                     <div className="flex items-center gap-2">
                       <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                        {formatAmount(Number(goal.current_amount))} / {formatAmount(Number(goal.target_amount))}
+                        {formatCurrency(Number(goal.current_amount), preferences.currency)} / {formatCurrency(Number(goal.target_amount), preferences.currency)}
                       </span>
                       <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                         isComplete
@@ -430,7 +431,7 @@ export function SavingsPage() {
                     <div className="flex items-center gap-1.5">
                       <Banknote className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
                       <span className="text-[12px] text-gray-600 dark:text-gray-400">
-                        {formatAmount(Number(goal.monthly_contribution))}
+                        {formatCurrency(Number(goal.monthly_contribution), preferences.currency)}
                         <span className="text-gray-400 dark:text-gray-500"> / month</span>
                       </span>
                     </div>

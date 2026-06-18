@@ -7,6 +7,7 @@ import {
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+import { formatCurrency } from '../../lib/currency';
 import { TransactionForm } from './TransactionForm';
 import { TransactionList } from './TransactionList';
 import { RecurringTransactionsList } from './RecurringTransactionsList';
@@ -82,7 +83,7 @@ const SORT_OPTIONS = [
 
 export function TransactionsPage() {
   const { user } = useAuth();
-  const { formatAmount, convertAmount } = useAppPreferences();
+  const { convertAmount, preferences } = useAppPreferences();
   const [activeTab, setActiveTab] = useState<'all' | 'recurring'>('all');
   const [showForm, setShowForm] = useState(false);
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -537,7 +538,7 @@ export function TransactionsPage() {
               <div>
                 <p className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Total Income</p>
                 <p className="text-[22px] font-bold text-emerald-600 dark:text-emerald-400 tabular-nums leading-none">
-                  +{formatAmount(totalIncome)}
+                  +{formatCurrency(totalIncome, preferences.currency)}
                 </p>
                 <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-1.5">
                   {transactions.filter(t => t.type === 'income').length} transaction{transactions.filter(t => t.type === 'income').length !== 1 ? 's' : ''}
@@ -556,7 +557,7 @@ export function TransactionsPage() {
               <div>
                 <p className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Total Expenses</p>
                 <p className="text-[22px] font-bold text-red-600 dark:text-red-400 tabular-nums leading-none">
-                  −{formatAmount(totalExpenses)}
+                  −{formatCurrency(totalExpenses, preferences.currency)}
                 </p>
                 <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-1.5">
                   {transactions.filter(t => t.type === 'expense').length} transaction{transactions.filter(t => t.type === 'expense').length !== 1 ? 's' : ''}
@@ -575,7 +576,7 @@ export function TransactionsPage() {
               <div>
                 <p className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Net</p>
                 <p className={`text-[22px] font-bold tabular-nums leading-none ${netAmount >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {netAmount >= 0 ? '+' : '−'}{formatAmount(Math.abs(netAmount))}
+                  {netAmount >= 0 ? '+' : '−'}{formatCurrency(Math.abs(netAmount), preferences.currency)}
                 </p>
                 <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-1.5">
                   {transactions.length} total

@@ -180,7 +180,7 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
         .select('amount, currency')
         .eq('user_id', user.id);
 
-      const totalBudget = budgets?.reduce((sum, b) => sum + convertCurrency(Number(b.amount), b.currency || 'AUD', preferences.currency), 0) || 0;
+      const totalBudget = budgets?.reduce((sum, b) => sum + convertCurrency(Number(b.amount), b.currency || 'USD', preferences.currency), 0) || 0;
       const budgetUtilization = totalBudget > 0 ? (expenses / totalBudget) * 100 : 0;
 
       const { data: bills } = await supabase
@@ -199,16 +199,16 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
 
       const { data: assets } = await supabase
         .from('assets')
-        .select('current_value')
+        .select('current_value, currency')
         .eq('user_id', user.id);
 
       const { data: liabilities } = await supabase
         .from('liabilities')
-        .select('current_balance')
+        .select('current_balance, currency')
         .eq('user_id', user.id);
 
-      const totalAssets = assets?.reduce((sum, a) => sum + Number(a.current_value), 0) || 0;
-      const totalLiabilities = liabilities?.reduce((sum, l) => sum + Number(l.current_balance), 0) || 0;
+      const totalAssets = assets?.reduce((sum, a) => sum + convertCurrency(Number(a.current_value), a.currency || 'USD', preferences.currency), 0) || 0;
+      const totalLiabilities = liabilities?.reduce((sum, l) => sum + convertCurrency(Number(l.current_balance), l.currency || 'USD', preferences.currency), 0) || 0;
       const netWorth = totalAssets - totalLiabilities;
 
       setStats({

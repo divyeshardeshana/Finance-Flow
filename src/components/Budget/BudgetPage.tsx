@@ -332,7 +332,7 @@ export function BudgetPage() {
     }
   };
 
-  const totalBudget = budgets.reduce((s, b) => s + convertCurrency(Number(b.amount), b.currency || 'AUD', preferences.currency), 0);
+  const totalBudget = budgets.reduce((s, b) => s + convertCurrency(Number(b.amount), b.currency || 'USD', preferences.currency), 0);
   const totalSpent = budgets.reduce((s, b) => s + (b.spent || 0), 0);
   const totalRemaining = totalBudget - totalSpent;
   const overallPct = totalBudget > 0 ? Math.min((totalSpent / totalBudget) * 100, 100) : 0;
