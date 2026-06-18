@@ -82,7 +82,7 @@ const SORT_OPTIONS = [
 
 export function TransactionsPage() {
   const { user } = useAuth();
-  const { formatAmount } = useAppPreferences();
+  const { formatAmount, convertAmount } = useAppPreferences();
   const [activeTab, setActiveTab] = useState<'all' | 'recurring'>('all');
   const [showForm, setShowForm] = useState(false);
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -345,8 +345,8 @@ export function TransactionsPage() {
   );
   const totalPages = Math.ceil(transactions.length / itemsPerPage);
 
-  const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
-  const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
+  const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + convertAmount(Number(t.amount), t.currency || 'USD'), 0);
+  const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + convertAmount(Number(t.amount), t.currency || 'USD'), 0);
   const netAmount = totalIncome - totalExpenses;
 
   const getPageNumbers = () => {
