@@ -113,6 +113,17 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
       return;
     }
 
+    if (isRecurring && !transaction) {
+      if (!recurringData.frequency) {
+        alert('Frequency is required for recurring transactions.');
+        return;
+      }
+      if (!recurringData.start_date) {
+        alert('Start Date is required for recurring transactions.');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
