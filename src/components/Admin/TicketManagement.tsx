@@ -18,6 +18,7 @@ import {
   X,
   User,
   Shield,
+  Trash2,
 } from 'lucide-react';
 import {
   getAllTickets,
@@ -311,6 +312,22 @@ export default function TicketManagement() {
     exportToCSV(exportData, 'support_tickets');
   };
 
+  const handleDeleteTicket = async (ticketId: string) => {
+    if (!canManage) return;
+    if (!confirm('Delete this ticket permanently?')) return;
+    try {
+      await supabase.from('support_tickets').delete().eq('id', ticketId);
+      if (selectedTicket?.id === ticketId) {
+        setSelectedTicket(null);
+        setTicketMessages([]);
+      }
+      await loadTickets();
+      showSuccess('Ticket deleted');
+    } catch (err) {
+      showError(err instanceof Error ? err.message : 'Failed to delete ticket');
+    }
+  };
+
   const showSuccess = (msg: string) => {
     setSuccessMessage(msg);
     setTimeout(() => setSuccessMessage(null), 3000);
@@ -571,6 +588,15 @@ export default function TicketManagement() {
                                 <Shield size={10} />
                                 Assigned
                               </span>
+                            )}
+                            {canManage && (
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleDeleteTicket(ticket.id); }}
+                                className="ml-auto p-1 rounded text-slate-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                                title="Delete ticket"
+                              >
+                                <Trash2 size={12} />
+                              </button>
                             )}
                           </div>
                         </div>

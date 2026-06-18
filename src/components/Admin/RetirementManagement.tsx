@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Pencil, X, Save, CheckCircle, Globe, Landmark, Upload, Download, AlertCircle, FileText } from 'lucide-react';
+import { Search, Pencil, X, Save, CheckCircle, Globe, Landmark, Upload, Download, AlertCircle, FileText, Filter, Trash2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { countries } from '../../lib/countries';
@@ -94,6 +94,7 @@ export default function RetirementManagement() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<'all' | 'configured' | 'unconfigured'>('all');
   const [editingCountry, setEditingCountry] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<CountryPlan | null>(null);
   const [savedSuccess, setSavedSuccess] = useState(false);
@@ -101,6 +102,8 @@ export default function RetirementManagement() {
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
 
@@ -313,10 +316,26 @@ export default function RetirementManagement() {
     setImportResult(null);
   };
 
-  const filteredCountries = countries.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.code.toLowerCase().includes(search.toLowerCase())
-  );
+  const deleteAllRecords = async () => {
+    setDeletingAll(true);
+    await supabase.from('country_retirement_plans').delete().neq('country_code', '');
+    await fetchPlans();
+    setDeletingAll(false);
+    setShowDeleteAllConfirm(false);
+  };
+
+  const configuredCount = Object.keys(plans).length;
+  const unconfiguredCount = countries.length - configuredCount;
+
+  const filteredCountries = countries.filter((c) => {
+    const matchesSearch =
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.code.toLowerCase().includes(search.toLowerCase());
+    const hasPlan = !!plans[c.code] && getPlanSummary(plans[c.code]) > 0;
+    if (filter === 'configured') return matchesSearch && hasPlan;
+    if (filter === 'unconfigured') return matchesSearch && !hasPlan;
+    return matchesSearch;
+  });
 
   return (
     <div className="space-y-6">
@@ -338,6 +357,13 @@ export default function RetirementManagement() {
             </div>
           )}
           <button
+            onClick={() => setShowDeleteAllConfirm(true)}
+            className="flex items-center gap-2 px-4 py-2 text-[13px] font-semibold text-white bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 rounded-xl shadow-sm shadow-red-500/25 transition-all"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            Delete All Records
+          </button>
+          <button
             onClick={openImportModal}
             className="flex items-center gap-2 px-4 py-2 text-[13px] font-semibold text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 rounded-xl shadow-sm shadow-blue-500/25 transition-all"
           >
@@ -349,15 +375,37 @@ export default function RetirementManagement() {
 
       <div className="bg-white dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.07] rounded-2xl overflow-hidden">
         <div className="p-4 border-b border-gray-200/80 dark:border-white/[0.07]">
-          <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search countries..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-[13px] bg-gray-50 dark:bg-white/[0.04] border border-gray-200/80 dark:border-white/[0.07] rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/60 transition-all"
-            />
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="relative flex-1 min-w-[180px] max-w-sm">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search countries..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 text-[13px] bg-gray-50 dark:bg-white/[0.04] border border-gray-200/80 dark:border-white/[0.07] rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/60 transition-all"
+              />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Filter className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+              {(['all', 'configured', 'unconfigured'] as const).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
+                    filter === f
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 dark:bg-white/[0.05] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/[0.08]'
+                  }`}
+                >
+                  {f === 'all'
+                    ? `All (${countries.length})`
+                    : f === 'configured'
+                    ? `Configured (${configuredCount})`
+                    : `Unconfigured (${unconfiguredCount})`}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -507,6 +555,41 @@ export default function RetirementManagement() {
               >
                 <Save className="w-3.5 h-3.5" />
                 {saving ? 'Saving...' : 'Save Plans'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteAllConfirm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-[#0f1219] border border-gray-200/80 dark:border-white/[0.07] rounded-2xl w-full max-w-md shadow-2xl p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                <Trash2 className="w-5 h-5 text-red-500" />
+              </div>
+              <div>
+                <h2 className="text-[16px] font-bold text-gray-900 dark:text-white">Delete All Records</h2>
+                <p className="text-[12px] text-gray-500 dark:text-gray-400">This action cannot be undone</p>
+              </div>
+            </div>
+            <p className="text-[13px] text-gray-600 dark:text-gray-400">
+              This will permanently delete all configured retirement plans for all countries. Country list will remain intact.
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteAllConfirm(false)}
+                className="px-4 py-2 text-[13px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200/80 dark:border-white/[0.07] rounded-xl hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteAllRecords}
+                disabled={deletingAll}
+                className="flex items-center gap-2 px-5 py-2 text-[13px] font-semibold text-white bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 rounded-xl disabled:opacity-50 transition-all"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                {deletingAll ? 'Deleting...' : 'Delete All'}
               </button>
             </div>
           </div>

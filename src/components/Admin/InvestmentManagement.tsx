@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Pencil, X, Save, CheckCircle, Globe, TrendingUp, Filter, Upload, Download, AlertCircle, FileText } from 'lucide-react';
+import { Search, Pencil, X, Save, CheckCircle, Globe, TrendingUp, Filter, Upload, Download, AlertCircle, FileText, Trash2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { countries } from '../../lib/countries';
@@ -102,6 +102,8 @@ export default function InvestmentManagement() {
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
 
@@ -314,6 +316,14 @@ export default function InvestmentManagement() {
     setImportResult(null);
   };
 
+  const deleteAllRecords = async () => {
+    setDeletingAll(true);
+    await supabase.from('country_investment_plans').delete().neq('country_code', '');
+    await fetchPlans();
+    setDeletingAll(false);
+    setShowDeleteAllConfirm(false);
+  };
+
   const configuredCount = Object.keys(plans).length;
   const unconfiguredCount = countries.length - configuredCount;
 
@@ -346,6 +356,13 @@ export default function InvestmentManagement() {
               <span className="text-[13px] font-semibold text-emerald-700 dark:text-emerald-400">Saved successfully</span>
             </div>
           )}
+          <button
+            onClick={() => setShowDeleteAllConfirm(true)}
+            className="flex items-center gap-2 px-4 py-2 text-[13px] font-semibold text-white bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 rounded-xl shadow-sm shadow-red-500/25 transition-all"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            Delete All Records
+          </button>
           <button
             onClick={openImportModal}
             className="flex items-center gap-2 px-4 py-2 text-[13px] font-semibold text-white bg-gradient-to-r from-teal-600 to-emerald-500 hover:from-teal-700 hover:to-emerald-600 rounded-xl shadow-sm shadow-teal-500/25 transition-all"
@@ -538,6 +555,41 @@ export default function InvestmentManagement() {
               >
                 <Save className="w-3.5 h-3.5" />
                 {saving ? 'Saving...' : 'Save Plans'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteAllConfirm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-[#0f1219] border border-gray-200/80 dark:border-white/[0.07] rounded-2xl w-full max-w-md shadow-2xl p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                <Trash2 className="w-5 h-5 text-red-500" />
+              </div>
+              <div>
+                <h2 className="text-[16px] font-bold text-gray-900 dark:text-white">Delete All Records</h2>
+                <p className="text-[12px] text-gray-500 dark:text-gray-400">This action cannot be undone</p>
+              </div>
+            </div>
+            <p className="text-[13px] text-gray-600 dark:text-gray-400">
+              This will permanently delete all configured investment plans for all countries. Country list will remain intact.
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteAllConfirm(false)}
+                className="px-4 py-2 text-[13px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200/80 dark:border-white/[0.07] rounded-xl hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteAllRecords}
+                disabled={deletingAll}
+                className="flex items-center gap-2 px-5 py-2 text-[13px] font-semibold text-white bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 rounded-xl disabled:opacity-50 transition-all"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                {deletingAll ? 'Deleting...' : 'Delete All'}
               </button>
             </div>
           </div>
