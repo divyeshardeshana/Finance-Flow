@@ -85,24 +85,83 @@ const BUDGET_TYPE_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_ICONS: Record<string, string> = {
-  'Food & Dining': '🍽',
+  // Food
+  'Food & Dining': '🍽️',
   'Food Delivery': '🛵',
+  Groceries: '🛒',
+  // Housing
+  'Rent/Mortgage': '🏠',
+  Rent: '🏠',
+  Mortgage: '🏠',
+  Housing: '🏠',
+  // Transport
   Transportation: '🚗',
-  Shopping: '🛍',
-  Entertainment: '🎬',
+  'Car Insurance': '🚘',
+  'Car Maintenance': '🔧',
+  Fuel: '⛽',
+  Parking: '🅿️',
+  'Public Transport': '🚌',
+  // Bills & Utilities
   'Bills & Utilities': '⚡',
-  Utilities: '⚡',
+  Utilities: '💡',
+  Electricity: '💡',
+  Water: '💧',
+  Internet: '🌐',
+  Phone: '📱',
+  // Entertainment & Lifestyle
+  Entertainment: '🎬',
+  Subscriptions: '📺',
+  'Streaming Services': '🎵',
+  Gaming: '🎮',
+  Sports: '⚽',
+  // Shopping
+  Shopping: '🛍️',
+  Clothing: '👕',
+  Electronics: '💻',
+  // Health
   Healthcare: '🏥',
+  Medical: '💊',
+  Fitness: '🏋️',
+  Gym: '🏋️',
+  // Education
   Education: '📚',
+  'Tuition Fees': '🎓',
+  Books: '📖',
+  Courses: '🎓',
+  // Personal
   'Personal Care': '💅',
-  Travel: '✈',
+  Haircut: '✂️',
+  Beauty: '💄',
+  // Finance
+  Insurance: '🛡️',
+  Savings: '🏦',
+  Investment: '📈',
+  Debt: '💳',
+  'Credit Card': '💳',
+  Taxes: '🧾',
+  // Travel
+  Travel: '✈️',
+  Holidays: '🏖️',
+  Hotels: '🏨',
+  // Business
   Business: '💼',
   'Business Expenses': '💼',
+  'Office Supplies': '🖊️',
+  // Income
+  Salary: '💰',
+  Freelance: '💻',
+  Bonus: '🎁',
+  // Other
+  'Gifts & Donations': '🎁',
+  Charity: '❤️',
+  Pets: '🐾',
+  'Home Maintenance': '🔨',
+  Childcare: '👶',
   Other: '📌',
 };
 
 function getCategoryIcon(category: string): string {
-  return CATEGORY_ICONS[category] ?? '📦';
+  return CATEGORY_ICONS[category] ?? '🗂️';
 }
 
 function getProgressGradient(pct: number) {

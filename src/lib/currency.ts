@@ -83,20 +83,20 @@ const currencyConfig: Record<string, { symbol: string; locale: string; decimals:
   AUD: { symbol: 'A$', locale: 'en-AU', decimals: 2 },
   CAD: { symbol: 'C$', locale: 'en-CA', decimals: 2 },
   CHF: { symbol: 'Fr', locale: 'de-CH', decimals: 2 },
-  AED: { symbol: 'د.إ', locale: 'ar-AE', decimals: 2 },
+  AED: { symbol: 'د.إ', locale: 'en-US', decimals: 2 },
   SGD: { symbol: 'S$', locale: 'en-SG', decimals: 2 },
   HKD: { symbol: 'HK$', locale: 'zh-HK', decimals: 2 },
   KRW: { symbol: '₩', locale: 'ko-KR', decimals: 0 },
   BRL: { symbol: 'R$', locale: 'pt-BR', decimals: 2 },
   ZAR: { symbol: 'R', locale: 'en-ZA', decimals: 2 },
-  SAR: { symbol: 'SR', locale: 'ar-SA', decimals: 2 },
+  SAR: { symbol: 'SR', locale: 'en-US', decimals: 2 },
   TRY: { symbol: '₺', locale: 'tr-TR', decimals: 2 },
   RUB: { symbol: '₽', locale: 'ru-RU', decimals: 2 },
   MXN: { symbol: 'MX$', locale: 'es-MX', decimals: 2 },
   THB: { symbol: '฿', locale: 'th-TH', decimals: 2 },
   NGN: { symbol: '₦', locale: 'en-NG', decimals: 2 },
   PKR: { symbol: '₨', locale: 'ur-PK', decimals: 2 },
-  EGP: { symbol: 'E£', locale: 'ar-EG', decimals: 2 },
+  EGP: { symbol: 'E£', locale: 'en-US', decimals: 2 },
   PLN: { symbol: 'zł', locale: 'pl-PL', decimals: 2 },
   SEK: { symbol: 'kr', locale: 'sv-SE', decimals: 2 },
   NOK: { symbol: 'kr', locale: 'nb-NO', decimals: 2 },
@@ -144,7 +144,8 @@ export function formatCurrency(amount: number, currency: string): string {
     maximumFractionDigits: config.decimals
   });
 
-  return `${config.symbol}${formatted}`;
+  // ‎ is LTR mark — prevents bidi algorithm from flipping RTL currency symbols (e.g. AED د.إ)
+  return `‎${config.symbol}${formatted}`;
 }
 
 export function formatNumber(value: number): string {
