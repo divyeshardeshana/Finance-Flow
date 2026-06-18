@@ -3,6 +3,7 @@ import { Repeat, Pause, Play, Trash2, Calendar } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+import { formatCurrency } from '../../lib/currency';
 
 interface RecurringTransaction {
   id: string;
@@ -19,7 +20,7 @@ interface RecurringTransaction {
 
 export function RecurringTransactionsList() {
   const { user } = useAuth();
-  const { formatAmount } = useAppPreferences();
+  const { preferences } = useAppPreferences();
   const [recurringTransactions, setRecurringTransactions] = useState<RecurringTransaction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -172,7 +173,7 @@ export function RecurringTransactionsList() {
                       : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                   }`}>
                     {recurring.type === 'expense' ? '−' : '+'}
-                    {formatAmount(recurring.amount)}
+                    {formatCurrency(recurring.amount, preferences.currency)}
                   </span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] font-medium border border-blue-500/20">
                     {getFrequencyLabel(recurring.frequency)}

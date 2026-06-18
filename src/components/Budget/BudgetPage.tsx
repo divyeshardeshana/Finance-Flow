@@ -128,6 +128,7 @@ export function BudgetPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     category: '',
     amount: '',
@@ -258,7 +259,9 @@ export function BudgetPage() {
 
   const openNewModal = () => {
     setEditingBudget(null);
-    setFormData({ category: '', amount: '', period: 'fixed_monthly', comments: '' });
+    const firstCat = categories.length > 0 ? categories[0] : 'Food & Dining';
+    setFormData({ category: firstCat, amount: '', period: 'fixed_monthly', comments: '' });
+    setSaveError(null);
     setShowModal(true);
   };
 
@@ -276,6 +279,7 @@ export function BudgetPage() {
   const closeModal = () => {
     setShowModal(false);
     setEditingBudget(null);
+    setSaveError(null);
     setFormData({ category: '', amount: '', period: 'fixed_monthly', comments: '' });
   };
 
@@ -314,8 +318,9 @@ export function BudgetPage() {
       }
       closeModal();
       fetchBudgets();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving budget:', error);
+      setSaveError(error?.message || 'Failed to save budget. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -719,9 +724,9 @@ export function BudgetPage() {
                   className="w-full px-3.5 py-2.5 text-[13px] border border-gray-200 dark:border-white/[0.1] bg-white dark:bg-white/[0.04] text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 dark:focus:border-blue-500 outline-none transition-all"
                   required
                 >
+                  <option value="adaptive">Adaptive</option>
                   <option value="fixed_monthly">Fixed Monthly</option>
                   <option value="rolling_average">Rolling Average</option>
-                  <option value="adaptive">Adaptive</option>
                 </select>
               </div>
 
@@ -737,6 +742,10 @@ export function BudgetPage() {
                   placeholder="Add notes about this budget..."
                 />
               </div>
+
+              {saveError && (
+                <p className="text-[12px] text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-lg px-3 py-2">{saveError}</p>
+              )}
 
               <div className="flex gap-3 pt-2">
                 <button

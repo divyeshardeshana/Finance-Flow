@@ -736,10 +736,10 @@ export function BillRemindersPage() {
                     }
                     className={inputClass}
                   >
-                    <option value="utilities">Utilities</option>
                     <option value="credit_cards">Credit Cards</option>
-                    <option value="subscriptions">Subscriptions</option>
                     <option value="other">Other</option>
+                    <option value="subscriptions">Subscriptions</option>
+                    <option value="utilities">Utilities</option>
                   </select>
                 </div>
                 <div>
@@ -751,10 +751,10 @@ export function BillRemindersPage() {
                     }
                     className={inputClass}
                   >
+                    <option value="custom">Custom</option>
                     <option value="monthly">Monthly</option>
                     <option value="quarterly">Quarterly</option>
                     <option value="yearly">Yearly</option>
-                    <option value="custom">Custom</option>
                   </select>
                 </div>
               </div>

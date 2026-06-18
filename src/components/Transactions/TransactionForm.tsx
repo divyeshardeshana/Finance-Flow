@@ -312,9 +312,9 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
                   required
                 >
                   <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
                   <option value="biweekly">Every 2 Weeks</option>
                   <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
                   <option value="yearly">Yearly</option>
                 </select>
               </div>
@@ -341,22 +341,23 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
             </div>
 
             <div>
-              <label className={labelClass}>Payment Method</label>
+              <label className={labelClass}>Payment Method <span className="text-red-500 normal-case tracking-normal font-normal">*</span></label>
               <select
                 value={formData.payment_method}
                 onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
                 className={fieldClass}
+                required
               >
                 <option value="">Select method</option>
+                <option value="Bank Transfer">Bank Transfer</option>
                 <option value="Cash">Cash</option>
+                <option value="Check">Check</option>
                 <option value="Credit Card">Credit Card</option>
                 <option value="Debit Card">Debit Card</option>
-                <option value="Bank Transfer">Bank Transfer</option>
                 <option value="Digital Wallet">Digital Wallet</option>
-                <option value="Check">Check</option>
                 <option value="Mobile Payment">Mobile Payment</option>
                 <option value="Other">Other</option>
-                {customPaymentMethods.map(m => (
+                {customPaymentMethods.sort().map(m => (
                   <option key={m} value={m}>{m}</option>
                 ))}
               </select>
@@ -385,24 +386,25 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
               <label className={labelClass}>
                 <div className="flex items-center gap-1.5">
                   <CreditCard className="w-3 h-3" />
-                  Payment Method
+                  Payment Method <span className="text-red-500 normal-case tracking-normal font-normal">*</span>
                 </div>
               </label>
               <select
                 value={formData.payment_method}
                 onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
                 className={fieldClass}
+                required
               >
                 <option value="">Select method</option>
+                <option value="Bank Transfer">Bank Transfer</option>
                 <option value="Cash">Cash</option>
+                <option value="Check">Check</option>
                 <option value="Credit Card">Credit Card</option>
                 <option value="Debit Card">Debit Card</option>
-                <option value="Bank Transfer">Bank Transfer</option>
                 <option value="Digital Wallet">Digital Wallet</option>
-                <option value="Check">Check</option>
                 <option value="Mobile Payment">Mobile Payment</option>
                 <option value="Other">Other</option>
-                {customPaymentMethods.map(m => (
+                {customPaymentMethods.sort().map(m => (
                   <option key={m} value={m}>{m}</option>
                 ))}
               </select>

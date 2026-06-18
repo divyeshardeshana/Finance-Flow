@@ -15,7 +15,8 @@ type EstateDocument = Database['public']['Tables']['estate_documents']['Row'];
 export function EstatePage() {
   const { user } = useAuth();
   const { checkAndLogAccess, tier } = useSubscription();
-  const { currency } = useAppPreferences();
+  const { preferences } = useAppPreferences();
+  const currency = preferences.currency;
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'beneficiaries' | 'insurance' | 'documents'>('beneficiaries');
   const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([]);
@@ -90,7 +91,7 @@ export function EstatePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Estate Planning</h1>
