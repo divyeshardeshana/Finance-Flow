@@ -238,7 +238,7 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
     }
 
     fetchData();
-  }, [user, selectedMonth, selectedYear]);
+  }, [user, selectedMonth, selectedYear, preferences.currency]);
 
   if (loading) {
     return (

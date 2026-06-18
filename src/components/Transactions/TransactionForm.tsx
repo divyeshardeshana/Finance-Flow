@@ -108,6 +108,11 @@ export function TransactionForm({ transaction, categories, onSave, onCancel }: T
       return;
     }
 
+    if (!formData.payment_method) {
+      alert('Payment Method is required.');
+      return;
+    }
+
     setLoading(true);
 
     try {

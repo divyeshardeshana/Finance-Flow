@@ -25,10 +25,10 @@ export function RecurringTransactionsList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadRecurringTransactions();
+    loadRecurringTransactions().then(generateDueTransactions);
   }, []);
 
-  const loadRecurringTransactions = async () => {
+  const loadRecurringTransactions = async (): Promise<RecurringTransaction[]> => {
     try {
       const { data, error } = await supabase
         .from('recurring_transactions')
@@ -38,11 +38,65 @@ export function RecurringTransactionsList() {
 
       if (error) throw error;
       setRecurringTransactions(data || []);
+      return data || [];
     } catch (error) {
       console.error('Error loading recurring transactions:', error);
+      return [];
     } finally {
       setLoading(false);
     }
+  };
+
+  const calcNextOccurrence = (from: string, frequency: string): string => {
+    const d = new Date(from);
+    switch (frequency) {
+      case 'daily':    d.setDate(d.getDate() + 1); break;
+      case 'weekly':   d.setDate(d.getDate() + 7); break;
+      case 'biweekly': d.setDate(d.getDate() + 14); break;
+      case 'monthly':  d.setMonth(d.getMonth() + 1); break;
+      case 'yearly':   d.setFullYear(d.getFullYear() + 1); break;
+    }
+    return d.toISOString().split('T')[0];
+  };
+
+  const generateDueTransactions = async (templates: RecurringTransaction[]) => {
+    if (!user || templates.length === 0) return;
+    const today = new Date().toISOString().split('T')[0];
+    let anyGenerated = false;
+
+    for (const t of templates) {
+      if (!t.is_active) continue;
+      if (t.end_date && t.next_occurrence > t.end_date) continue;
+
+      let next = t.next_occurrence;
+      while (next <= today) {
+        // Create transaction instance
+        await supabase.from('transactions').insert({
+          user_id: user.id,
+          amount: t.amount,
+          type: t.type,
+          category: t.category,
+          description: t.description,
+          transaction_date: next,
+          is_recurring: true,
+          recurring_transaction_id: t.id,
+          currency: preferences.currency,
+        });
+
+        next = calcNextOccurrence(next, t.frequency);
+        if (t.end_date && next > t.end_date) break;
+        anyGenerated = true;
+      }
+
+      // Update next_occurrence on template
+      if (next !== t.next_occurrence) {
+        await supabase.from('recurring_transactions')
+          .update({ next_occurrence: next })
+          .eq('id', t.id);
+      }
+    }
+
+    if (anyGenerated) loadRecurringTransactions();
   };
 
   const toggleActive = async (id: string, currentStatus: boolean) => {
