@@ -194,12 +194,18 @@ export function NetWorthPage() {
     e.preventDefault();
     if (!user) return;
 
+    const currentValue = parseFloat(assetFormData.current_value);
+    if (isNaN(currentValue) || currentValue < 0) {
+      alert('Current value must be a valid number (0 or greater).');
+      return;
+    }
+
     try {
       const data = {
         user_id: user.id,
         asset_name: assetFormData.asset_name,
         asset_type: assetFormData.asset_type,
-        current_value: parseFloat(assetFormData.current_value),
+        current_value: currentValue,
         purchase_date: assetFormData.purchase_date || null,
         purchase_price: assetFormData.purchase_price ? parseFloat(assetFormData.purchase_price) : null,
         is_liquid: assetFormData.is_liquid,
@@ -226,12 +232,18 @@ export function NetWorthPage() {
     e.preventDefault();
     if (!user) return;
 
+    const currentBalance = parseFloat(liabilityFormData.current_balance);
+    if (isNaN(currentBalance) || currentBalance < 0) {
+      alert('Current balance must be a valid number (0 or greater).');
+      return;
+    }
+
     try {
       const data = {
         user_id: user.id,
         liability_name: liabilityFormData.liability_name,
         liability_type: liabilityFormData.liability_type,
-        current_balance: parseFloat(liabilityFormData.current_balance),
+        current_balance: currentBalance,
         original_amount: liabilityFormData.original_amount ? parseFloat(liabilityFormData.original_amount) : null,
         interest_rate: liabilityFormData.interest_rate ? parseFloat(liabilityFormData.interest_rate) : 0,
         monthly_payment: liabilityFormData.monthly_payment ? parseFloat(liabilityFormData.monthly_payment) : 0,

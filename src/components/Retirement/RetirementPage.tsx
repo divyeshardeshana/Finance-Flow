@@ -234,12 +234,18 @@ export function RetirementPage() {
     e.preventDefault();
     if (!user) return;
 
+    const currentBalance = parseFloat(accountFormData.current_balance);
+    if (isNaN(currentBalance) || currentBalance < 0) {
+      alert('Current balance must be a valid number (0 or greater).');
+      return;
+    }
+
     try {
       const data = {
         user_id: user.id,
         account_name: accountFormData.account_name,
         account_type: accountFormData.account_type,
-        current_balance: parseFloat(accountFormData.current_balance),
+        current_balance: currentBalance,
         employer_match: parseFloat(accountFormData.employer_match) || 0,
         annual_contribution: parseFloat(accountFormData.annual_contribution) || 0,
         institution: accountFormData.institution,

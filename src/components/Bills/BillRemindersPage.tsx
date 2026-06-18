@@ -191,11 +191,17 @@ export function BillRemindersPage() {
     e.preventDefault();
     if (!user) return;
 
+    const amount = parseFloat(formData.amount);
+    if (isNaN(amount) || amount <= 0) {
+      alert('Amount must be a positive number.');
+      return;
+    }
+
     try {
       const billData = {
         user_id: user.id,
         bill_name: formData.bill_name,
-        amount: parseFloat(formData.amount),
+        amount,
         due_date: formData.due_date,
         category: formData.category,
         frequency: formData.frequency,

@@ -12,6 +12,7 @@ interface BeneficiaryFormProps {
 export function BeneficiaryForm({ beneficiary, onSave, onCancel }: BeneficiaryFormProps) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     full_name: beneficiary?.full_name || '',
     relationship: beneficiary?.relationship || '',
@@ -24,11 +25,17 @@ export function BeneficiaryForm({ beneficiary, onSave, onCancel }: BeneficiaryFo
     e.preventDefault();
     if (!user) return;
 
+    const pct = parseFloat(formData.allocation_percentage);
+    if (isNaN(pct) || pct <= 0 || pct > 100) {
+      setFormError('Allocation % must be a number between 0.01 and 100.');
+      return;
+    }
+    setFormError(null);
     setLoading(true);
     try {
       const data = {
         ...formData,
-        allocation_percentage: parseFloat(formData.allocation_percentage),
+        allocation_percentage: pct,
         user_id: user.id,
       };
 
@@ -44,9 +51,9 @@ export function BeneficiaryForm({ beneficiary, onSave, onCancel }: BeneficiaryFo
       }
 
       onSave();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving beneficiary:', error);
-      alert('Failed to save beneficiary');
+      setFormError(error?.message || 'Failed to save beneficiary.');
     } finally {
       setLoading(false);
     }
@@ -132,6 +139,10 @@ export function BeneficiaryForm({ beneficiary, onSave, onCancel }: BeneficiaryFo
             Contingent beneficiary (backup)
           </label>
         </div>
+
+        {formError && (
+          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{formError}</p>
+        )}
 
         <div className="flex gap-3 pt-4">
           <button
