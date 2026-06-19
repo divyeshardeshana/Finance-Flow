@@ -17,6 +17,7 @@ import { calculateAnnualDiscount } from '../../lib/pricingHelpers';
 interface FeaturesPageProps {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 function useScrollInView(threshold = 0.15) {
@@ -353,7 +354,8 @@ function CheckMark({ checked }: { checked: boolean }) {
   return <div className="w-4 h-0.5 bg-gray-200 dark:bg-white/10 rounded-full mx-auto" />;
 }
 
-export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps) {
+export default function FeaturesPage({ onNavigate, onSignIn, onGetStarted }: FeaturesPageProps) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const [featureImages, setFeatureImages] = useState<Record<string, string>>({});
   const [featureTierMap, setFeatureTierMap] = useState<Record<string, { tierName: string; displayName: string }>>({});
   const [isAnnual, setIsAnnual] = useState(false);
@@ -482,7 +484,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
           ],
         }}
       />
-      <PublicNavbar currentView="features" onNavigate={onNavigate} onSignIn={onSignIn} />
+      <PublicNavbar currentView="features" onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} />
 
       {/* HERO */}
       <section className="relative pt-28 pb-24 px-4 overflow-hidden">
@@ -534,7 +536,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <button
-              onClick={onSignIn}
+              onClick={handleGetStarted}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold text-white rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 text-base"
             >
               Start for free - no card needed
@@ -779,7 +781,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
               {tableColumns.map((col, idx) => (
                 <div key={col.tierName} className="px-3 py-5 border-l border-gray-100 dark:border-white/[0.06]">
                   <button
-                    onClick={idx === 0 ? onSignIn : () => onNavigate('pricing')}
+                    onClick={idx === 0 ? handleGetStarted : () => onNavigate('pricing')}
                     className={`w-full py-2 rounded-lg text-xs font-semibold text-white transition-colors ${ctaBtnClass[col.tierName] ?? 'bg-blue-600 hover:bg-blue-500'}`}
                   >
                     {idx === 0 ? 'Get Started' : `Get ${col.label}`}
@@ -904,7 +906,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
                   </div>
 
                   <button
-                    onClick={onSignIn}
+                    onClick={handleGetStarted}
                     className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 mb-7 ${
                       plan.highlighted
                         ? 'bg-white text-blue-700 hover:bg-blue-50 shadow-md'
@@ -997,7 +999,7 @@ export default function FeaturesPage({ onNavigate, onSignIn }: FeaturesPageProps
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
-                onClick={onSignIn}
+                onClick={handleGetStarted}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold text-base hover:bg-blue-50 transition-colors shadow-xl shadow-blue-900/20"

@@ -168,6 +168,7 @@ function useNavHandlers() {
   return {
     onNavigate: (view: PublicView) => navigate(viewToPath(view)),
     onSignIn: () => navigate(user ? '/dashboard' : '/signin'),
+    onGetStarted: () => navigate(user ? '/dashboard' : '/signup'),
   };
 }
 

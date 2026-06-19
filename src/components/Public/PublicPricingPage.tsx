@@ -23,6 +23,7 @@ import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
 interface PublicPricingPageProps {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 function useScrollInView(threshold = 0.15) {
@@ -130,7 +131,8 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricingPageProps) {
+export default function PublicPricingPage({ onNavigate, onSignIn, onGetStarted }: PublicPricingPageProps) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const [isAnnual, setIsAnnual] = useState(false);
   const { plans: pricingPlans, loading } = useSubscriptionPlans({ activeOnly: true });
 
@@ -168,7 +170,7 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
           { name: 'Pricing', url: 'https://financeflow.ai/pricing' },
         ]}
       />
-      <PublicNavbar currentView="pricing" onNavigate={onNavigate} onSignIn={onSignIn} />
+      <PublicNavbar currentView="pricing" onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} />
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative pt-28 pb-20 px-4 overflow-hidden">
@@ -323,7 +325,7 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
                     <button
                       onClick={() => {
                         gtm.planSelected(plan.displayName, isAnnual ? plan.annualPrice : plan.monthlyPrice);
-                        onSignIn();
+                        handleGetStarted();
                       }}
                       className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 mb-7 ${
                         plan.highlighted
@@ -438,7 +440,7 @@ export default function PublicPricingPage({ onNavigate, onSignIn }: PublicPricin
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
-                onClick={onSignIn}
+                onClick={handleGetStarted}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold text-base hover:bg-blue-50 transition-colors shadow-xl shadow-blue-900/20"

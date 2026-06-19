@@ -9,6 +9,7 @@ interface PublicNavbarProps {
   currentView: PublicView;
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 const navLinks: { label: string; view: PublicView }[] = [
@@ -21,7 +22,8 @@ const navLinks: { label: string; view: PublicView }[] = [
   { label: 'Contact', view: 'contact' },
 ];
 
-export function PublicNavbar({ currentView, onNavigate, onSignIn }: PublicNavbarProps) {
+export function PublicNavbar({ currentView, onNavigate, onSignIn, onGetStarted }: PublicNavbarProps) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { isDarkMode, toggleDarkMode } = useAppPreferences();
@@ -95,7 +97,7 @@ export function PublicNavbar({ currentView, onNavigate, onSignIn }: PublicNavbar
               Sign In
             </button>
             <button
-              onClick={onSignIn}
+              onClick={handleGetStarted}
               className="px-5 py-2 text-sm font-semibold text-white rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 shadow-md shadow-blue-500/20 hover:shadow-blue-500/40 dark:shadow-blue-500/30 dark:hover:shadow-blue-400/50"
             >
               Get Started
@@ -142,7 +144,7 @@ export function PublicNavbar({ currentView, onNavigate, onSignIn }: PublicNavbar
                   Sign In
                 </button>
                 <button
-                  onClick={() => { onSignIn(); setMobileOpen(false); }}
+                  onClick={() => { handleGetStarted(); setMobileOpen(false); }}
                   className="w-full px-4 py-3 text-sm font-semibold text-white rounded-xl bg-gradient-to-r from-blue-600 to-blue-500"
                 >
                   Get Started Free
