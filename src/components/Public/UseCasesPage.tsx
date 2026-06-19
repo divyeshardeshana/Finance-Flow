@@ -13,6 +13,7 @@ import SEOHead from '../SEO/SEOHead';
 interface UseCasesPageProps {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 const fadeUp = {
@@ -136,7 +137,7 @@ const USE_CASES: UseCase[] = [
   },
 ];
 
-function UseCaseCard({ uc, index, onSignIn }: { uc: UseCase; index: number; onSignIn: () => void }) {
+function UseCaseCard({ uc, index, onSignIn }: { uc: UseCase; index: number; onSignIn: () => void; }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });
   const isEven = index % 2 === 0;
@@ -217,7 +218,8 @@ function UseCaseCard({ uc, index, onSignIn }: { uc: UseCase; index: number; onSi
   );
 }
 
-export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps) {
+export default function UseCasesPage({ onNavigate, onSignIn, onGetStarted }: UseCasesPageProps) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const heroRef = useRef<HTMLDivElement>(null);
   const heroInView = useInView(heroRef, { once: true });
 
@@ -234,7 +236,7 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
         ]}
       />
       <div className="min-h-screen bg-white dark:bg-[#0B0F1A]">
-        <PublicNavbar currentView="use-cases" onNavigate={onNavigate} onSignIn={onSignIn} />
+        <PublicNavbar currentView="use-cases" onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} />
 
         {/* Hero */}
         <section ref={heroRef} className="pt-28 pb-12 px-4 text-center relative overflow-hidden">
@@ -279,7 +281,7 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
         <section className="max-w-6xl mx-auto px-4">
           {USE_CASES.map((uc, i) => (
             <div key={uc.id} id={uc.id}>
-              <UseCaseCard uc={uc} index={i} onSignIn={onSignIn} />
+              <UseCaseCard uc={uc} index={i} onSignIn={handleGetStarted} />
             </div>
           ))}
         </section>
@@ -303,7 +305,7 @@ export default function UseCasesPage({ onNavigate, onSignIn }: UseCasesPageProps
             </motion.p>
             <motion.div variants={fadeUp} custom={0.2} className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
-                onClick={onSignIn}
+                onClick={handleGetStarted}
                 className="px-8 py-3.5 rounded-xl bg-white text-blue-600 font-bold text-sm hover:bg-blue-50 transition-colors shadow-lg"
               >
                 Get Started Free
