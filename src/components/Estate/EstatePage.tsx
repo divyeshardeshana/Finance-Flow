@@ -241,8 +241,8 @@ export function EstatePage() {
                               <div className="flex-1">
                                 <h4 className="font-semibold text-gray-900">{ben.full_name}</h4>
                                 <p className="text-sm text-gray-600 mt-1">{ben.relationship}</p>
-                                {ben.contact_info && (
-                                  <p className="text-sm text-gray-500 mt-1">{ben.contact_info}</p>
+                                {ben.contact_email && (
+                                  <p className="text-sm text-gray-500 mt-1">{ben.contact_email}</p>
                                 )}
                                 <div className="flex items-center gap-2 mt-2">
                                   <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
