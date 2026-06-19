@@ -263,8 +263,9 @@ export function RetirementPage() {
 
       resetAccountForm();
       loadData();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving account:', error);
+      alert('Failed to save account: ' + (error?.message || 'Unknown error'));
     }
   }
 
