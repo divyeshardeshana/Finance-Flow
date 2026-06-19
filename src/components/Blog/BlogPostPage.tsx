@@ -1244,28 +1244,26 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
       <PublicNavbar currentView="blog" onNavigate={navigate} onSignIn={onSignIn || onBack} />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <div className="relative w-full h-[62vh] min-h-[420px] max-h-[640px] overflow-hidden">
-        {/* Dark gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-[#0B0F1A] to-[#0B0F1A]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
+      <div className="relative pt-32 pb-14 px-6 overflow-hidden bg-white dark:bg-[#0B0F1A]">
+        {/* Subtle gradient blobs matching other pages */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-b from-blue-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-20 right-1/4 w-64 h-64 bg-cyan-400/[0.06] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-32 left-1/4 w-72 h-72 bg-blue-600/[0.06] rounded-full blur-3xl pointer-events-none" />
 
-        {/* Back button */}
-        <div className="absolute top-0 left-0 right-0 pt-20 px-6 max-w-[900px] mx-auto w-full">
+        <div className="max-w-[900px] mx-auto w-full relative">
+          {/* Back button */}
           <motion.button
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
             onClick={onBack}
-            className="inline-flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors group backdrop-blur-sm bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-lg border border-white/10"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group mb-8 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/[0.06] hover:bg-gray-200 dark:hover:bg-white/[0.10] border border-gray-200/80 dark:border-white/[0.08]"
           >
             <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform duration-200" />
             Back to Blog
           </motion.button>
-        </div>
 
-        {/* Title area - bottom of hero */}
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-10 max-w-[900px] mx-auto w-full">
+          {/* Title area */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1273,16 +1271,16 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
           >
             {post.blog_categories && (
               <span
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white mb-4 shadow-lg"
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white mb-5 shadow-sm"
                 style={{ backgroundColor: post.blog_categories.color }}
               >
                 {post.blog_categories.name}
               </span>
             )}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-white mb-4 drop-shadow-lg">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-gray-900 dark:text-white mb-5">
               {post.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
               {publishDate && (
                 <div className="flex items-center gap-1.5">
                   <Calendar size={13} />
@@ -1294,7 +1292,7 @@ export default function BlogPostPage({ slug, onBack, onPostClick, onNavigate, on
                 {readTime} min read
               </div>
               {post.tags && post.tags.slice(0, 3).map(tag => (
-                <span key={tag} className="px-2 py-0.5 rounded-md bg-white/10 text-white/60 text-xs border border-white/10">
+                <span key={tag} className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/[0.06] text-gray-500 dark:text-gray-400 text-xs border border-gray-200/80 dark:border-white/[0.08]">
                   #{tag}
                 </span>
               ))}
