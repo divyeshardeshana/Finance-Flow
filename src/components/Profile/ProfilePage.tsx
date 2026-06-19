@@ -610,13 +610,18 @@ export function ProfilePage({ initialTab, onTabChange }: ProfilePageProps = {}) 
     if (user?.id && fromCurrency !== toCurrency) {
       try {
         const rate = convertCurrency(1, fromCurrency, toCurrency);
-        await supabase.from('currency_change_history').insert({
+        const { error: historyError } = await supabase.from('currency_change_history').insert({
           user_id: user.id,
           from_currency: fromCurrency,
           to_currency: toCurrency,
           exchange_rate: rate,
           changed_at: new Date().toISOString(),
         });
+        if (historyError) {
+          console.error('Currency history insert error:', historyError.message, historyError.code, historyError.details);
+        }
+        // Also persist currency to user_profiles immediately
+        await supabase.from('user_profiles').update({ currency: toCurrency, updated_at: new Date().toISOString() }).eq('id', user.id);
         loadCurrencyHistory();
       } catch (err) {
         console.error('Error recording currency history:', err);
