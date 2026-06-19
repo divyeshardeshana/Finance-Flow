@@ -12,6 +12,7 @@ import SEOHead from '../SEO/SEOHead';
 interface Props {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 const fadeUp = {
@@ -102,7 +103,8 @@ const FEATURES = [
   { icon: Sparkles, text: 'Net worth tracker' },
 ];
 
-export default function HowItWorksPage({ onNavigate, onSignIn }: Props) {
+export default function HowItWorksPage({ onNavigate, onSignIn, onGetStarted }: Props) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
 
@@ -118,7 +120,7 @@ export default function HowItWorksPage({ onNavigate, onSignIn }: Props) {
           { name: 'How It Works', url: 'https://financeflow.ai/how-it-works' },
         ]}
       />
-      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="how-it-works" />
+      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} currentView="how-it-works" />
 
       {/* Hero */}
       <section ref={heroRef} className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 text-center">
@@ -141,7 +143,7 @@ export default function HowItWorksPage({ onNavigate, onSignIn }: Props) {
           </motion.p>
           <motion.div variants={fadeUp} custom={3} className="flex flex-wrap justify-center gap-3">
             <button
-              onClick={onSignIn}
+              onClick={handleGetStarted}
               className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105"
             >
               Get started free <ArrowRight size={16} className="inline ml-1" />
@@ -245,7 +247,7 @@ export default function HowItWorksPage({ onNavigate, onSignIn }: Props) {
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Start your financial journey today</h2>
           <p className="text-gray-500 dark:text-gray-400 mb-8">Free plan. No credit card. No bank connections required.</p>
           <button
-            onClick={onSignIn}
+            onClick={handleGetStarted}
             className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105 text-lg"
           >
             Create free account <ArrowRight size={18} className="inline ml-2" />

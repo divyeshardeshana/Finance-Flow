@@ -8,6 +8,7 @@ import SEOHead from '../SEO/SEOHead';
 interface Props {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 const fadeUp = {
@@ -35,7 +36,8 @@ function fmt(n: number, symbol: string) {
   return `${symbol}${Math.round(n).toLocaleString()}`;
 }
 
-export default function ROICalculatorPage({ onNavigate, onSignIn }: Props) {
+export default function ROICalculatorPage({ onNavigate, onSignIn, onGetStarted }: Props) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
 
@@ -75,7 +77,7 @@ export default function ROICalculatorPage({ onNavigate, onSignIn }: Props) {
           { name: 'ROI Calculator', url: 'https://financeflow.ai/roi-calculator' },
         ]}
       />
-      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="roi-calculator" />
+      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} currentView="roi-calculator" />
 
       {/* Hero */}
       <section ref={heroRef} className="pt-24 pb-10 px-4 sm:px-6 lg:px-8 text-center">
@@ -255,7 +257,7 @@ export default function ROICalculatorPage({ onNavigate, onSignIn }: Props) {
             </p>
 
             <button
-              onClick={onSignIn}
+              onClick={handleGetStarted}
               className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-[1.02] text-base"
             >
               Start saving - it's free <ArrowRight size={16} className="inline ml-2" />

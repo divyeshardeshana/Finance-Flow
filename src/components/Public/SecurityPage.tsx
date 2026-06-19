@@ -11,6 +11,7 @@ import SEOHead from '../SEO/SEOHead';
 interface Props {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 const fadeUp = {
@@ -115,7 +116,8 @@ const BADGES = [
   { label: '256-bit AES', sub: 'At rest' },
 ];
 
-export default function SecurityPage({ onNavigate, onSignIn }: Props) {
+export default function SecurityPage({ onNavigate, onSignIn, onGetStarted }: Props) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
 
@@ -131,7 +133,7 @@ export default function SecurityPage({ onNavigate, onSignIn }: Props) {
           { name: 'Security & Trust', url: 'https://financeflow.ai/security' },
         ]}
       />
-      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="security" />
+      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} currentView="security" />
 
       {/* Hero */}
       <section ref={heroRef} className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 text-center">
@@ -244,7 +246,7 @@ export default function SecurityPage({ onNavigate, onSignIn }: Props) {
           <p className="text-gray-500 dark:text-gray-400 mb-8">Start for free. Your data is protected from your first transaction.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
-              onClick={onSignIn}
+              onClick={handleGetStarted}
               className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105 text-lg"
             >
               Get started free <ArrowRight size={18} className="inline ml-2" />

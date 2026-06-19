@@ -8,6 +8,7 @@ import SEOHead from '../SEO/SEOHead';
 interface Props {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 const fadeUp = {
@@ -104,7 +105,8 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-export default function TestimonialsPage({ onNavigate, onSignIn }: Props) {
+export default function TestimonialsPage({ onNavigate, onSignIn, onGetStarted }: Props) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
   const statsRef = useRef(null);
@@ -122,7 +124,7 @@ export default function TestimonialsPage({ onNavigate, onSignIn }: Props) {
           { name: 'Testimonials', url: 'https://financeflow.ai/testimonials' },
         ]}
       />
-      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="testimonials" />
+      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} currentView="testimonials" />
 
       {/* Hero */}
       <section ref={heroRef} className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 text-center">
@@ -215,7 +217,7 @@ export default function TestimonialsPage({ onNavigate, onSignIn }: Props) {
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Write your own success story</h2>
           <p className="text-gray-500 dark:text-gray-400 mb-8">Free plan. No credit card. Results in the first week.</p>
           <button
-            onClick={onSignIn}
+            onClick={handleGetStarted}
             className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105 text-lg"
           >
             Get started free <ArrowRight size={18} className="inline ml-2" />

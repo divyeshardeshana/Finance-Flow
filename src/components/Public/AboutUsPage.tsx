@@ -22,6 +22,7 @@ import { PublicFooter } from '../Common/PublicFooter';
 interface AboutUsPageProps {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 function useScrollInView(threshold = 0.15) {
@@ -112,7 +113,8 @@ const problemPoints = [
   'Financial advisors are expensive and inaccessible.',
 ];
 
-export default function AboutUsPage({ onNavigate, onSignIn }: AboutUsPageProps) {
+export default function AboutUsPage({ onNavigate, onSignIn, onGetStarted }: AboutUsPageProps) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const problemSection = useScrollInView();
   const statsSection = useScrollInView();
   const valuesSection = useScrollInView();
@@ -121,7 +123,7 @@ export default function AboutUsPage({ onNavigate, onSignIn }: AboutUsPageProps) 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0B0F1A] overflow-x-hidden">
       <SEOHead pageKey="about" />
-      <PublicNavbar currentView="about" onNavigate={onNavigate} onSignIn={onSignIn} />
+      <PublicNavbar currentView="about" onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} />
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative pt-28 pb-24 px-4 overflow-hidden">
@@ -411,7 +413,7 @@ export default function AboutUsPage({ onNavigate, onSignIn }: AboutUsPageProps) 
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
-                onClick={onSignIn}
+                onClick={handleGetStarted}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold text-base hover:bg-blue-50 transition-colors shadow-xl shadow-blue-900/20"

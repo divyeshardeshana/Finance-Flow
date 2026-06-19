@@ -8,6 +8,7 @@ import SEOHead from '../SEO/SEOHead';
 interface Props {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 const fadeUp = {
@@ -51,7 +52,8 @@ function Cell({ value, highlight }: { value: CellValue; highlight: boolean }) {
   return <span className={`text-xs font-medium ${highlight ? 'text-blue-300' : 'text-gray-500 dark:text-gray-400'}`}>{value}</span>;
 }
 
-export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
+export default function ComparisonPage({ onNavigate, onSignIn, onGetStarted }: Props) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
   const tableRef = useRef(null);
@@ -69,7 +71,7 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
           { name: 'Comparison', url: 'https://financeflow.ai/comparison' },
         ]}
       />
-      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} currentView="comparison" />
+      <PublicNavbar onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} currentView="comparison" />
 
       {/* Hero */}
       <section ref={heroRef} className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 text-center">
@@ -151,7 +153,7 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
                 >
                   {col.highlight && (
                     <button
-                      onClick={onSignIn}
+                      onClick={handleGetStarted}
                       className="px-4 py-2 bg-white text-blue-700 font-bold rounded-xl text-sm hover:bg-blue-50 transition-colors"
                     >
                       Start free
@@ -264,7 +266,7 @@ export default function ComparisonPage({ onNavigate, onSignIn }: Props) {
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Try FinanceFlow AI free</h2>
           <p className="text-gray-500 dark:text-gray-400 mb-8">No credit card. No bank link required. Switch anytime.</p>
           <button
-            onClick={onSignIn}
+            onClick={handleGetStarted}
             className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105 text-lg"
           >
             Get started free <ArrowRight size={18} className="inline ml-2" />

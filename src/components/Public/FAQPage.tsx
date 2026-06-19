@@ -12,6 +12,7 @@ import { supabase } from '../../lib/supabase';
 interface FAQPageProps {
   onNavigate: (view: PublicView) => void;
   onSignIn: () => void;
+  onGetStarted?: () => void;
 }
 
 interface FAQItem {
@@ -99,7 +100,8 @@ function AccordionItem({ faq, isOpen, onToggle, accentGradient }: {
   );
 }
 
-export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
+export default function FAQPage({ onNavigate, onSignIn, onGetStarted }: FAQPageProps) {
+  const handleGetStarted = onGetStarted ?? onSignIn;
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -149,7 +151,7 @@ export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
       {faqs.length > 0 && <FAQSchemaScript faqs={faqs} />}
 
       <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e]">
-        <PublicNavbar currentView="faq" onNavigate={onNavigate} onSignIn={onSignIn} />
+        <PublicNavbar currentView="faq" onNavigate={onNavigate} onSignIn={onSignIn} onGetStarted={handleGetStarted} />
 
         {/* Hero */}
         <section className="pt-28 pb-12 px-4 relative overflow-hidden">
@@ -392,7 +394,7 @@ export default function FAQPage({ onNavigate, onSignIn }: FAQPageProps) {
             </div>
             <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
               <button
-                onClick={onSignIn}
+                onClick={handleGetStarted}
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105"
               >
                 <Zap size={15} className="inline mr-1.5" />
