@@ -228,8 +228,9 @@ export function BillRemindersPage() {
       setEditingBill(null);
       resetForm();
       loadBills();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving bill:', error);
+      alert('Failed to save bill: ' + (error?.message || 'Unknown error'));
     }
   }
 

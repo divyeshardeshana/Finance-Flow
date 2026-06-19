@@ -15,9 +15,9 @@ export function BeneficiaryForm({ beneficiary, onSave, onCancel }: BeneficiaryFo
   const [formError, setFormError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     full_name: beneficiary?.full_name || '',
-    relationship: beneficiary?.relationship || '',
+    relationship: beneficiary?.relationship || 'other',
     allocation_percentage: beneficiary?.allocation_percentage || '',
-    contact_info: beneficiary?.contact_info || '',
+    contact_email: beneficiary?.contact_email || '',
     contingent: beneficiary?.contingent || false,
   });
 
@@ -89,14 +89,22 @@ export function BeneficiaryForm({ beneficiary, onSave, onCancel }: BeneficiaryFo
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Relationship <span className="text-red-600">*</span>
             </label>
-            <input
-              type="text"
+            <select
               required
               value={formData.relationship}
               onChange={(e) => setFormData({ ...formData, relationship: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="e.g., Spouse, Child"
-            />
+            >
+              <option value="">Select...</option>
+              <option value="spouse">Spouse</option>
+              <option value="child">Child</option>
+              <option value="parent">Parent</option>
+              <option value="sibling">Sibling</option>
+              <option value="friend">Friend</option>
+              <option value="trust">Trust</option>
+              <option value="charity">Charity</option>
+              <option value="other">Other</option>
+            </select>
           </div>
 
           <div>
@@ -117,13 +125,13 @@ export function BeneficiaryForm({ beneficiary, onSave, onCancel }: BeneficiaryFo
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Contact Info</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
           <input
-            type="text"
-            value={formData.contact_info}
-            onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })}
+            type="email"
+            value={formData.contact_email}
+            onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Email or phone"
+            placeholder="Email address"
           />
         </div>
 
