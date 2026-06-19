@@ -15,11 +15,12 @@ interface PublicNavbarProps {
 const navLinks: { label: string; view: PublicView }[] = [
   { label: 'Home', view: 'home' },
   { label: 'Features', view: 'features' },
+  { label: 'How It Works', view: 'how-it-works' },
   { label: 'Use Cases', view: 'use-cases' },
   { label: 'Pricing', view: 'pricing' },
   { label: 'FAQ', view: 'faq' },
   { label: 'Blog', view: 'blog' },
-  { label: 'Contact', view: 'contact' },
+  { label: 'Contact Us', view: 'contact' },
 ];
 
 export function PublicNavbar({ currentView, onNavigate, onSignIn, onGetStarted }: PublicNavbarProps) {
