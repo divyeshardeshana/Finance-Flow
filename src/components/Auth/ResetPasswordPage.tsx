@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Lock, AlertCircle, CheckCircle, Eye, EyeOff, RefreshCw, ShieldCheck, ArrowRight } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -58,8 +58,6 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const exchangedRef = useRef(false);
-
   const [hashError] = useState(parseHashError);
 
   const [pageState, setPageState] = useState<PageState>(() => {
@@ -68,47 +66,31 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
     return 'verifying';
   });
 
-  // Listen for PASSWORD_RECOVERY event and check existing session
   useEffect(() => {
-    const hash = window.location.hash;
-    const hasRecoverySignal = hash.includes('type=recovery') || hash.includes('access_token');
+    if (pageState !== 'verifying') return;
 
+    // isPasswordRecovery set by AuthContext via PASSWORD_RECOVERY event (or detectRecoveryFromUrl)
+    // user set when session is actually established
+    if (isPasswordRecovery && user) {
+      window.history.replaceState(null, '', window.location.pathname);
+      setPageState('ready');
+      return;
+    }
+
+    // No recovery signal at all — fail fast
+    const hash = window.location.hash;
+    const hasRecoverySignal = isPasswordRecovery
+      || hash.includes('type=recovery')
+      || hash.includes('access_token');
     if (!hasRecoverySignal) {
       setPageState('expired');
       return;
     }
 
-    let settled = false;
-    const settle = (ready: boolean) => {
-      if (settled) return;
-      settled = true;
-      window.history.replaceState(null, '', window.location.pathname);
-      setPageState(ready ? 'ready' : 'expired');
-    };
-
-    // Subscribe first so we don't miss the event
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'PASSWORD_RECOVERY' && session) {
-        settle(true);
-      }
-    });
-
-    // Also check if session already established before we subscribed
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) settle(true);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  // Fallback timeout — in case run() hangs
-  useEffect(() => {
-    if (pageState !== 'verifying') return;
-    const timer = setTimeout(() => {
-      setPageState(prev => prev === 'verifying' ? 'expired' : prev);
-    }, VERIFY_TIMEOUT_MS);
+    // Has signal but user not set yet — wait (PASSWORD_RECOVERY event will set user)
+    const timer = setTimeout(() => setPageState('expired'), VERIFY_TIMEOUT_MS);
     return () => clearTimeout(timer);
-  }, [pageState]);
+  }, [isPasswordRecovery, user, pageState]);
 
   const strength = useMemo(() => getPasswordStrength(password), [password]);
   const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword;
