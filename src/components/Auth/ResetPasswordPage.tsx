@@ -68,43 +68,53 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
     return 'verifying';
   });
 
-  // Clean up URL hash/code after Supabase reads it
+  // Establish session from URL (PKCE ?code= or implicit #access_token=)
   useEffect(() => {
     if (exchangedRef.current) return;
     exchangedRef.current = true;
-    if (window.location.hash || window.location.search.includes('code=')) {
-      setTimeout(() => {
+
+    const run = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+
+      if (code) {
+        // PKCE flow: must exchange manually
+        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
         window.history.replaceState(null, '', window.location.pathname);
-      }, 2000); // delay so Supabase can read URL first
-    }
+        if (error || !data.session) {
+          setPageState('expired');
+        } else {
+          setPageState('ready');
+        }
+        return;
+      }
+
+      // Implicit flow: Supabase detects #access_token= hash via getSession()
+      if (window.location.hash.includes('type=recovery')) {
+        const { data: { session } } = await supabase.auth.getSession();
+        window.history.replaceState(null, '', window.location.pathname);
+        if (session) {
+          setPageState('ready');
+        } else {
+          setPageState('expired');
+        }
+        return;
+      }
+
+      // No recovery signal in URL at all
+      setPageState('expired');
+    };
+
+    run();
   }, []);
 
-  // Handle implicit flow — hash contains access_token + type=recovery
-  useEffect(() => {
-    if (hashError.isError && window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname);
-    }
-  }, [hashError.isError]);
-
+  // Fallback timeout — in case run() hangs
   useEffect(() => {
     if (pageState !== 'verifying') return;
-    // Require both: isPasswordRecovery (recovery event fired) AND user (session established)
-    if (isPasswordRecovery && user) {
-      setPageState('ready');
-      return;
-    }
     const timer = setTimeout(() => {
-      if (!isPasswordRecovery && !user) {
-        setPageState('expired');
-      }
+      setPageState(prev => prev === 'verifying' ? 'expired' : prev);
     }, VERIFY_TIMEOUT_MS);
     return () => clearTimeout(timer);
-  }, [isPasswordRecovery, user, pageState]);
-
-  useEffect(() => {
-    if (pageState === 'ready' && window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname);
-    }
   }, [pageState]);
 
   const strength = useMemo(() => getPasswordStrength(password), [password]);
