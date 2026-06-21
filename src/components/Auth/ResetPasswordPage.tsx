@@ -64,19 +64,19 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
 
   const [pageState, setPageState] = useState<PageState>(() => {
     if (hashError.isError) return 'expired';
-    if (isPasswordRecovery) return 'ready';
+    // Always start verifying — detectRecoveryFromUrl sees URL but session not established yet
     return 'verifying';
   });
 
-  // Supabase v2 auto-exchanges ?code= via detectSessionInUrl — fires PASSWORD_RECOVERY event
-  // which sets isPasswordRecovery=true in AuthContext. Just clean up the URL.
+  // Clean up URL hash/code after Supabase reads it
   useEffect(() => {
     if (exchangedRef.current) return;
-    const params = new URLSearchParams(window.location.search);
-    if (!params.get('code')) return;
     exchangedRef.current = true;
-    // Remove code from URL without re-triggering auth
-    window.history.replaceState(null, '', window.location.pathname);
+    if (window.location.hash || window.location.search.includes('code=')) {
+      setTimeout(() => {
+        window.history.replaceState(null, '', window.location.pathname);
+      }, 2000); // delay so Supabase can read URL first
+    }
   }, []);
 
   // Handle implicit flow — hash contains access_token + type=recovery
@@ -88,7 +88,8 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
 
   useEffect(() => {
     if (pageState !== 'verifying') return;
-    if (isPasswordRecovery || user) {
+    // Require both: isPasswordRecovery (recovery event fired) AND user (session established)
+    if (isPasswordRecovery && user) {
       setPageState('ready');
       return;
     }
