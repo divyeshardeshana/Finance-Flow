@@ -64,34 +64,19 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
 
   const [pageState, setPageState] = useState<PageState>(() => {
     if (hashError.isError) return 'expired';
-    // If ?code= present, must exchange first — start verifying regardless of isPasswordRecovery
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('code')) return 'verifying';
     if (isPasswordRecovery) return 'ready';
     return 'verifying';
   });
 
-  // Handle PKCE ?code= exchange — Supabase v2 sends code in URL for recovery
+  // Supabase v2 auto-exchanges ?code= via detectSessionInUrl — fires PASSWORD_RECOVERY event
+  // which sets isPasswordRecovery=true in AuthContext. Just clean up the URL.
   useEffect(() => {
     if (exchangedRef.current) return;
     const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    if (!code) return;
+    if (!params.get('code')) return;
     exchangedRef.current = true;
-    supabase.auth.exchangeCodeForSession(code).then(async ({ data, error: exchError }) => {
-      if (exchError || !data.session) {
-        setPageState('expired');
-        window.history.replaceState(null, '', window.location.pathname);
-        return;
-      }
-      // Explicitly set session to ensure client state is populated before form renders
-      await supabase.auth.setSession({
-        access_token: data.session.access_token,
-        refresh_token: data.session.refresh_token,
-      });
-      window.history.replaceState(null, '', window.location.pathname);
-      setPageState('ready');
-    });
+    // Remove code from URL without re-triggering auth
+    window.history.replaceState(null, '', window.location.pathname);
   }, []);
 
   // Handle implicit flow — hash contains access_token + type=recovery
