@@ -220,6 +220,13 @@ export default function BlogTab() {
       loadData();
 
       if (formData.auto_publish) {
+        // Publish immediately regardless of AI content generation outcome
+        await updateBlogPost(savedPost.id, {
+          status: 'published',
+          published_at: new Date().toISOString(),
+        } as Partial<BlogPost>, user.id);
+        await loadData();
+
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.access_token) {
           setGeneratingId(savedPost.id);
@@ -229,13 +236,10 @@ export default function BlogTab() {
               content: result.content,
               excerpt: result.excerpt,
               meta_description: result.meta_description || formData.meta_description,
-              status: 'published',
-              published_at: new Date().toISOString(),
             } as Partial<BlogPost>, user.id);
             await loadData();
           } catch (genErr: any) {
-            setGeneratingId(null);
-            alert(`Blog post created successfully, but AI content generation failed: ${genErr.message || 'Unknown error'}. You can retry using the AI generate button.`);
+            alert(`Blog post published, but AI content generation failed: ${genErr.message || 'Unknown error'}. You can retry using the AI generate button.`);
           } finally {
             setGeneratingId(null);
           }
