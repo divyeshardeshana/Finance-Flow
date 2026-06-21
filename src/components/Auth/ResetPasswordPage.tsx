@@ -64,6 +64,9 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
 
   const [pageState, setPageState] = useState<PageState>(() => {
     if (hashError.isError) return 'expired';
+    // If ?code= present, must exchange first — start verifying regardless of isPasswordRecovery
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('code')) return 'verifying';
     if (isPasswordRecovery) return 'ready';
     return 'verifying';
   });
@@ -75,12 +78,12 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
     const code = params.get('code');
     if (!code) return;
     exchangedRef.current = true;
-    supabase.auth.exchangeCodeForSession(code).then(({ error: exchError }) => {
-      if (exchError) {
+    supabase.auth.exchangeCodeForSession(code).then(({ data, error: exchError }) => {
+      if (exchError || !data.session) {
         setPageState('expired');
+      } else {
+        setPageState('ready');
       }
-      // PASSWORD_RECOVERY event from onAuthStateChange will set isPasswordRecovery → pageState ready
-      // Clean up URL
       window.history.replaceState(null, '', window.location.pathname);
     });
   }, []);
