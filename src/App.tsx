@@ -198,6 +198,7 @@ function AppContent() {
           element={
             <LandingPage
               onGetStarted={() => navigate(user ? '/dashboard' : '/signup')}
+              onSignIn={() => navigate(user ? '/dashboard' : '/signin')}
               onBlogClick={() => navigate('/blog')}
               onNavigate={navHandlers.onNavigate}
             />

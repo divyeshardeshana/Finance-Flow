@@ -34,6 +34,7 @@ import { PublicFooter } from '../Common/PublicFooter';
 
 interface LandingPageProps {
   onGetStarted: () => void;
+  onSignIn?: () => void;
   onBlogClick?: () => void;
   onNavigate?: (view: PublicView) => void;
 }
@@ -194,7 +195,7 @@ function HeroDashboard() {
   );
 }
 
-export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPageProps) {
+export function LandingPage({ onGetStarted, onSignIn, onBlogClick, onNavigate }: LandingPageProps) {
   const [isAnnual, setIsAnnual] = useState(false);
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
   const [loadingPricing, setLoadingPricing] = useState(true);
@@ -267,7 +268,8 @@ export function LandingPage({ onGetStarted, onBlogClick, onNavigate }: LandingPa
           if (view === 'blog' && onBlogClick) { onBlogClick(); return; }
           if (onNavigate) onNavigate(view);
         }}
-        onSignIn={onGetStarted}
+        onSignIn={onSignIn ?? onGetStarted}
+        onGetStarted={onGetStarted}
       />
 
       {/* ── HERO ──────────────────────────────────────────────────────── */}
