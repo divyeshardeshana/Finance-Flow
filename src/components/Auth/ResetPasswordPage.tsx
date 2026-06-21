@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Lock, AlertCircle, CheckCircle, Eye, EyeOff, RefreshCw, ShieldCheck, ArrowRight } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -58,18 +58,37 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const exchangedRef = useRef(false);
 
   const [hashError] = useState(parseHashError);
 
   const [pageState, setPageState] = useState<PageState>(() => {
     if (hashError.isError) return 'expired';
-    if (isPasswordRecovery || user) return 'ready';
+    if (isPasswordRecovery) return 'ready';
     return 'verifying';
   });
 
+  // Handle PKCE ?code= exchange — Supabase v2 sends code in URL for recovery
+  useEffect(() => {
+    if (exchangedRef.current) return;
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (!code) return;
+    exchangedRef.current = true;
+    supabase.auth.exchangeCodeForSession(code).then(({ error: exchError }) => {
+      if (exchError) {
+        setPageState('expired');
+      }
+      // PASSWORD_RECOVERY event from onAuthStateChange will set isPasswordRecovery → pageState ready
+      // Clean up URL
+      window.history.replaceState(null, '', window.location.pathname);
+    });
+  }, []);
+
+  // Handle implicit flow — hash contains access_token + type=recovery
   useEffect(() => {
     if (hashError.isError && window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      window.history.replaceState(null, '', window.location.pathname);
     }
   }, [hashError.isError]);
 
@@ -89,7 +108,7 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
 
   useEffect(() => {
     if (pageState === 'ready' && window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      window.history.replaceState(null, '', window.location.pathname);
     }
   }, [pageState]);
 

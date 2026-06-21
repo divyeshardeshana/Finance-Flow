@@ -22,8 +22,8 @@ function detectRecoveryFromUrl(): boolean {
   if (hash.includes('type=recovery')) return true;
   const params = new URLSearchParams(window.location.search);
   if (params.get('view') === 'reset-password') return true;
-  // When redirectTo is /reset-password, the path itself signals recovery
-  if (window.location.pathname === '/reset-password') return true;
+  // PKCE flow: code in URL on /reset-password path means recovery is in progress
+  if (window.location.pathname === '/reset-password' && params.get('code')) return true;
   return false;
 }
 
