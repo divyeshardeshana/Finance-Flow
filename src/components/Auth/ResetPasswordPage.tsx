@@ -48,7 +48,7 @@ function getPasswordStrength(password: string): { score: number; label: string; 
   return { score: 5, label: 'Very Strong', color: 'bg-green-600' };
 }
 
-const VERIFY_TIMEOUT_MS = 10000;
+const VERIFY_TIMEOUT_MS = 20000;
 
 export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPassword }: ResetPasswordPageProps) {
   const { user, isPasswordRecovery } = useAuth();
@@ -354,6 +354,7 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
         currentView="home"
         onNavigate={onNavigate}
         onSignIn={onSignIn}
+        onGetStarted={onSignIn}
       />
       <div className="relative flex-1 flex flex-col items-center justify-center pt-28 pb-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">

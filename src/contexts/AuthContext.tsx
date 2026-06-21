@@ -22,6 +22,8 @@ function detectRecoveryFromUrl(): boolean {
   if (hash.includes('type=recovery')) return true;
   const params = new URLSearchParams(window.location.search);
   if (params.get('view') === 'reset-password') return true;
+  // When redirectTo is /reset-password, the path itself signals recovery
+  if (window.location.pathname === '/reset-password') return true;
   return false;
 }
 

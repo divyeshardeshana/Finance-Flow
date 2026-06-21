@@ -49,7 +49,7 @@ export function ForgotPasswordPage({ onNavigate, onSignIn, onBackToSignIn }: For
     }
 
     setLoading(true);
-    const redirectTo = `${window.location.origin}/?view=reset-password`;
+    const redirectTo = `${window.location.origin}/reset-password`;
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
     setLoading(false);
 
@@ -65,7 +65,7 @@ export function ForgotPasswordPage({ onNavigate, onSignIn, onBackToSignIn }: For
     if (cooldown > 0) return;
     setError('');
     setLoading(true);
-    const redirectTo = `${window.location.origin}/?view=reset-password`;
+    const redirectTo = `${window.location.origin}/reset-password`;
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
     setLoading(false);
 
