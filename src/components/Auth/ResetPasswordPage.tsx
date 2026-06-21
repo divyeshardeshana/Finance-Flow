@@ -68,35 +68,37 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
     return 'verifying';
   });
 
-  // Implicit flow: Supabase detects #access_token= hash via detectSessionInUrl
-  // getSession() processes the hash and fires PASSWORD_RECOVERY via onAuthStateChange
+  // Listen for PASSWORD_RECOVERY event and check existing session
   useEffect(() => {
-    if (exchangedRef.current) return;
-    exchangedRef.current = true;
+    const hash = window.location.hash;
+    const hasRecoverySignal = hash.includes('type=recovery') || hash.includes('access_token');
 
-    const run = async () => {
-      const hash = window.location.hash;
-
-      if (hash.includes('type=recovery') || hash.includes('access_token')) {
-        // Give Supabase time to process hash (detectSessionInUrl)
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          setPageState('ready');
-        } else {
-          // Wait briefly for onAuthStateChange to fire
-          await new Promise(resolve => setTimeout(resolve, 1500));
-          const { data: { session: session2 } } = await supabase.auth.getSession();
-          setPageState(session2 ? 'ready' : 'expired');
-        }
-        window.history.replaceState(null, '', window.location.pathname);
-        return;
-      }
-
-      // No recovery hash → expired
+    if (!hasRecoverySignal) {
       setPageState('expired');
+      return;
+    }
+
+    let settled = false;
+    const settle = (ready: boolean) => {
+      if (settled) return;
+      settled = true;
+      window.history.replaceState(null, '', window.location.pathname);
+      setPageState(ready ? 'ready' : 'expired');
     };
 
-    run();
+    // Subscribe first so we don't miss the event
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY' && session) {
+        settle(true);
+      }
+    });
+
+    // Also check if session already established before we subscribed
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) settle(true);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Fallback timeout — in case run() hangs
