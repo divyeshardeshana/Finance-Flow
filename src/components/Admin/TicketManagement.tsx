@@ -316,7 +316,8 @@ export default function TicketManagement() {
     if (!canManage) return;
     if (!confirm('Delete this ticket permanently?')) return;
     try {
-      await supabase.from('support_tickets').delete().eq('id', ticketId);
+      const { error } = await supabase.from('support_tickets').delete().eq('id', ticketId);
+      if (error) throw error;
       if (selectedTicket?.id === ticketId) {
         setSelectedTicket(null);
         setTicketMessages([]);
