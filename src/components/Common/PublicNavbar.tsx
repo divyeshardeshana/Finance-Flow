@@ -158,3 +158,4 @@ export function PublicNavbar({ currentView, onNavigate, onSignIn, onGetStarted }
     </nav>
   );
 }
+
