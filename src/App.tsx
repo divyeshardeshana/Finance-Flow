@@ -180,7 +180,7 @@ function AppContent() {
   const navHandlers = useNavHandlers();
 
   useEffect(() => {
-    if (isPasswordRecovery) {
+    if (isPasswordRecovery && location.pathname !== '/reset-password') {
       navigate('/reset-password', { replace: true });
     }
   }, [isPasswordRecovery]);
