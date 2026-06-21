@@ -78,13 +78,19 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
     const code = params.get('code');
     if (!code) return;
     exchangedRef.current = true;
-    supabase.auth.exchangeCodeForSession(code).then(({ data, error: exchError }) => {
+    supabase.auth.exchangeCodeForSession(code).then(async ({ data, error: exchError }) => {
       if (exchError || !data.session) {
         setPageState('expired');
-      } else {
-        setPageState('ready');
+        window.history.replaceState(null, '', window.location.pathname);
+        return;
       }
+      // Explicitly set session to ensure client state is populated before form renders
+      await supabase.auth.setSession({
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+      });
       window.history.replaceState(null, '', window.location.pathname);
+      setPageState('ready');
     });
   }, []);
 
