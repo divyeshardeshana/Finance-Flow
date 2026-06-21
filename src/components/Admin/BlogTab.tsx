@@ -215,18 +215,19 @@ export default function BlogTab() {
         await logActivity('create_blog_post', 'blog_post', savedPost.id);
       }
 
-      setShowModal(false);
-      setSaving(false);
-      loadData();
-
       if (formData.auto_publish) {
-        // Publish immediately regardless of AI content generation outcome
+        // Publish immediately before closing modal
         await updateBlogPost(savedPost.id, {
           status: 'published',
           published_at: new Date().toISOString(),
         } as Partial<BlogPost>, user.id);
-        await loadData();
+      }
 
+      setShowModal(false);
+      setSaving(false);
+      await loadData();
+
+      if (formData.auto_publish) {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.access_token) {
           setGeneratingId(savedPost.id);
