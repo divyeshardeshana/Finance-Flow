@@ -68,40 +68,31 @@ export function ResetPasswordPage({ onNavigate, onSignIn, onSuccess, onForgotPas
     return 'verifying';
   });
 
-  // Establish session from URL (PKCE ?code= or implicit #access_token=)
+  // Implicit flow: Supabase detects #access_token= hash via detectSessionInUrl
+  // getSession() processes the hash and fires PASSWORD_RECOVERY via onAuthStateChange
   useEffect(() => {
     if (exchangedRef.current) return;
     exchangedRef.current = true;
 
     const run = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get('code');
+      const hash = window.location.hash;
 
-      if (code) {
-        // PKCE flow: must exchange manually
-        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-        window.history.replaceState(null, '', window.location.pathname);
-        if (error || !data.session) {
-          setPageState('expired');
-        } else {
-          setPageState('ready');
-        }
-        return;
-      }
-
-      // Implicit flow: Supabase detects #access_token= hash via getSession()
-      if (window.location.hash.includes('type=recovery')) {
+      if (hash.includes('type=recovery') || hash.includes('access_token')) {
+        // Give Supabase time to process hash (detectSessionInUrl)
         const { data: { session } } = await supabase.auth.getSession();
-        window.history.replaceState(null, '', window.location.pathname);
         if (session) {
           setPageState('ready');
         } else {
-          setPageState('expired');
+          // Wait briefly for onAuthStateChange to fire
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          const { data: { session: session2 } } = await supabase.auth.getSession();
+          setPageState(session2 ? 'ready' : 'expired');
         }
+        window.history.replaceState(null, '', window.location.pathname);
         return;
       }
 
-      // No recovery signal in URL at all
+      // No recovery hash → expired
       setPageState('expired');
     };
 
